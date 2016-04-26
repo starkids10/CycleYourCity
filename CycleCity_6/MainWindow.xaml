@@ -6,7 +6,7 @@
         xmlns:cyclistViewer="clr-namespace:CycleCity_6.Tools.CyclistViewer"
         xmlns:cyclistCreator="clr-namespace:CycleCity_6.Tools.CyclistCreator"
         mc:Ignorable="d"
-        Title="Cycle City 6" Height="350" Width="525">
+        Title="Cycle City 6" Height="768" Width="1024">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>

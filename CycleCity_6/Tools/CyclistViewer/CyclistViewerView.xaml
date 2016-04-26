@@ -15,10 +15,21 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         
-        <esri:MapView Grid.Column="0" Name="MapView" Margin="0,0,10,0">
-            <esri:Map>
-                <esri:OpenStreetMapLayer />
+        <esri:MapView Grid.Column="0" MouseDown="CycleMapView_MouseDown" Name="CycleMapView" Margin="0,0,10,0">
+            <esri:Map x:Name="CycleMap">
                 
+                <esri:Map.InitialViewpoint>
+                    <esri:ViewpointExtent XMin="1091513"
+                                 YMin="7102386"
+                                 XMax="1137172"
+                                 YMax="7069974"/>
+                </esri:Map.InitialViewpoint>
+
+                <esri:ArcGISTiledMapServiceLayer x:Name="Topographie"
+                                                 ServiceUri="http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer"
+                                                 IsVisible="True">
+                </esri:ArcGISTiledMapServiceLayer>
+
                 <esri:GraphicsLayer ID="CyclistLayer">
                     <esri:GraphicsLayer.Renderer>
                         <esri:SimpleRenderer>

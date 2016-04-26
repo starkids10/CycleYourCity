@@ -1,6 +1,7 @@
 ﻿using Esri.ArcGISRuntime.Layers;
 using System.Diagnostics.Contracts;
 using System.Windows.Controls;
+using System;
 
 namespace CycleCity_6.Tools.CyclistViewer
 {
@@ -13,7 +14,8 @@ namespace CycleCity_6.Tools.CyclistViewer
         {
             InitializeComponent();
 
-            GetViewModel().MapLayer = (GraphicsLayer)MapView.Map.Layers["CyclistLayer"];
+            GetViewModel().MapLayer = (GraphicsLayer)CycleMapView.Map.Layers["CyclistLayer"];
+            GetViewModel ().DummyTrack ();
         }
 
         private CyclistViewerViewModel GetViewModel()
@@ -27,8 +29,16 @@ namespace CycleCity_6.Tools.CyclistViewer
         {
             if (GetViewModel().HasSelectedCyclist())
             {
-                MapView.SetView(GetViewModel().SelectedCyclist.Track);
+                CycleMapView.SetView(GetViewModel().SelectedCyclist.Track);
             }
+        }
+
+        private void CycleMapView_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            var z = e.GetPosition (this);
+            var mappoint = CycleMapView.ScreenToLocation (z);
+
+            Console.WriteLine ("" + mappoint.X + " " + mappoint.Y + " " + mappoint.Z);
         }
     }
 }

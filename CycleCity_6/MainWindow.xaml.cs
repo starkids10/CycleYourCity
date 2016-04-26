@@ -22,7 +22,7 @@ namespace CycleCity_6
     {
         public MainWindow()
         {
-            InitializeComponent();
+            InitializeComponent ();
         }
     }
 }

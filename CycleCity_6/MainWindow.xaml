@@ -1,0 +1,21 @@
+﻿<Window x:Class="CycleCity_6.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:cyclistViewer="clr-namespace:CycleCity_6.Tools.CyclistViewer"
+        xmlns:cyclistCreator="clr-namespace:CycleCity_6.Tools.CyclistCreator"
+        mc:Ignorable="d"
+        Title="Cycle City 6" Height="350" Width="525">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+
+        <cyclistViewer:CyclistViewerView Grid.Row="0" />
+        
+        <cyclistCreator:CyclistCreatorView Grid.Row="1" Margin="0,10,0,0" />
+    </Grid>
+
+</Window>

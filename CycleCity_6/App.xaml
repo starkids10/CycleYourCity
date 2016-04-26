@@ -1,0 +1,9 @@
+﻿<Application x:Class="CycleCity_6.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:tools="clr-namespace:CycleCity_6.Tools"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <tools:ViewModelLocator x:Key="ViewModelLocator" />
+    </Application.Resources>
+</Application>

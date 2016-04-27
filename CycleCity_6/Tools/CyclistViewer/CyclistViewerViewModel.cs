@@ -1,8 +1,10 @@
 ﻿using CycleCity_6.Materials;
 using CycleCity_6.Services;
 using Esri.ArcGISRuntime.Layers;
+using Esri.ArcGISRuntime.Symbology;
 using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
+using System.Windows.Media;
 
 namespace CycleCity_6.Tools.CyclistViewer
 {
@@ -93,7 +95,24 @@ namespace CycleCity_6.Tools.CyclistViewer
 
         public void DummyTrack()
         {
-            MapLayer.Graphics.Add (new Graphic (GpxToEsriService.parseGPXtoEsri ()));
+            var test = new SimpleLineSymbol ();
+            test.Color = Colors.Black;
+            test.Style = SimpleLineStyle.Dot;
+            test.Width = 2;
+
+            var test1 = new SimpleLineSymbol ();
+            test1.Color = Colors.Brown;
+            test1.Style = SimpleLineStyle.Solid;
+            test1.Width = 3;
+
+            var test2 = new SimpleLineSymbol ();
+            test2.Color = Colors.DarkOrange;
+            test2.Style = SimpleLineStyle.Dash;
+            test2.Width = 4;
+
+            MapLayer.Graphics.Add (new Graphic (GpxToEsriService.parseGPXtoEsri (@"C:\Users\David\Downloads\2760562.gpx"),test1));
+            MapLayer.Graphics.Add (new Graphic (GpxToEsriService.parseGPXtoEsri (@"C:\Users\David\Downloads\2786928.gpx"), test2));
+            MapLayer.Graphics.Add (new Graphic (GpxToEsriService.parseGPXtoEsri (@"C:\Users\David\Downloads\3041433.gpx"),test));
         }
     }
 }

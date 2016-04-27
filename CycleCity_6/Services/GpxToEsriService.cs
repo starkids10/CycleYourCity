@@ -15,10 +15,10 @@ namespace CycleCity_6.Services
 
         }
 
-        public static Polyline parseGPXtoEsri()
+        public static Polyline parseGPXtoEsri(string path)
         {
 
-            XDocument gpxDoc = XDocument.Load (@"C:\Users\David\Downloads\3041433.gpx");
+            XDocument gpxDoc = XDocument.Load (path);
             XNamespace gpx = XNamespace.Get ("http://www.topografix.com/GPX/1/1");
             List<MapPoint> points = new List<MapPoint> ();
             var tracks = from track in gpxDoc.Descendants (gpx + "trk")

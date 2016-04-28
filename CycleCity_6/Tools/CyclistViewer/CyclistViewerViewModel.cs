@@ -1,8 +1,10 @@
 ﻿using CycleCity_6.Materials;
 using CycleCity_6.Services;
 using Esri.ArcGISRuntime.Layers;
+using Esri.ArcGISRuntime.Symbology;
 using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
+using System.Windows.Media;
 
 namespace CycleCity_6.Tools.CyclistViewer
 {

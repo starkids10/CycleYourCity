@@ -10,12 +10,15 @@
     
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150" />
             <ColumnDefinition />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <TextBox Grid.Column="0" Text="{Binding Path=Name}" Margin="0,0,10,0" VerticalContentAlignment="Center" />
-        
-        <Button Grid.Column="1" Click="SaveButton_OnClick">Speichern</Button>
+        <TextBox  Name="NameTextbox" Grid.Column="0" Text="{Binding Path=Name, TargetNullValue=Name}" Margin="0,0,10,0" VerticalContentAlignment="Center" ToolTip="Name" GotFocus="NameText_OnGotFocus"/>
+
+        <TextBox Name="UrlTextbox" Grid.Column="1" Text="{Binding Path=Url, TargetNullValue=URL}" Margin="0,0,10,0" VerticalContentAlignment="Center" ToolTip="URL" GotFocus="UrlText_OnGotFocus"/>
+
+        <Button Grid.Column="2" Click="SaveButton_OnClick">Speichern</Button>
     </Grid>
 </UserControl>

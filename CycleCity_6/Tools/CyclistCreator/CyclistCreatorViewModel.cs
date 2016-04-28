@@ -26,12 +26,33 @@ namespace CycleCity_6.Tools.CyclistCreator
             }
         }
 
+        private string _url;
+        public string Url
+        {
+            get { return _url; }
+            set
+            {
+                _url = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        //TODO schönere if abfrage
         public void AddNewCyclist()
         {
-            if (!string.IsNullOrWhiteSpace(Name))
+            if (!string.IsNullOrWhiteSpace(Url) && !string.IsNullOrWhiteSpace(Name))
+            {
+                _cyclistService.AddNewCyclist(Name, Url);
+            }
+            else if (!string.IsNullOrWhiteSpace(Name))
             {
                 _cyclistService.AddNewCyclist(Name);
             }
+            else if (!string.IsNullOrWhiteSpace(Url))
+            {
+                _cyclistService.AddNewCyclist("Unnamed", Url);
+            }
+
         }
     }
 }

@@ -15,7 +15,7 @@ namespace CycleCity_6.Tools.CyclistViewer
             InitializeComponent();
 
             GetViewModel().MapLayer = (GraphicsLayer)CycleMapView.Map.Layers["CyclistLayer"];
-            GetViewModel ().DummyTrack ();
+            //GetViewModel ().DummyTrack ();
         }
 
         private CyclistViewerViewModel GetViewModel()

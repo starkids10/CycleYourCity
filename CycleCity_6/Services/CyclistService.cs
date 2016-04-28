@@ -9,6 +9,7 @@ namespace CycleCity_6.Services
 {
     internal class CyclistService
     {
+
         private readonly List<Cyclist> _cyclists;
 
         private int _idCounter = 0;
@@ -41,6 +42,22 @@ namespace CycleCity_6.Services
             _cyclists.Add(newCyclist);
 
             CyclistAddedEvent(this, newCyclist);
+        }
+
+        public void AddNewCyclist(string name, string url)
+        {
+            Contract.Requires(!string.IsNullOrWhiteSpace(name));
+            Contract.Requires(!string.IsNullOrWhiteSpace(url));
+
+            // TODO GPX aufgruf eventuell nicht WAM konform
+            Polyline track = GpxToEsriService.parseGPXtoEsri(url);
+
+            var newCyclist = new Cyclist(_idCounter++, name, track);
+
+            _cyclists.Add(newCyclist);
+
+            CyclistAddedEvent(this, newCyclist);
+
         }
 
         private Polyline GetTrack1()

@@ -25,5 +25,22 @@ namespace CycleCity_6.Tools.CyclistCreator
         {
             GetViewModel().AddNewCyclist();
         }
+
+        // TODO  schön machen wenn Zeit ist ("URL" und "Name" wieder einblenden)
+        private void UrlText_OnGotFocus(object sender, RoutedEventArgs e)
+        {
+            if (UrlTextbox.Text.Equals("URL"))
+            {
+                UrlTextbox.Text = "";
+            }
+        }
+
+        private void NameText_OnGotFocus(object sender, RoutedEventArgs e)
+        {
+            if (NameTextbox.Text.Equals("Name"))
+            {
+                NameTextbox.Text = "";
+            }
+        }
     }
 }

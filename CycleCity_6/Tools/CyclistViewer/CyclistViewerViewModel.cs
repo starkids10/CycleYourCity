@@ -91,9 +91,9 @@ namespace CycleCity_6.Tools.CyclistViewer
             }
         }
 
-        public void DummyTrack()
+       /* public void DummyTrack()
         {
             MapLayer.Graphics.Add (new Graphic (GpxToEsriService.parseGPXtoEsri ()));
-        }
+        }*/
     }
 }

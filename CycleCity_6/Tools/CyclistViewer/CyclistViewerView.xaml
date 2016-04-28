@@ -11,7 +11,7 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="3*" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         
@@ -26,9 +26,10 @@
                 </esri:Map.InitialViewpoint>
 
                 <esri:ArcGISTiledMapServiceLayer x:Name="Topographie"
-                                                 ServiceUri="http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer"
+                                                 ServiceUri="http://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer"
                                                  IsVisible="True">
                 </esri:ArcGISTiledMapServiceLayer>
+                <esri:WmsLayer ServiceUri="http://geodienste.hamburg.de/HH_WMS_RadwegeGIS"></esri:WmsLayer>
 
                 <esri:GraphicsLayer ID="CyclistLayer">
                     <esri:GraphicsLayer.Renderer>

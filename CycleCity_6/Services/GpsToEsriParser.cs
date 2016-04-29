@@ -7,9 +7,9 @@ using Esri.ArcGISRuntime.Geometry;
 
 namespace CycleCity_6.Services
 {
-    public class GpxToEsriService
+    public class GpsToEsriParser
     {
-        public static Polyline parseGPXtoEsri(string url)
+        public static Polyline ParseGPXtoEsriPolyline(string url)
         {
             XDocument gpxDoc = XDocument.Load (@url);
             XNamespace gpx = XNamespace.Get ("http://www.topografix.com/GPX/1/1");

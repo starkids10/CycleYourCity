@@ -1,5 +1,6 @@
 ﻿using CycleCity_6.Services;
 using System.Diagnostics.Contracts;
+using System.Text.RegularExpressions;
 
 namespace CycleCity_6.Tools.CyclistCreator
 {
@@ -37,10 +38,11 @@ namespace CycleCity_6.Tools.CyclistCreator
             }
         }
 
-        //TODO schönere if abfrage
         public void AddNewCyclist()
         {
-            if (!string.IsNullOrWhiteSpace(Url) && !string.IsNullOrWhiteSpace(Name))
+            Regex regex = new Regex(@"\S*.gpx");
+            Match match = regex.Match(Url);
+            if (!string.IsNullOrWhiteSpace(Url) && !string.IsNullOrWhiteSpace(Name) && match.Success)
             {
                 _cyclistService.AddNewCyclist(Name, Url);
             }
@@ -48,7 +50,7 @@ namespace CycleCity_6.Tools.CyclistCreator
             {
                 _cyclistService.AddNewCyclist(Name);
             }
-            else if (!string.IsNullOrWhiteSpace(Url))
+            else if (!string.IsNullOrWhiteSpace(Url) && match.Success)
             {
                 _cyclistService.AddNewCyclist("Unnamed", Url);
             }

@@ -58,7 +58,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Services\CyclistService.cs" />
-    <Compile Include="Services\GpxToEsriService.cs" />
+    <Compile Include="Services\GpsToEsriParser.cs" />
     <Compile Include="Tools\CyclistCreator\CyclistCreatorView.xaml.cs">
       <DependentUpon>CyclistCreatorView.xaml</DependentUpon>
     </Compile>

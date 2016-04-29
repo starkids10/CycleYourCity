@@ -49,8 +49,7 @@ namespace CycleCity_6.Services
             Contract.Requires(!string.IsNullOrWhiteSpace(name));
             Contract.Requires(!string.IsNullOrWhiteSpace(url));
 
-            // TODO GPX aufgruf eventuell nicht WAM konform
-            Polyline track = GpxToEsriService.parseGPXtoEsri(url);
+            Polyline track = GpsToEsriParser.ParseGPXtoEsriPolyline(url);
 
             var newCyclist = new Cyclist(_idCounter++, name, track);
 

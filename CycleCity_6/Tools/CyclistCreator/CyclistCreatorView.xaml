@@ -28,8 +28,7 @@
                  Text="{Binding Path=Url, TargetNullValue=URL}" 
                  Margin="0,0,10,0" 
                  VerticalContentAlignment="Center" 
-                 ToolTip="URL" 
-                 GotFocus="UrlText_OnGotFocus" 
+                 ToolTip="URL" GotFocus="UrlText_OnGotFocus" 
                  LostFocus="UrlTextbox_OnLostFocus"/>
 
         <Button Grid.Column="2" Click="SaveButton_OnClick">Speichern</Button>

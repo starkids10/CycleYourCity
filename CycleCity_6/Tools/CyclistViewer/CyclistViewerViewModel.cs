@@ -1,4 +1,5 @@
-﻿using CycleCity_6.Materials;
+﻿using System;
+using CycleCity_6.Materials;
 using CycleCity_6.Services;
 using Esri.ArcGISRuntime.Layers;
 using Esri.ArcGISRuntime.Symbology;
@@ -73,12 +74,22 @@ namespace CycleCity_6.Tools.CyclistViewer
             }
         }
 
+        /// <summary>
+        /// adds new track to map and generates the color of the track
+        /// </summary>
+        /// <param name="mapLayer"></param>
+        /// <param name="cyclist"></param>
         private static void AddCyclistToMapLayer(GraphicsLayer mapLayer, Cyclist cyclist)
         {
             Contract.Requires(mapLayer != null);
             Contract.Requires(cyclist != null);
-
-            mapLayer.Graphics.Add(new Graphic(cyclist.Track));
+            var simpleLineSymbol = new SimpleLineSymbol();
+            simpleLineSymbol.Width = 3;
+            Random randomGen = new Random();
+            var randomColor = Color.FromRgb((byte)randomGen.Next(255), (byte)randomGen.Next(255),
+                (byte)randomGen.Next(255));
+            simpleLineSymbol.Color = randomColor;
+            mapLayer.Graphics.Add(new Graphic(cyclist.Track, simpleLineSymbol));
         }
 
         private void CyclistService_OnCyclistAdded(object sender, Cyclist newCyclist)

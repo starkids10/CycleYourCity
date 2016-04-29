@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using Esri.ArcGISRuntime.Geometry;
@@ -9,34 +10,46 @@ namespace CycleCity_6.Services
 {
     public class GpsToEsriParser
     {
-        public static Polyline ParseGPXtoEsriPolyline(string url)
+        /// <summary>
+        /// Parses the tracks from a .gpx file to a Esri Polyline Object, which can be displayed on 
+        /// </summary>
+        /// <param name="url">Path to .gpx file</param>
+        /// <returns>represents the track in the gpx file as a polyline</returns>
+        public static Polyline ParseGpxToEsriPolyline(string url)
         {
-            XDocument gpxDoc = XDocument.Load (@url);
-            XNamespace gpx = XNamespace.Get ("http://www.topografix.com/GPX/1/1");
             List<MapPoint> points = new List<MapPoint> ();
-            var tracks = from track in gpxDoc.Descendants (gpx + "trk")
-                         select new
-                         {
-                             Segs = (
-                                from trackpoint in track.Descendants (gpx + "trkpt")
+            try
+            {
+                XDocument gpxDoc = XDocument.Load (@url);
+                XNamespace gpx = XNamespace.Get ("http://www.topografix.com/GPX/1/1");
+                var tracks = from track in gpxDoc.Descendants (gpx + "trk")
                                 select new
                                 {
+                                    Segs = (
+                                        from trackpoint in track.Descendants (gpx + "trkpt")
+                                        select new
+                                        {
                                     Latitude = trackpoint.Attribute ("lat").Value,
                                     Longitude = trackpoint.Attribute ("lon").Value,
-                                }
-                              )
-                         };
+                                        })
+                                };
 
-            foreach(var track in tracks)
-            {
-                foreach(var trekSeg in track.Segs)
+                foreach(var track in tracks)
                 {
-                    var y = Double.Parse (trekSeg.Latitude, CultureInfo.InvariantCulture);
-                    var x = Double.Parse (trekSeg.Longitude, CultureInfo.InvariantCulture);
-                    points.Add (new MapPoint (x, y));
+                    foreach(var trekSeg in track.Segs)
+                    {
+                        var y = Double.Parse (trekSeg.Latitude, CultureInfo.InvariantCulture);
+                        var x = Double.Parse (trekSeg.Longitude, CultureInfo.InvariantCulture);
+                        points.Add (new MapPoint (x, y));
+                    }
                 }
-            }
-            Console.WriteLine (points.Count);
+                Console.WriteLine (points.Count);
+                }
+                catch (FileNotFoundException)
+                {
+                    Console.WriteLine("File not found");
+                    points = new List<MapPoint>();
+                }
             return new Polyline (points, SpatialReferences.Wgs84);
         }
     }

@@ -40,8 +40,14 @@ namespace CycleCity_6.Tools.CyclistCreator
 
         public void AddNewCyclist()
         {
+            if (Url == null)
+            {
+                Url = "";
+            }
+
             Regex regex = new Regex(@"\S*.gpx");
             Match match = regex.Match(Url);
+
             if (!string.IsNullOrWhiteSpace(Url) && !string.IsNullOrWhiteSpace(Name) && match.Success)
             {
                 _cyclistService.AddNewCyclist(Name, Url);

@@ -4,7 +4,10 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using CycleCity_6.Materials;
 using Esri.ArcGISRuntime.Geometry;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace CycleCity_6.Services
 {
@@ -51,6 +54,13 @@ namespace CycleCity_6.Services
                     points = new List<MapPoint>();
                 }
             return new Polyline (points, SpatialReferences.Wgs84);
+        }
+
+        public static Polyline ParseJsonToEsriPolyline(String json)
+        {
+            JObject jObject = JObject.Parse(json);
+            var Id = (int) jObject["tourid"];
+            return null;
         }
     }
 }

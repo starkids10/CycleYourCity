@@ -8,7 +8,7 @@ namespace CycleCity_6.Materials
 {
     internal class Track
     {
-        private int Id { get; set; }
-        private Array WayPoints { get; set; }
+        public int Id { get; set; }
+        public Array WayPoints { get; set; }
     }
 }

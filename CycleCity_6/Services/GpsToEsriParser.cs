@@ -58,9 +58,18 @@ namespace CycleCity_6.Services
 
         public static Polyline ParseJsonToEsriPolyline(String json)
         {
+            List<MapPoint> pointList= new List<MapPoint>();
             JObject jObject = JObject.Parse(json);
+
             var Id = (int) jObject["tourid"];
-            return null;
+            var waypoints = from points in jObject["WayPoints"].Children()
+                select points;
+
+            foreach (var point in waypoints)
+            {
+                pointList.Add(new MapPoint((double)point["lat"],(double)point["lon"]));
+            }
+            return new Polyline(pointList,SpatialReferences.Wgs84);
         }
     }
 }

@@ -24,7 +24,6 @@ namespace CycleCity_6
         public MainWindow()
         {
             InitializeComponent ();
-            GpsToEsriParser.ParseJsonToEsriPolyline("");
         }
     }
 }

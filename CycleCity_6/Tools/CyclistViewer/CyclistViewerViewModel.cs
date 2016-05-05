@@ -5,12 +5,16 @@ using Esri.ArcGISRuntime.Layers;
 using Esri.ArcGISRuntime.Symbology;
 using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
+using System.Timers;
 using System.Windows.Media;
 
 namespace CycleCity_6.Tools.CyclistViewer
 {
     internal class CyclistViewerViewModel : ToolViewModel
     {
+        // TODO Richtige Klasse für Timer? 
+        private Timer aTimer = new Timer(1000);
+
         public CyclistViewerViewModel(CyclistService cyclistService)
         {
             Contract.Requires(cyclistService != null);
@@ -18,6 +22,9 @@ namespace CycleCity_6.Tools.CyclistViewer
             Cyclists = new ObservableCollection<Cyclist>(cyclistService.GetAllCyclists());
 
             cyclistService.CyclistAddedEvent += CyclistService_OnCyclistAdded;
+
+            aTimer.Elapsed += CollectData_OnTimedEvent;
+            aTimer.Enabled = true;
         }
 
         public ObservableCollection<Cyclist> Cyclists { get; }
@@ -102,6 +109,13 @@ namespace CycleCity_6.Tools.CyclistViewer
             {
                 AddCyclistToMapLayer(MapLayer, newCyclist);
             }
+        }
+
+        // TODO Richtige Klasse für Timer? 
+        private static void CollectData_OnTimedEvent(Object souce, System.Timers.ElapsedEventArgs e)
+        {
+            //Hier die Klasse DatabaseContentService aufrufen neue Daten abfragen und mit AddCyclistToMapLayer visualisieren
+            Console.WriteLine("The Elapsed event was raised at {0}", e.SignalTime);
         }
     }
 }

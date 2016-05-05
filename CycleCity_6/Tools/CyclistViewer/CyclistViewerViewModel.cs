@@ -7,13 +7,13 @@ using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
 using System.Timers;
 using System.Windows.Media;
+using Esri.ArcGISRuntime.Geometry;
 
 namespace CycleCity_6.Tools.CyclistViewer
 {
     internal class CyclistViewerViewModel : ToolViewModel
     {
-        // TODO Richtige Klasse für Timer? 
-        private Timer aTimer = new Timer(1000);
+        private Timer aTimer;
 
         public CyclistViewerViewModel(CyclistService cyclistService)
         {
@@ -23,6 +23,7 @@ namespace CycleCity_6.Tools.CyclistViewer
 
             cyclistService.CyclistAddedEvent += CyclistService_OnCyclistAdded;
 
+            aTimer = new Timer(1000);
             aTimer.Elapsed += CollectData_OnTimedEvent;
             aTimer.Enabled = true;
         }
@@ -35,8 +36,8 @@ namespace CycleCity_6.Tools.CyclistViewer
             get { return _selectedCyclist; }
             set
             {
-                _selectedCyclist = value; 
-                
+                _selectedCyclist = value;
+
                 NotifyPropertyChanged();
             }
         }
@@ -111,11 +112,21 @@ namespace CycleCity_6.Tools.CyclistViewer
             }
         }
 
-        // TODO Richtige Klasse für Timer? 
-        private static void CollectData_OnTimedEvent(Object souce, System.Timers.ElapsedEventArgs e)
+        //TODO erst einkommentieren wenn wir daten vom Server kriegen
+        private  void CollectData_OnTimedEvent(Object souce, System.Timers.ElapsedEventArgs e)
         {
-            //Hier die Klasse DatabaseContentService aufrufen neue Daten abfragen und mit AddCyclistToMapLayer visualisieren
-            Console.WriteLine("The Elapsed event was raised at {0}", e.SignalTime);
+            /*
+            string data = DatabaseContentService.GetNewData();
+
+            Polyline newTrack = GpsToEsriParser.ParseJsonToEsriPolyline(data);
+
+            // TODO Auflösung der Cyclist --> umstellung auf Track??
+            Cyclist newCyclist = new Cyclist(0, "", newTrack);
+            if (HasMapLayer())
+            {
+                AddCyclistToMapLayer(MapLayer, newCyclist);
+            }
+            */
         }
     }
 }

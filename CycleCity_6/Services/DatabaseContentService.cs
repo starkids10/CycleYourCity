@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,14 +11,32 @@ namespace CycleCity_6.Services
     class DatabaseContentService
     {
         /// <summary>
-        /// TODO methode die die URL des Servers zum abrufen der Daten aufruft und die Jason Datei zurückgibt.
+        /// @return: string aus angefragter Json Datei
         /// </summary>
-        public string GetNewData()
+        public static string GetNewData()
         {
-            return null;
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://preview.api.cycleyourcity.jmakro.de:4040/log_coordinates.php"); //TODO URL
+            try
+            {
+                WebResponse response = request.GetResponse();
+                using (Stream responseStream = response.GetResponseStream())
+                {
+                    StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
+                    return reader.ReadToEnd(); //TODO liste von strings aus mehreren Json files ???
+                }
+            }
+            catch (WebException ex)
+            {
+                WebResponse errorResponse = ex.Response;
+                using (Stream responseStream = errorResponse.GetResponseStream())
+                {
+                    StreamReader reader = new StreamReader(responseStream, Encoding.GetEncoding("utf-8"));
+                    String errorText = reader.ReadToEnd();
+                    // log errorText
+                }
+                throw;
+            }
         }
-
-
     }
 
 }

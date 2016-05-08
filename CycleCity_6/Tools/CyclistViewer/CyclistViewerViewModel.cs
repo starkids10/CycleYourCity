@@ -5,12 +5,16 @@ using Esri.ArcGISRuntime.Layers;
 using Esri.ArcGISRuntime.Symbology;
 using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
+using System.Timers;
 using System.Windows.Media;
+using Esri.ArcGISRuntime.Geometry;
 
 namespace CycleCity_6.Tools.CyclistViewer
 {
     internal class CyclistViewerViewModel : ToolViewModel
     {
+        private Timer aTimer;
+
         public CyclistViewerViewModel(CyclistService cyclistService)
         {
             Contract.Requires(cyclistService != null);
@@ -18,6 +22,10 @@ namespace CycleCity_6.Tools.CyclistViewer
             Cyclists = new ObservableCollection<Cyclist>(cyclistService.GetAllCyclists());
 
             cyclistService.CyclistAddedEvent += CyclistService_OnCyclistAdded;
+
+            aTimer = new Timer(1000);
+            aTimer.Elapsed += CollectData_OnTimedEvent;
+            aTimer.Enabled = true;
         }
 
         public ObservableCollection<Cyclist> Cyclists { get; }
@@ -28,8 +36,8 @@ namespace CycleCity_6.Tools.CyclistViewer
             get { return _selectedCyclist; }
             set
             {
-                _selectedCyclist = value; 
-                
+                _selectedCyclist = value;
+
                 NotifyPropertyChanged();
             }
         }
@@ -102,6 +110,23 @@ namespace CycleCity_6.Tools.CyclistViewer
             {
                 AddCyclistToMapLayer(MapLayer, newCyclist);
             }
+        }
+
+        //TODO erst einkommentieren wenn wir daten vom Server kriegen
+        private  void CollectData_OnTimedEvent(Object souce, System.Timers.ElapsedEventArgs e)
+        {
+            /*
+            string data = DatabaseContentService.GetNewData();
+
+            Polyline newTrack = GpsToEsriParser.ParseJsonToEsriPolyline(data);
+
+            // TODO Auflösung der Cyclist --> umstellung auf Track??
+            Cyclist newCyclist = new Cyclist(0, "", newTrack);
+            if (HasMapLayer())
+            {
+                AddCyclistToMapLayer(MapLayer, newCyclist);
+            }
+            */
         }
     }
 }

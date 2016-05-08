@@ -56,7 +56,9 @@ namespace CycleCity_6.Services
             return new Polyline (points, SpatialReferences.Wgs84);
         }
 
-        public static Track ParseJsonToEsriPolyline(String json)
+
+        //TODO Parser muss eine Liste von Polylines zurückgeben da mehrere tracks änderungen in dem String übergenen werden könnten.
+        public static Polyline ParseJsonToEsriPolyline(String json)
         {
             List<MapPoint> pointList= new List<MapPoint>();
             JObject jObject = JObject.Parse(json);

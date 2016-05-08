@@ -89,7 +89,7 @@ namespace CycleCity_6.Tools.CyclistViewer
             var randomColor = Color.FromRgb((byte)randomGen.Next(255), (byte)randomGen.Next(255),
                 (byte)randomGen.Next(255));
             simpleLineSymbol.Color = randomColor;
-            mapLayer.Graphics.Add(new Graphic(cyclist.Track, simpleLineSymbol));
+            mapLayer.Graphics.Add(new Graphic(cyclist.Track.Tour, simpleLineSymbol));
         }
 
         private void CyclistService_OnCyclistAdded(object sender, Cyclist newCyclist)

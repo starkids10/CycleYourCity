@@ -28,7 +28,8 @@ namespace CycleCity_6.Tools.CyclistViewer
         {
             if (GetViewModel().HasSelectedCyclist())
             {
-                CycleMapView.SetView(GetViewModel().SelectedCyclist.Track);
+                var cyclist = GetViewModel().SelectedCyclist;
+                CycleMapView.SetView(cyclist.Track.Tour);
             }
         }
 

@@ -7,9 +7,27 @@ using Esri.ArcGISRuntime.Geometry;
 
 namespace CycleCity_6.Materials
 {
-    internal class Track
+    public class Track
     {
-        public int Id { get; set; }
-        public Polyline  Tour{ get; set; }
+        public int Id { get;}
+        public Polyline Tour{ get;}
+        public DateTime Startzeit { get; }
+        public DateTime Endzeit { get;  }
+
+        public Track(Polyline tour)
+        {
+            Id = 0;
+            Tour = tour;
+            Startzeit = new DateTime();
+            Endzeit = new DateTime();
+        }
+
+        public Track(int id, Polyline tour, DateTime start, DateTime ende)
+        {
+            Id = id;
+            Tour = tour;
+            Startzeit = start;
+            Endzeit = ende;
+        }
     }
 }

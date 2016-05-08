@@ -43,7 +43,7 @@ namespace CycleCity_6.Services
             Contract.Requires(!string.IsNullOrWhiteSpace(name));
 
             var newCyclist = new Cyclist(_idCounter++, name,
-                new Polyline(new[] {new MapPoint(0, 0)}, SpatialReferences.Wgs84));
+                new Track(new Polyline(new[] {new MapPoint(0, 0)}, SpatialReferences.Wgs84)));
 
             _cyclists.Add(newCyclist);
 
@@ -62,7 +62,7 @@ namespace CycleCity_6.Services
 
             Polyline track = GpsToEsriParser.ParseGpxToEsriPolyline(url);
 
-            var newCyclist = new Cyclist(_idCounter++, name, track);
+            var newCyclist = new Cyclist(_idCounter++, name, new Track(track));
 
             _cyclists.Add(newCyclist);
 

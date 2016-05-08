@@ -56,12 +56,16 @@ namespace CycleCity_6.Services
             return new Polyline (points, SpatialReferences.Wgs84);
         }
 
-        public static Polyline ParseJsonToEsriPolyline(String json)
+        public static Track ParseJsonToEsriPolyline(String json)
         {
             List<MapPoint> pointList= new List<MapPoint>();
             JObject jObject = JObject.Parse(json);
 
             var Id = (int) jObject["tourid"];
+            //TODO Startzeit und Endzeit vom ersten/letzten Punkt übertragen
+            //Casten zu DateTime von String geht nicht -> string zu mehreren Ints parsen oder json ändern
+            //var startzeit = (DateTime) jObject["WayPoints"].First["time"];
+            //var endzeit = (DateTime) jObject["WayPoints"].Last["time"];
             var waypoints = from points in jObject["WayPoints"].Children()
                 select points;
 
@@ -69,7 +73,8 @@ namespace CycleCity_6.Services
             {
                 pointList.Add(new MapPoint((double)point["lat"],(double)point["lon"]));
             }
-            return new Polyline(pointList,SpatialReferences.Wgs84);
+            var tour = new Polyline(pointList, SpatialReferences.Wgs84);
+            return new Track(Id, tour, new DateTime(),new DateTime()) ;
         }
     }
 }

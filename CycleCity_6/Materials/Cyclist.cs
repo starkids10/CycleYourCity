@@ -5,7 +5,7 @@ namespace CycleCity_6.Materials
 {
     internal class Cyclist
     {
-        public Cyclist(int id, string name, Polyline track)
+        public Cyclist(int id, string name, Track track)
         {
             Contract.Requires(!string.IsNullOrWhiteSpace(name));
             Contract.Requires(track != null);
@@ -19,7 +19,7 @@ namespace CycleCity_6.Materials
 
         public string Name { get; }
 
-        public Polyline Track { get; }
+        public Track Track { get; }
 
         public MapPoint RecentPosition1 { get; set; }
 
@@ -27,7 +27,7 @@ namespace CycleCity_6.Materials
 
         private double CalculateDistance()
         {
-            return GeometryEngine.Length(GeometryEngine.Project(Track, SpatialReference.Create(25832)));
+            return GeometryEngine.Length(GeometryEngine.Project(Track.Tour, SpatialReference.Create(25832)));
         }
 
         public override bool Equals(object other)

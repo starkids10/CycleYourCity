@@ -26,16 +26,16 @@ namespace CycleCity_6.Services
                 XDocument gpxDoc = XDocument.Load (@url);
                 XNamespace gpx = XNamespace.Get ("http://www.topografix.com/GPX/1/1");
                 var tracks = from track in gpxDoc.Descendants (gpx + "trk")
-                                select new
-                                {
-                                    Segs = (
-                                        from trackpoint in track.Descendants (gpx + "trkpt")
-                                        select new
-                                        {
-                                    Latitude = trackpoint.Attribute ("lat").Value,
-                                    Longitude = trackpoint.Attribute ("lon").Value,
-                                        })
-                                };
+                             select new
+                             {
+                                 Segs = (
+                                     from trackpoint in track.Descendants (gpx + "trkpt")
+                                     select new
+                                     {
+                                         Latitude = trackpoint.Attribute ("lat").Value,
+                                         Longitude = trackpoint.Attribute ("lon").Value,
+                                     })
+                             };
 
                 foreach(var track in tracks)
                 {
@@ -47,12 +47,12 @@ namespace CycleCity_6.Services
                     }
                 }
                 Console.WriteLine (points.Count);
-                }
-                catch (FileNotFoundException)
-                {
-                    Console.WriteLine("File not found");
-                    points = new List<MapPoint>();
-                }
+            }
+            catch(FileNotFoundException)
+            {
+                Console.WriteLine ("File not found");
+                points = new List<MapPoint> ();
+            }
             return new Polyline (points, SpatialReferences.Wgs84);
         }
 
@@ -60,18 +60,18 @@ namespace CycleCity_6.Services
         //TODO Parser muss eine Liste von Polylines zurückgeben da mehrere tracks änderungen in dem String übergenen werden könnten.
         public static Polyline ParseJsonToEsriPolyline(String json)
         {
-            List<MapPoint> pointList= new List<MapPoint>();
-            JObject jObject = JObject.Parse(json);
+            List<MapPoint> pointList = new List<MapPoint> ();
+            JObject jObject = JObject.Parse (json);
 
-            var Id = (int) jObject["tourid"];
-            var waypoints = from points in jObject["WayPoints"].Children()
-                select points;
+            var Id = (int)jObject["tourid"];
+            var waypoints = from points in jObject["WayPoints"].Children ()
+                            select points;
 
-            foreach (var point in waypoints)
+            foreach(var point in waypoints)
             {
-                pointList.Add(new MapPoint((double)point["lat"],(double)point["lon"]));
+                pointList.Add (new MapPoint ((double)point["lat"], (double)point["lon"]));
             }
-            return new Polyline(pointList,SpatialReferences.Wgs84);
+            return new Polyline (pointList, SpatialReferences.Wgs84);
         }
     }
 }

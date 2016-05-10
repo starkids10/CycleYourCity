@@ -63,8 +63,8 @@
     </ApplicationDefinition>
     <Compile Include="Materials\Track.cs" />
     <Compile Include="Services\DatabaseContentService.cs" />
-    <Compile Include="Services\TrackService.cs" />
     <Compile Include="Services\GpsToEsriParser.cs" />
+    <Compile Include="Services\TrackService.cs" />
     <Compile Include="Tools\CyclistViewer\CyclistViewerView.xaml.cs">
       <DependentUpon>CyclistViewerView.xaml</DependentUpon>
     </Compile>
@@ -106,7 +106,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

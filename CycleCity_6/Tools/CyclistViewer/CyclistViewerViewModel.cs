@@ -17,13 +17,13 @@ namespace CycleCity_6.Tools.CyclistViewer
 
         public CyclistViewerViewModel(TrackService trackService)
         {
-            Contract.Requires(trackService != null);
+            Contract.Requires (trackService != null);
 
-            Tracks = new ObservableCollection<Track>(trackService.GetAllTracks());
+            Tracks = new ObservableCollection<Track> (trackService.GetAllTracks ());
 
             trackService.TrackAddedEvent += TrackService_OnTrackAdded;
 
-            aTimer = new Timer(1000);
+            aTimer = new Timer (1000);
             aTimer.Elapsed += CollectData_OnTimedEvent;
             aTimer.Enabled = true;
         }
@@ -35,18 +35,18 @@ namespace CycleCity_6.Tools.CyclistViewer
         {
             get
             {
-                Contract.Requires(HasMapLayer());
+                Contract.Requires (HasMapLayer ());
 
                 return _mapLayer;
             }
             set
             {
-                Contract.Requires(value != null);
-                Contract.Ensures(HasMapLayer());
+                Contract.Requires (value != null);
+                Contract.Ensures (HasMapLayer ());
 
                 _mapLayer = value;
 
-                AddCyclistsToMapLayer(value);
+                AddCyclistsToMapLayer (value);
             }
         }
 
@@ -57,11 +57,11 @@ namespace CycleCity_6.Tools.CyclistViewer
 
         private void AddCyclistsToMapLayer(GraphicsLayer mapLayer)
         {
-            Contract.Requires(mapLayer != null);
+            Contract.Requires (mapLayer != null);
 
-            foreach (var cyclist in Tracks)
+            foreach(var cyclist in Tracks)
             {
-                AddCyclistToMapLayer(mapLayer, cyclist);
+                AddCyclistToMapLayer (mapLayer, cyclist);
             }
         }
 
@@ -72,31 +72,31 @@ namespace CycleCity_6.Tools.CyclistViewer
         /// <param name="track"></param>
         private static void AddCyclistToMapLayer(GraphicsLayer mapLayer, Track track)
         {
-            Contract.Requires(mapLayer != null);
-            Contract.Requires(track != null);
-            var simpleLineSymbol = new SimpleLineSymbol();
+            Contract.Requires (mapLayer != null);
+            Contract.Requires (track != null);
+            var simpleLineSymbol = new SimpleLineSymbol ();
             simpleLineSymbol.Width = 3;
-            Random randomGen = new Random();
-            var randomColor = Color.FromRgb((byte)randomGen.Next(255), (byte)randomGen.Next(255),
-                (byte)randomGen.Next(255));
+            Random randomGen = new Random ();
+            var randomColor = Color.FromRgb ((byte)randomGen.Next (255), (byte)randomGen.Next (255),
+                (byte)randomGen.Next (255));
             simpleLineSymbol.Color = randomColor;
-            mapLayer.Graphics.Add(new Graphic(track.Tour, simpleLineSymbol));
+            mapLayer.Graphics.Add (new Graphic (track.Tour, simpleLineSymbol));
         }
 
         private void TrackService_OnTrackAdded(object sender, Track newCyclist)
         {
-            Contract.Requires(newCyclist != null);
+            Contract.Requires (newCyclist != null);
 
-            Tracks.Add(newCyclist);
+            Tracks.Add (newCyclist);
 
-            if (HasMapLayer())
+            if(HasMapLayer ())
             {
-                AddCyclistToMapLayer(MapLayer, newCyclist);
+                AddCyclistToMapLayer (MapLayer, newCyclist);
             }
         }
 
         //TODO erst einkommentieren wenn wir daten vom Server kriegen
-        private  void CollectData_OnTimedEvent(Object souce, System.Timers.ElapsedEventArgs e)
+        private void CollectData_OnTimedEvent(Object souce, System.Timers.ElapsedEventArgs e)
         {
             /*
             string data = DatabaseContentService.GetNewData();

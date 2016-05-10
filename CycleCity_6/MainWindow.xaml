@@ -6,9 +6,9 @@
         xmlns:cyclistViewer="clr-namespace:CycleCity_6.Tools.CyclistViewer"
         mc:Ignorable="d"
         Title="Cycle City 6" Height="512" Width="1024">
- 
 
-        <cyclistViewer:CyclistViewerView/>
+
+    <cyclistViewer:CyclistViewerView/>
 
 
 </Window>

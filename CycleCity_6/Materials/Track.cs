@@ -13,27 +13,27 @@ namespace CycleCity_6.Materials
     {
         public Track(int id, Polyline tour)
         {
-            Contract.Requires(tour != null);
+            Contract.Requires (tour != null);
 
             Id = id;
             Tour = tour;
         }
 
-        public int Id { get;}
+        public int Id { get; }
         public Polyline Tour { get; set; }
 
-        public double Distance => CalculateDistance();
+        public double Distance => CalculateDistance ();
 
         private double CalculateDistance()
         {
-            return GeometryEngine.Length(GeometryEngine.Project(Tour, SpatialReference.Create(25832)));
+            return GeometryEngine.Length (GeometryEngine.Project (Tour, SpatialReference.Create (25832)));
         }
 
         public override bool Equals(object other)
         {
             var otherTrack = other as Track;
 
-            return otherTrack != null && Equals(otherTrack.Id, Id);
+            return otherTrack != null && Equals (otherTrack.Id, Id);
         }
 
         public override int GetHashCode()

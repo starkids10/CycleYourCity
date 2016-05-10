@@ -11,7 +11,7 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="5*" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         
@@ -25,11 +25,12 @@
                                  YMax="7069974"/>
                 </esri:Map.InitialViewpoint>
 
-                <esri:ArcGISTiledMapServiceLayer x:Name="Topographie"
+                <esri:ArcGISTiledMapServiceLayer x:Name="DarkMap"
                                                  ServiceUri="http://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer"
                                                  IsVisible="True">
                 </esri:ArcGISTiledMapServiceLayer>
-                <esri:WmsLayer ServiceUri="http://geodienste.hamburg.de/HH_WMS_RadwegeGIS"></esri:WmsLayer>
+                <esri:WmsLayer ServiceUri="http://geodienste.hamburg.de/HH_WMS_RadwegeGIS" 
+                               x:Name="FahrradwegLayer"/> 
 
                 <esri:GraphicsLayer ID="CyclistLayer">
                     <esri:GraphicsLayer.Renderer>
@@ -62,3 +63,4 @@
         </ListBox>
     </Grid>
 </UserControl>
+

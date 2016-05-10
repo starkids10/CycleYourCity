@@ -4,7 +4,10 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using CycleCity_6.Materials;
 using Esri.ArcGISRuntime.Geometry;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace CycleCity_6.Services
 {
@@ -51,6 +54,24 @@ namespace CycleCity_6.Services
                     points = new List<MapPoint>();
                 }
             return new Polyline (points, SpatialReferences.Wgs84);
+        }
+
+
+        //TODO Parser muss eine Liste von Polylines zurückgeben da mehrere tracks änderungen in dem String übergenen werden könnten.
+        public static Polyline ParseJsonToEsriPolyline(String json)
+        {
+            List<MapPoint> pointList= new List<MapPoint>();
+            JObject jObject = JObject.Parse(json);
+
+            var Id = (int) jObject["tourid"];
+            var waypoints = from points in jObject["WayPoints"].Children()
+                select points;
+
+            foreach (var point in waypoints)
+            {
+                pointList.Add(new MapPoint((double)point["lat"],(double)point["lon"]));
+            }
+            return new Polyline(pointList,SpatialReferences.Wgs84);
         }
     }
 }

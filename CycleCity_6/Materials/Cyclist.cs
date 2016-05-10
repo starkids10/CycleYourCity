@@ -21,6 +21,8 @@ namespace CycleCity_6.Materials
 
         public Polyline Track { get; }
 
+        public MapPoint RecentPosition1 { get; set; }
+
         public double Distance => CalculateDistance();
 
         private double CalculateDistance()

@@ -4,18 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:cyclistViewer="clr-namespace:CycleCity_6.Tools.CyclistViewer"
-        xmlns:cyclistCreator="clr-namespace:CycleCity_6.Tools.CyclistCreator"
         mc:Ignorable="d"
         Title="Cycle City 6" Height="512" Width="1024">
-    <Grid Margin="10">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="40"/>
-        </Grid.RowDefinitions>
+ 
 
-        <cyclistViewer:CyclistViewerView Grid.Row="0" />
-        
-        <cyclistCreator:CyclistCreatorView Grid.Row="1" Margin="0,10,0,0" />
-    </Grid>
+        <cyclistViewer:CyclistViewerView/>
+
 
 </Window>

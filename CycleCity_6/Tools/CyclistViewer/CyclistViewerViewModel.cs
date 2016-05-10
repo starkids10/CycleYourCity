@@ -15,37 +15,20 @@ namespace CycleCity_6.Tools.CyclistViewer
     {
         private Timer aTimer;
 
-        public CyclistViewerViewModel(CyclistService cyclistService)
+        public CyclistViewerViewModel(TrackService trackService)
         {
-            Contract.Requires(cyclistService != null);
+            Contract.Requires(trackService != null);
 
-            Cyclists = new ObservableCollection<Cyclist>(cyclistService.GetAllCyclists());
+            Tracks = new ObservableCollection<Track>(trackService.GetAllTracks());
 
-            cyclistService.CyclistAddedEvent += CyclistService_OnCyclistAdded;
+            trackService.TrackAddedEvent += TrackService_OnTrackAdded;
 
             aTimer = new Timer(1000);
             aTimer.Elapsed += CollectData_OnTimedEvent;
             aTimer.Enabled = true;
         }
 
-        public ObservableCollection<Cyclist> Cyclists { get; }
-
-        private Cyclist _selectedCyclist;
-        public Cyclist SelectedCyclist
-        {
-            get { return _selectedCyclist; }
-            set
-            {
-                _selectedCyclist = value;
-
-                NotifyPropertyChanged();
-            }
-        }
-
-        public bool HasSelectedCyclist()
-        {
-            return _selectedCyclist != null;
-        }
+        public ObservableCollection<Track> Tracks { get; }
 
         private GraphicsLayer _mapLayer;
         public GraphicsLayer MapLayer
@@ -76,7 +59,7 @@ namespace CycleCity_6.Tools.CyclistViewer
         {
             Contract.Requires(mapLayer != null);
 
-            foreach (var cyclist in Cyclists)
+            foreach (var cyclist in Tracks)
             {
                 AddCyclistToMapLayer(mapLayer, cyclist);
             }
@@ -86,25 +69,25 @@ namespace CycleCity_6.Tools.CyclistViewer
         /// adds new track to map and generates the color of the track
         /// </summary>
         /// <param name="mapLayer"></param>
-        /// <param name="cyclist"></param>
-        private static void AddCyclistToMapLayer(GraphicsLayer mapLayer, Cyclist cyclist)
+        /// <param name="track"></param>
+        private static void AddCyclistToMapLayer(GraphicsLayer mapLayer, Track track)
         {
             Contract.Requires(mapLayer != null);
-            Contract.Requires(cyclist != null);
+            Contract.Requires(track != null);
             var simpleLineSymbol = new SimpleLineSymbol();
             simpleLineSymbol.Width = 3;
             Random randomGen = new Random();
             var randomColor = Color.FromRgb((byte)randomGen.Next(255), (byte)randomGen.Next(255),
                 (byte)randomGen.Next(255));
             simpleLineSymbol.Color = randomColor;
-            mapLayer.Graphics.Add(new Graphic(cyclist.Track, simpleLineSymbol));
+            mapLayer.Graphics.Add(new Graphic(track.Tour, simpleLineSymbol));
         }
 
-        private void CyclistService_OnCyclistAdded(object sender, Cyclist newCyclist)
+        private void TrackService_OnTrackAdded(object sender, Track newCyclist)
         {
             Contract.Requires(newCyclist != null);
 
-            Cyclists.Add(newCyclist);
+            Tracks.Add(newCyclist);
 
             if (HasMapLayer())
             {

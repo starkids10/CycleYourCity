@@ -23,21 +23,5 @@ namespace CycleCity_6.Tools.CyclistViewer
 
             return (CyclistViewerViewModel)DataContext;
         }
-
-        private void CyclistListBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (GetViewModel().HasSelectedCyclist())
-            {
-                CycleMapView.SetView(GetViewModel().SelectedCyclist.Track);
-            }
-        }
-
-        private void CycleMapView_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            var z = e.GetPosition (this);
-            var mappoint = CycleMapView.ScreenToLocation (z);
-
-            Console.WriteLine ("" + mappoint.X + " " + mappoint.Y + " " + mappoint.Z);
-        }
     }
 }

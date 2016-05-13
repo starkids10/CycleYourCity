@@ -6,7 +6,6 @@ using System.Linq;
 using System.Xml.Linq;
 using CycleCity_6.Materials;
 using Esri.ArcGISRuntime.Geometry;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace CycleCity_6.Services
@@ -58,9 +57,9 @@ namespace CycleCity_6.Services
 
 
         //TODO Parser muss eine Liste von Polylines zurückgeben da mehrere tracks änderungen in dem String übergenen werden könnten.
-        public static List<Polyline> ParseJsonToEsriPolyline(String json)
+        public static List<Track> ParseJsonToEsriPolyline(String json)
         {
-            List<MapPoint> pointList= new List<MapPoint>();
+            List<MapPoint> pointList = new List<MapPoint>();
             JObject jObject = JObject.Parse(json);
 
             var Id = (int) jObject["tourid"];
@@ -73,12 +72,26 @@ namespace CycleCity_6.Services
 
             foreach (var point in waypoints)
             {
-                pointList.Add(new MapPoint((double)point["lat"],(double)point["lon"]));
+                //Zeit+Datum für jeden Punkt extrahieren
+                var tempTime = (string) point["time"];
+                var time = getDate(tempTime);
+                pointList.Add(new MapPoint((double) point["lat"], (double) point["lon"]));
             }
             var tour = new Polyline(pointList, SpatialReferences.Wgs84);
 
 
-            return new Track(Id, tour, new DateTime(),new DateTime()) ;
+            return new List<Track> {new Track(Id, tour, new DateTime(), new DateTime())};
+        }
+
+        private static DateTime getDate(string timeString)
+        {
+            var tempTime = timeString.Split(' ');
+            var date = tempTime[0];
+            var time = tempTime[1];
+            var dateArray = date.Split('-');
+            var timeArray = time.Split(':');
+            return new DateTime(int.Parse(dateArray[0]), int.Parse(dateArray[1]), int.Parse(dateArray[2]),
+                int.Parse(timeArray[0]), int.Parse(timeArray[1]), int.Parse(timeArray[2]));
         }
     }
 }

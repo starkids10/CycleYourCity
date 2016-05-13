@@ -2,6 +2,10 @@
 using System.Diagnostics.Contracts;
 using System.Windows.Controls;
 using System;
+using System.Collections.Generic;
+using System.Threading;
+using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.Tasks.Geocoding;
 
 namespace CycleCity_6.Tools.CyclistViewer
 {
@@ -31,14 +35,6 @@ namespace CycleCity_6.Tools.CyclistViewer
                 var cyclist = GetViewModel().SelectedCyclist;
                 CycleMapView.SetView(cyclist.Track.Tour);
             }
-        }
-
-        private void CycleMapView_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            var z = e.GetPosition (this);
-            var mappoint = CycleMapView.ScreenToLocation (z);
-
-            Console.WriteLine ("" + mappoint.X + " " + mappoint.Y + " " + mappoint.Z);
         }
     }
 }

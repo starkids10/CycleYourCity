@@ -47,10 +47,10 @@ namespace CycleCity_6.Services
                 }
                 Console.WriteLine (points.Count);
                 }
-                catch (FileNotFoundException)
+            catch(FileNotFoundException)
                 {
-                    Console.WriteLine("File not found");
-                    points = new List<MapPoint>();
+                Console.WriteLine ("File not found");
+                points = new List<MapPoint> ();
                 }
             return new Polyline (points, SpatialReferences.Wgs84);
         }
@@ -62,15 +62,11 @@ namespace CycleCity_6.Services
             List<MapPoint> pointList = new List<MapPoint>();
             JObject jObject = JObject.Parse(json);
 
-            var Id = (int) jObject["tourid"];
-            //TODO Startzeit und Endzeit vom ersten/letzten Punkt übertragen
-            //Casten zu DateTime von String geht nicht -> string zu mehreren Ints parsen oder json ändern
-            //var startzeit = (DateTime) jObject["WayPoints"].First["time"];
-            //var endzeit = (DateTime) jObject["WayPoints"].Last["time"];
-            var waypoints = from points in jObject["WayPoints"].Children()
+            var Id = (int)jObject["tourid"];
+            var waypoints = from points in jObject["WayPoints"].Children ()
                 select points;
 
-            foreach (var point in waypoints)
+            foreach(var point in waypoints)
             {
                 //Zeit+Datum für jeden Punkt extrahieren
                 var tempTime = (string) point["time"];

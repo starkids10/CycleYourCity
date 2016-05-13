@@ -8,7 +8,7 @@ namespace CycleCity_6.Tools
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
         protected void NotifyPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged (this, new PropertyChangedEventArgs (propertyName));
         }
     }
 }

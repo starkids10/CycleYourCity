@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,27 +8,37 @@ using Esri.ArcGISRuntime.Geometry;
 
 namespace CycleCity_6.Materials
 {
-    public class Track
+    // Test mergekonfikt
+    internal class Track
     {
-        public int Id { get;}
-        public Polyline Tour{ get;}
-        public DateTime Startzeit { get; }
-        public DateTime Endzeit { get;  }
-
-        public Track(Polyline tour)
+        public Track(int id, Polyline tour)
         {
-            Id = 0;
-            Tour = tour;
-            Startzeit = new DateTime();
-            Endzeit = new DateTime();
-        }
+            Contract.Requires (tour != null);
 
-        public Track(int id, Polyline tour, DateTime start, DateTime ende)
-    {
             Id = id;
             Tour = tour;
-            Startzeit = start;
-            Endzeit = ende;
+        }
+
+        public int Id { get; }
+        public Polyline Tour { get; set; }
+
+        public double Distance => CalculateDistance ();
+
+        private double CalculateDistance()
+        {
+            return GeometryEngine.Length (GeometryEngine.Project (Tour, SpatialReference.Create (25832)));
+        }
+
+        public override bool Equals(object other)
+        {
+            var otherTrack = other as Track;
+
+            return otherTrack != null && Equals (otherTrack.Id, Id);
+        }
+
+        public override int GetHashCode()
+        {
+            return Id;
         }
     }
 }

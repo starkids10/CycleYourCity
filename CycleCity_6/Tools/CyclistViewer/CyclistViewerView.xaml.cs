@@ -16,25 +16,16 @@ namespace CycleCity_6.Tools.CyclistViewer
     {
         public CyclistViewerView()
         {
-            InitializeComponent();
+            InitializeComponent ();
 
-            GetViewModel().MapLayer = (GraphicsLayer)CycleMapView.Map.Layers["CyclistLayer"];
+            GetViewModel ().MapLayer = (GraphicsLayer)CycleMapView.Map.Layers["CyclistLayer"];
         }
 
         private CyclistViewerViewModel GetViewModel()
         {
-            Contract.Requires(DataContext is CyclistViewerViewModel);
+            Contract.Requires (DataContext is CyclistViewerViewModel);
 
             return (CyclistViewerViewModel)DataContext;
-        }
-
-        private void CyclistListBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (GetViewModel().HasSelectedCyclist())
-            {
-                var cyclist = GetViewModel().SelectedCyclist;
-                CycleMapView.SetView(cyclist.Track.Tour);
-            }
         }
     }
 }

@@ -9,13 +9,9 @@
         <Binding Source="{StaticResource ResourceKey=ViewModelLocator}" Path="CyclistViewerViewModel" />
     </UserControl.DataContext>
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="5*" />
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
         
-        <esri:MapView Grid.Column="0" MouseDown="CycleMapView_MouseDown" Name="CycleMapView" Margin="0,0,10,0">
+
+    <esri:MapView  Name="CycleMapView">
             <esri:Map x:Name="CycleMap">
                 
                 <esri:Map.InitialViewpoint>
@@ -30,7 +26,7 @@
                                                  IsVisible="True">
                 </esri:ArcGISTiledMapServiceLayer>
                 <!--<esri:WmsLayer ServiceUri="http://geodienste.hamburg.de/HH_WMS_RadwegeGIS" 
-                               x:Name="FahrradwegLayer"/>-->
+                               x:Name="FahrradwegLayer"/>--> 
 
                 <esri:GraphicsLayer ID="CyclistLayer">
                     <esri:GraphicsLayer.Renderer>
@@ -43,24 +39,5 @@
                 </esri:GraphicsLayer>
             </esri:Map>
         </esri:MapView>
-        
-        <ListBox ItemsSource="{Binding Path=Cyclists}" SelectedItem="{Binding Path=SelectedCyclist}" SelectionChanged="CyclistListBox_OnSelectionChanged" Grid.Column="1">
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="ListBoxItem">
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                </Style>
-            </ListBox.ItemContainerStyle>
-            
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <DockPanel>
-                        <TextBlock DockPanel.Dock="Right" Text="{Binding Path=Distance, StringFormat={}{0:0.00 m}}" />
-
-                        <TextBlock DockPanel.Dock="Left" Text="{Binding Path=Name}" />
-                    </DockPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-    </Grid>
 </UserControl>
 

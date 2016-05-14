@@ -8,8 +8,7 @@ using Esri.ArcGISRuntime.Geometry;
 
 namespace CycleCity_6.Materials
 {
-    // Test mergekonfikt
-    internal class Track
+    public class Track
     {
         public Track(int id, Polyline tour)
         {
@@ -19,8 +18,22 @@ namespace CycleCity_6.Materials
             Tour = tour;
         }
 
+        public Track(int id, Polyline tour, DateTime start, DateTime end)
+            : this(id, tour)
+        {
+            Contract.Requires(start != null);
+            Contract.Requires(end != null);
+
+            Startzeit = start;
+            Endzeit = end;
+        }
+
+
+
         public int Id { get; }
         public Polyline Tour { get; set; }
+        public DateTime Startzeit { get; }
+        public DateTime Endzeit { get; set; }
 
         public double Distance => CalculateDistance ();
 

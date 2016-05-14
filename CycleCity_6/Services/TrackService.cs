@@ -20,9 +20,9 @@ namespace CycleCity_6.Services
         public event EventHandler<Track> TrackAddedEvent = delegate { };
 
         /// <summary>
-        /// Returns all cyclists.
+        /// Returns all tracks.
         /// </summary>
-        /// <returns>all registered cyclists</returns>
+        /// <returns>all registered tracks</returns>
         public IEnumerable<Track> GetAllTracks()
         {
             Contract.Ensures(Contract.Result<IEnumerable<Track>>() != null);
@@ -49,7 +49,7 @@ namespace CycleCity_6.Services
         /// Adds a new Tour to the list
         /// </summary>
         /// <param name="id">id of the track</param>
-        /// <param tour="tour">Polyline foor the track wich simulate the tour</param>
+        /// <param tour="tour">Polyline for the track which simulates the tour</param>
         public void AddNewTrack(int id, Polyline tour)
         {
 

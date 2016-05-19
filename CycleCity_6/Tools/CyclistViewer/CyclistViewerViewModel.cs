@@ -1,36 +1,36 @@
 ﻿using System;
+using System.Collections.Generic;
 using CycleCity_6.Materials;
 using CycleCity_6.Services;
 using Esri.ArcGISRuntime.Layers;
 using Esri.ArcGISRuntime.Symbology;
 using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
-using System.Timers;
+using System.Linq;
+
 using System.Windows.Media;
-using Esri.ArcGISRuntime.Geometry;
 
 namespace CycleCity_6.Tools.CyclistViewer
 {
     internal class CyclistViewerViewModel : ToolViewModel
     {
-        private Timer aTimer;
+
+        public ObservableCollection<Track> Tracks { get; }
+        public ObservableCollection<HeatPoint> HeatMap { get; } 
+
+        private GraphicsLayer _mapLayer;
+
 
         public CyclistViewerViewModel(TrackService trackService)
         {
             Contract.Requires (trackService != null);
 
             Tracks = new ObservableCollection<Track> (trackService.GetAllTracks ());
-
+            HeatMap = new ObservableCollection<HeatPoint>(trackService.GetAllHeatPoints());
             trackService.TrackAddedEvent += TrackService_OnTrackAdded;
-
-            aTimer = new Timer (1000);
-            aTimer.Elapsed += CollectData_OnTimedEvent;
-            aTimer.Enabled = true;
+            trackService.HeatPointAddedEvent += TrackService_OnHeatMapChanged;
         }
 
-        public ObservableCollection<Track> Tracks { get; }
-
-        private GraphicsLayer _mapLayer;
         public GraphicsLayer MapLayer
         {
             get
@@ -46,7 +46,7 @@ namespace CycleCity_6.Tools.CyclistViewer
 
                 _mapLayer = value;
 
-                AddCyclistsToMapLayer (value);
+                AddTracksToMapLayer (value);
             }
         }
 
@@ -55,14 +55,24 @@ namespace CycleCity_6.Tools.CyclistViewer
             return _mapLayer != null;
         }
 
-        private void AddCyclistsToMapLayer(GraphicsLayer mapLayer)
+        private void AddTracksToMapLayer(GraphicsLayer mapLayer)
         {
             Contract.Requires (mapLayer != null);
 
-            foreach(var cyclist in Tracks)
+            foreach(var track in Tracks)
             {
-                AddCyclistToMapLayer (mapLayer, cyclist);
+                AddTrackToMapLayer (mapLayer, track);
             }
+        }
+
+        private void AddHeatmapToMapLayer(GraphicsLayer mapLayer)
+        {
+            Contract.Requires(mapLayer != null);
+            foreach (HeatPoint heatPoint in HeatMap)
+            {
+                AddHeatpointToMapLayer(mapLayer,heatPoint);
+            }
+
         }
 
         /// <summary>
@@ -70,12 +80,11 @@ namespace CycleCity_6.Tools.CyclistViewer
         /// </summary>
         /// <param name="mapLayer"></param>
         /// <param name="track"></param>
-        private static void AddCyclistToMapLayer(GraphicsLayer mapLayer, Track track)
+        private void AddTrackToMapLayer(GraphicsLayer mapLayer, Track track)
         {
             Contract.Requires (mapLayer != null);
             Contract.Requires (track != null);
-            var simpleLineSymbol = new SimpleLineSymbol ();
-            simpleLineSymbol.Width = 3;
+            var simpleLineSymbol = new SimpleLineSymbol {Width = 3};
             Random randomGen = new Random ();
             var randomColor = Color.FromRgb ((byte)randomGen.Next (255), (byte)randomGen.Next (255),
                 (byte)randomGen.Next (255));
@@ -83,33 +92,57 @@ namespace CycleCity_6.Tools.CyclistViewer
             mapLayer.Graphics.Add (new Graphic (track.Tour, simpleLineSymbol));
         }
 
-        private void TrackService_OnTrackAdded(object sender, Track newCyclist)
+        private void AddHeatpointToMapLayer(GraphicsLayer mapLayer, HeatPoint heatPoint)
         {
-            Contract.Requires (newCyclist != null);
-
-            Tracks.Add (newCyclist);
-
-            if(HasMapLayer ())
+            var punktStyle = new SimpleMarkerSymbol();
+            var heat = heatPoint.Heat;
+            if (heat < 5)
             {
-                AddCyclistToMapLayer (MapLayer, newCyclist);
+                punktStyle.Color = Colors.Aqua;
+                punktStyle.Size = 1;
+            }
+            else if (heat < 10)
+            {
+                punktStyle.Color = Colors.Blue;
+                punktStyle.Size = 3;
+            }
+            else if (heat < 20)
+            {
+                punktStyle.Color = Colors.Tomato;
+                punktStyle.Size = 5;
+            }
+            else
+            {
+                punktStyle.Color = Colors.Red;
+                punktStyle.Size = 7;
+            }
+            List<Point> points = heatPoint.Points;
+            foreach (Point point in points)
+            {
+                mapLayer.Graphics.Add(new Graphic(point.Coordinates,punktStyle));
             }
         }
 
-        //TODO erst einkommentieren wenn wir daten vom Server kriegen
-        private void CollectData_OnTimedEvent(Object souce, System.Timers.ElapsedEventArgs e)
+        private void TrackService_OnHeatMapChanged(object sender, IEnumerable<HeatPoint> heatPoints)
         {
-            /*
-            string data = DatabaseContentService.GetNewData();
+            HeatMap.Concat(heatPoints);
 
-            Polyline newTrack = GpsToEsriParser.ParseJsonToEsriPolyline(data);
-
-            // TODO Auflösung der Cyclist --> umstellung auf Track??
-            Cyclist newCyclist = new Cyclist(0, "", newTrack);
             if (HasMapLayer())
             {
-                AddCyclistToMapLayer(MapLayer, newCyclist);
+                AddHeatmapToMapLayer(MapLayer);
             }
-            */
+        }
+
+        private void TrackService_OnTrackAdded(object sender, Track track)
+        {
+            Contract.Requires (track != null);
+
+            Tracks.Add (track);
+
+            if(HasMapLayer ())
+            {
+                AddTrackToMapLayer (MapLayer, track);
+            }
         }
     }
 }

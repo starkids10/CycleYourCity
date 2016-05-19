@@ -18,7 +18,7 @@ namespace CycleCity_6.Services
         /// </summary>
         /// <param name="url">Path to .gpx file</param>
         /// <returns>represents the track in the gpx file as a polyline</returns>
-        public Polyline ParseGpxToEsriPolyline(string url)
+        public static Polyline ParseGpxToEsriPolyline(string url)
         {
             List<MapPoint> points = new List<MapPoint> ();
             try
@@ -57,8 +57,7 @@ namespace CycleCity_6.Services
         }
 
 
-        //TODO Parser muss eine Liste von Polylines zurückgeben da mehrere tracks änderungen in dem String übergenen werden könnten.
-        public List<Track> ParseJsonToEsriPolyline(String json)
+        public static List<Track> ParseJsonToEsriPolyline(String json)
         {
             List<MapPoint> pointList = new List<MapPoint>();
             List<Track> trackList = new List<Track>();
@@ -74,10 +73,6 @@ namespace CycleCity_6.Services
                     select points;
                 foreach(var point in waypoints)
                 {
-                    //Zeit+Datum für jeden Punkt extrahieren
-                    var tempTime = (string) point["time"];
-                    var time = getDate(tempTime);
-
                     pointList.Add(new MapPoint((double) point["lat"], (double) point["lon"]));
                 }
                 var tour = new Polyline(pointList, SpatialReferences.Wgs84);
@@ -92,26 +87,19 @@ namespace CycleCity_6.Services
             return trackList;
         }
 
-        
-        private DateTime getDate(string timeString)
-        {
-            var tempTime = timeString.Split('\r');
-            var date = tempTime[0];
-            var time = tempTime[1];
-            var dateArray = date.Split('-');
-            var timeArray = time.Split(':');
-            return new DateTime(int.Parse(dateArray[0]), int.Parse(dateArray[1]), int.Parse(dateArray[2]),
-                int.Parse(timeArray[0]), int.Parse(timeArray[1]), int.Parse(timeArray[2]));
-        }
-
-        public List<HeatPoint> ParseJsonToPointArray(string json)
+        /// <summary>
+        /// Liefert alle Points aus dem Json-String in Form einer Liste von Points
+        /// </summary>
+        /// <param name="json"></param>
+        /// <returns></returns>
+        public static List<Point> ParseJsonToPoinList(string json)
         {
 
             List<Point> pointList = new List<Point>();
-            Dictionary<String, HeatPoint> heatDictionary = new Dictionary<String,HeatPoint>();
-            JArray jArray = JArray.Parse(json);
-
-            foreach (var track in jArray)
+            JObject jObject = JObject.Parse(json);
+            var tracks = jObject["tracks"];
+            
+            foreach (var track in tracks)
             {
                 var waypoints = from points in track["WayPoints"].Children()
                                 select points;
@@ -120,16 +108,27 @@ namespace CycleCity_6.Services
                     //Zeit+Datum für jeden Punkt extrahieren
                     var tempTime = (string)point["time"];
                     var time = getDate(tempTime);
-                    var mappoint = new MapPoint((double) point["lat"], (double) point["lon"]);
+                    var mappoint = new MapPoint((double) point["lat"], (double) point["lon"],0,SpatialReferences.Wgs84);
                     pointList.Add(new Point(mappoint,time));
                 }
             }
-            LocatorTask locator = new OnlineLocatorTask(new Uri("http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"));
-            foreach (Point point in pointList)
-            {
-                //TODO heatpoints erstellen
-            }
-            return null;
+            return pointList;
+        }
+        
+        /// <summary>
+        /// Erstellt aus einem Json String ein DateTime-Objekt
+        /// </summary>
+        /// <param name="timeString">Json String aus dem Element "time"</param>
+        /// <returns>Date mit JJ/MM/DD HH/MM/SS</returns>
+        private static DateTime getDate(string timeString)
+        {
+            var tempTime = timeString.Split('\u0020');
+            var date = tempTime[0];
+            var time = tempTime[1];
+            var dateArray = date.Split('-');
+            var timeArray = time.Split(':');
+            return new DateTime(int.Parse(dateArray[0]), int.Parse(dateArray[1]), int.Parse(dateArray[2]),
+                int.Parse(timeArray[0]), int.Parse(timeArray[1]), int.Parse(timeArray[2]));
         }
     }
 }

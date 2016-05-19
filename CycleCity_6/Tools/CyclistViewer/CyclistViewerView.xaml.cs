@@ -27,5 +27,10 @@ namespace CycleCity_6.Tools.CyclistViewer
 
             return (CyclistViewerViewModel)DataContext;
         }
+
+        public Layer GraphicsLayer
+        {
+            get { return (GraphicsLayer)CycleMapView.Map.Layers["CyclistLayer"]; }
+        }
     }
 }

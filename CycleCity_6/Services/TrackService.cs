@@ -15,6 +15,43 @@ namespace CycleCity_6.Services
         private readonly Dictionary<string, HeatPoint> _heatPoints;
         private Timer aTimer;
 
+        public String data = @"{'tracks':[
+  { 'track_id':'1',
+    'WayPoints': [
+    {
+      'cmt': '0',
+      'time': '2011-12-31 23:59:56',
+      'lat': '53.55299',
+      'lon': '9.93784',
+      'ele': '0.0'
+    },
+    {
+      'cmt': '1',
+      'time': '2011-12-31 23:59:59',
+      'lat': '53.55179',
+      'lon': '9.94323',
+      'ele': '0.0'
+    }
+  ]},
+  { 'track_id':'2',
+    'WayPoints': [
+    {
+      'cmt': '0',
+      'time': '2011-12-31 23:59:56',
+      'lat': '53.54617',
+      'lon': '9.95066',
+      'ele': '0.0'
+    },
+    {
+      'cmt': '1',
+      'time': '2011-12-31 23:59:59',
+      'lat': '53.54525',
+      'lon': '10.00127',
+      'ele': '0.0'
+    }
+  ]}
+]}";
+
         public TrackService()
         {
             _tracks = new List<Track>();
@@ -74,15 +111,18 @@ namespace CycleCity_6.Services
                     await
                         locator.ReverseGeocodeAsync(newPoint.Coordinates,50, newPoint.Coordinates.SpatialReference,
                             CancellationToken.None);
-                string adresse = addressInfo.AddressFields.Values.ToString();
+                string adresse = addressInfo.AddressFields["Address"];
+                Console.WriteLine (adresse);
                 HeatPoint heatPoint = null;
                 if (_heatPoints.TryGetValue(adresse, out heatPoint))
                 {
                     heatPoint.Points.Add(newPoint);
+                    Console.WriteLine ("hinzufügen");
                 }
                 else
                 {
                     _heatPoints.Add(adresse, new HeatPoint(new List<Point>() {newPoint}));
+                    Console.WriteLine ("neu");
                 }
 
             }
@@ -93,45 +133,12 @@ namespace CycleCity_6.Services
          {
 
 //            string data = DatabaseContentService.GetNewData();
-              var data = @"{'tracks':[
-  { 'track_id':'1',
-    'WayPoints': [
-    {
-      'cmt': '0',
-      'time': '2011-12-31 23:59:56',
-      'lat': '53.54525',
-      'lon': '10.00127',
-      'ele': '0.0'
-    },
-    {
-      'cmt': '1',
-      'time': '2011-12-31 23:59:59',
-      'lat': '53.54525',
-      'lon': '10.00127',
-      'ele': '0.0'
-    }
-  ]},
-  { 'track_id':'2',
-    'WayPoints': [
-    {
-      'cmt': '0',
-      'time': '2011-12-31 23:59:56',
-      'lat': '53.54525',
-      'lon': '10.00127',
-      'ele': '0.0'
-    },
-    {
-      'cmt': '1',
-      'time': '2011-12-31 23:59:59',
-      'lat': '53.54525',
-      'lon': '10.00127',
-      'ele': '0.0'
-    }
-  ]}
-]}";
+              
+
               var heatPoints = GpsToEsriParser.ParseJsonToPoinList(data);
               GenerateNewHeatMap(heatPoints);
               HeatPointAddedEvent(this, GetAllHeatPoints());
+
          }
     }
 }

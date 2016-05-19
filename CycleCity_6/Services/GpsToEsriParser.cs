@@ -61,11 +61,12 @@ namespace CycleCity_6.Services
         {
             List<MapPoint> pointList = new List<MapPoint>();
             List<Track> trackList = new List<Track>();
-            JArray jArray = JArray.Parse(json);
+            JObject jObject = JObject.Parse (json);
+            var tracks = jObject["tracks"];
 
-            foreach(var track in jArray)
+            foreach(var track in tracks)
             {
-                var id = (int)track["tourid"];
+                var id = (int)track["track_id"];
                 var start = getDate((string)track["WayPoints"].First["time"]);
                 var end = getDate((string)track["WayPoints"].Last["time"]);
 
@@ -73,7 +74,7 @@ namespace CycleCity_6.Services
                     select points;
                 foreach(var point in waypoints)
                 {
-                    pointList.Add(new MapPoint((double) point["lat"], (double) point["lon"]));
+                    pointList.Add(new MapPoint((double) point["lon"], (double) point["lat"]));
                 }
                 var tour = new Polyline(pointList, SpatialReferences.Wgs84);
                 trackList.Add(new Track(id,tour,start,end));
@@ -108,7 +109,7 @@ namespace CycleCity_6.Services
                     //Zeit+Datum für jeden Punkt extrahieren
                     var tempTime = (string)point["time"];
                     var time = getDate(tempTime);
-                    var mappoint = new MapPoint((double) point["lat"], (double) point["lon"],0,SpatialReferences.Wgs84);
+                    var mappoint = new MapPoint((double) point["lon"], (double) point["lat"],0,SpatialReferences.Wgs84);
                     pointList.Add(new Point(mappoint,time));
                 }
             }

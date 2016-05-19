@@ -20,15 +20,22 @@ namespace CycleCity_6.Tools.CyclistViewer
 
         private GraphicsLayer _mapLayer;
 
-
         public CyclistViewerViewModel(TrackService trackService)
         {
             Contract.Requires (trackService != null);
+
+            //TODO MapLayer
 
             Tracks = new ObservableCollection<Track> (trackService.GetAllTracks ());
             HeatMap = new ObservableCollection<HeatPoint>(trackService.GetAllHeatPoints());
             trackService.TrackAddedEvent += TrackService_OnTrackAdded;
             trackService.HeatPointAddedEvent += TrackService_OnHeatMapChanged;
+
+            List<Track> trackList = GpsToEsriParser.ParseJsonToEsriPolyline (trackService.data);
+
+            AddTrackToMapLayer (_mapLayer,trackList[0]);
+
+            AddTrackToMapLayer (_mapLayer, trackList[1]);
         }
 
         public GraphicsLayer MapLayer
@@ -45,8 +52,6 @@ namespace CycleCity_6.Tools.CyclistViewer
                 Contract.Ensures (HasMapLayer ());
 
                 _mapLayer = value;
-
-                AddTracksToMapLayer (value);
             }
         }
 

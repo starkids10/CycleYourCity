@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Tasks.Geocoding;
+using System.Windows.Media;
 
 namespace CycleCity_6.Tools.CyclistViewer
 {
@@ -14,11 +15,16 @@ namespace CycleCity_6.Tools.CyclistViewer
     /// </summary>
     public partial class CyclistViewerView : UserControl
     {
+
+        GraphicsLayer gLayer;
+
         public CyclistViewerView()
         {
             InitializeComponent ();
 
-            GetViewModel ().MapLayer = (GraphicsLayer)CycleMapView.Map.Layers["CyclistLayer"];
+            gLayer = (GraphicsLayer)CycleMapView.Map.Layers["CyclistLayer"];
+
+            GetViewModel ().MapLayer = gLayer;
             GetViewModel ().GraphicsCollection += DisplayGraphics;
         }
 
@@ -31,12 +37,23 @@ namespace CycleCity_6.Tools.CyclistViewer
 
         private void DisplayGraphics(object sender, List<Graphic> graphics)
         {
-                var graphicsLayer = CycleMap.Layers["CyclistLayer"] as Esri.ArcGISRuntime.Layers.GraphicsLayer;
+            //gLayer.Graphics.AddRange (graphics);
 
-                foreach(var graphic in graphics)
-                {
-                    graphicsLayer.Graphics.Add (graphic);
-                }            
+            // löscht alle vorherigen elemente von dem graphicslayer
+            this.CycleMapView.Dispatcher.InvokeAsync (() => gLayer.Graphics.Clear ());
+            // Zeichnet die neue Graphics Collection auf den graphicslayer 
+            this.CycleMapView.Dispatcher.InvokeAsync (() => gLayer.Graphics.AddRange (graphics));
+
+            var mapPoint = new MapPoint (1091513, 7102386);
+            var markerSym = new Esri.ArcGISRuntime.Symbology.SimpleMarkerSymbol ();
+            markerSym.Color = Colors.Red;
+            markerSym.Style = Esri.ArcGISRuntime.Symbology.SimpleMarkerStyle.Circle;
+            markerSym.Size = 5;
+
+            var pointGraphic = new Esri.ArcGISRuntime.Layers.Graphic ();
+            pointGraphic.Geometry = mapPoint;
+            pointGraphic.Symbol = markerSym;
+            this.CycleMapView.Dispatcher.InvokeAsync (() => gLayer.Graphics.Add (pointGraphic));
         }
     }
 }

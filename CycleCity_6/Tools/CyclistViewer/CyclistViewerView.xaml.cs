@@ -19,6 +19,7 @@ namespace CycleCity_6.Tools.CyclistViewer
             InitializeComponent ();
 
             GetViewModel ().MapLayer = (GraphicsLayer)CycleMapView.Map.Layers["CyclistLayer"];
+            GetViewModel ().GraphicsCollection += DisplayGraphics;
         }
 
         private CyclistViewerViewModel GetViewModel()
@@ -28,9 +29,14 @@ namespace CycleCity_6.Tools.CyclistViewer
             return (CyclistViewerViewModel)DataContext;
         }
 
-        public Layer GraphicsLayer
+        private void DisplayGraphics(object sender, List<Graphic> graphics)
         {
-            get { return (GraphicsLayer)CycleMapView.Map.Layers["CyclistLayer"]; }
+                var graphicsLayer = CycleMap.Layers["CyclistLayer"] as Esri.ArcGISRuntime.Layers.GraphicsLayer;
+
+                foreach(var graphic in graphics)
+                {
+                    graphicsLayer.Graphics.Add (graphic);
+                }            
         }
     }
 }

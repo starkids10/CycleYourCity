@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Windows;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Tasks.Geocoding;
 
@@ -37,6 +38,11 @@ namespace CycleCity_6.Tools.CyclistViewer
                 {
                     graphicsLayer.Graphics.Add (graphic);
                 }            
+        }
+
+        private void HeatMapOrTracksAnzeigen_OnClick(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }

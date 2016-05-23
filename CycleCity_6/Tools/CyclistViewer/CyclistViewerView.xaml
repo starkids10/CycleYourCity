@@ -9,33 +9,36 @@
         <Binding Source="{StaticResource ResourceKey=ViewModelLocator}" Path="CyclistViewerViewModel" />
     </UserControl.DataContext>
 
-    <esri:MapView  Name="CycleMapView">
-        <esri:Map x:Name="CycleMap">
-                
+    <Grid>
+        <esri:MapView  x:Name="CycleMapView">
+            <esri:Map x:Name="CycleMap">
+
                 <esri:Map.InitialViewpoint>
                     <esri:ViewpointExtent XMin="1091513"
-                                 YMin="7102386"
-                                 XMax="1137172"
-                                 YMax="7069974"/>
+ 				YMin="7102386"
+ 				XMax="1137172"
+ 				YMax="7069974"/>
                 </esri:Map.InitialViewpoint>
 
                 <esri:ArcGISTiledMapServiceLayer x:Name="DarkMap"
-                                                 ServiceUri="http://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer"
-                                                 IsVisible="True">
-                </esri:ArcGISTiledMapServiceLayer>
+ 			ServiceUri="http://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer"
+ 			IsVisible="True"/>
                 <!--<esri:WmsLayer ServiceUri="http://geodienste.hamburg.de/HH_WMS_RadwegeGIS" 
                                x:Name="FahrradwegLayer"/>-->
 
-            <esri:GraphicsLayer ID="CyclistLayer">
-                <esri:GraphicsLayer.Renderer>
+                <esri:GraphicsLayer ID="CyclistLayer">
+                    <esri:GraphicsLayer.Renderer>
                         <esri:SimpleRenderer>
-                            <esri:SimpleRenderer.Symbol>
-                                <esri:SimpleLineSymbol Color="Tomato" Width="3" />
-                            </esri:SimpleRenderer.Symbol>
+                            <esri:SimpleLineSymbol Color="Tomato" Width="3" />
                         </esri:SimpleRenderer>
                     </esri:GraphicsLayer.Renderer>
                 </esri:GraphicsLayer>
             </esri:Map>
         </esri:MapView>
+        <StackPanel VerticalAlignment="Bottom" Margin="5" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Slider x:Name="slider" Maximum="100" TickPlacement="BottomRight"   Width="300" VerticalAlignment="Center"/>
+            <Button x:Name="button" Content="Button" Width="50"  Height="50"  Opacity="0.5" Click="HeatMapOrTracksAnzeigen_OnClick"/>
+        </StackPanel>
+    </Grid>
 </UserControl>
 

@@ -62,22 +62,22 @@ namespace CycleCity_6.Services
             List<MapPoint> pointList = new List<MapPoint>();
             List<Track> trackList = new List<Track>();
             JObject jObject = JObject.Parse (json);
-            var tracks = jObject["tracks"];
+            var tracks = jObject.Values();
 
             foreach(var track in tracks)
             {
-                var id = (int)track["track_id"];
-                var start = getDate((string)track["WayPoints"].First["time"]);
-                var end = getDate((string)track["WayPoints"].Last["time"]);
+                //var id = (int)track["track_id"];
+                var start = getDate((string)track.First["time"]);
+                var end = getDate((string)track.Last["time"]);
 
-                var waypoints = from points in track["WayPoints"].Children ()
+                var waypoints = from points in track.Children ()
                     select points;
                 foreach(var point in waypoints)
                 {
                     pointList.Add(new MapPoint((double) point["lon"], (double) point["lat"]));
                 }
                 var tour = new Polyline(pointList, SpatialReferences.Wgs84);
-                trackList.Add(new Track(id,tour,start,end));
+                trackList.Add(new Track(0,tour,start,end));
              }
             //Debug
             foreach (var track in trackList)
@@ -98,11 +98,11 @@ namespace CycleCity_6.Services
 
             List<Point> pointList = new List<Point>();
             JObject jObject = JObject.Parse(json);
-            var tracks = jObject["tracks"];
+            var tracks = jObject.Values();
             
             foreach (var track in tracks)
             {
-                var waypoints = from points in track["WayPoints"].Children()
+                var waypoints = from points in track.Children()
                                 select points;
                 foreach (var point in waypoints)
                 {

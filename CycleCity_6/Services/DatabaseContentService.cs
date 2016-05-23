@@ -2,37 +2,63 @@
 using System.IO;
 using System.Net;
 using System.Text;
+using Newtonsoft.Json.Linq;
+
 
 namespace CycleCity_6.Services
-{
+{ 
     class DatabaseContentService
     {
+        private readonly string _token;
+
+        public DatabaseContentService()
+        {
+            _token = getToken();
+        }
+
         /// <summary>
         /// @return: string aus angefragter Json Datei
         /// </summary>
-        public static string GetNewData()
+        public string GetNewData()
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create ("https://preview.api.cycleyourcity.jmakro.de:4040/log_coordinates.php"); //TODO URL
-            try
+            var request = (HttpWebRequest)WebRequest.Create("https://api.cyc.jmakro.de:4040/get_latest_coordinates.php");
+
+            var data = Encoding.ASCII.GetBytes("auth_token=" +_token);
+
+            request.Method = "POST";
+            request.ContentType = "application/x-www-form-urlencoded";
+            request.ContentLength = data.Length;
+
+            using (var stream = request.GetRequestStream())
             {
-                WebResponse response = request.GetResponse ();
-                using(Stream responseStream = response.GetResponseStream ())
-                {
-                    StreamReader reader = new StreamReader (responseStream, Encoding.UTF8);
-                    return reader.ReadToEnd (); //TODO liste von strings aus mehreren Json files ???
-                }
+                stream.Write(data, 0, data.Length);
             }
-            catch(WebException ex)
+
+            var response = (HttpWebResponse)request.GetResponse();
+
+            return new StreamReader(response.GetResponseStream()).ReadToEnd();
+        }
+
+        private string getToken()
+        {
+            HttpWebRequest request =
+                (HttpWebRequest) WebRequest.Create("https://api.cyc.jmakro.de:4040/get_auth_token.php");
+            var data = Encoding.ASCII.GetBytes("username=table&password=ftzfD3pz");
+
+            request.Method = "POST";
+            request.ContentType = "application/x-www-form-urlencoded";
+            request.ContentLength = data.Length;
+
+            using (var stream = request.GetRequestStream())
             {
-                WebResponse errorResponse = ex.Response;
-                using(Stream responseStream = errorResponse.GetResponseStream ())
-                {
-                    StreamReader reader = new StreamReader (responseStream, Encoding.GetEncoding ("utf-8"));
-                    String errorText = reader.ReadToEnd ();
-                    // log errorText
-                }
-                throw;
+                stream.Write(data, 0, data.Length);
             }
+
+            var response = (HttpWebResponse)request.GetResponse();
+
+            var responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
+            JObject jObject = JObject.Parse(responseString);
+            return jObject["auth_token"].ToString();
         }
     }
 

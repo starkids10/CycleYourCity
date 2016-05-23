@@ -14,46 +14,11 @@ namespace CycleCity_6.Services
         private readonly List<Track> _tracks;
         private readonly Dictionary<string, HeatPoint> _heatPoints;
         private Timer aTimer;
-
-        public String data = @"{'tracks':[
-  { 'track_id':'1',
-    'WayPoints': [
-    {
-      'cmt': '0',
-      'time': '2011-12-31 23:59:56',
-      'lat': '53.55299',
-      'lon': '9.93784',
-      'ele': '0.0'
-    },
-    {
-      'cmt': '1',
-      'time': '2011-12-31 23:59:59',
-      'lat': '53.55179',
-      'lon': '9.94323',
-      'ele': '0.0'
-    }
-  ]},
-  { 'track_id':'2',
-    'WayPoints': [
-    {
-      'cmt': '0',
-      'time': '2011-12-31 23:59:56',
-      'lat': '53.54617',
-      'lon': '9.95066',
-      'ele': '0.0'
-    },
-    {
-      'cmt': '1',
-      'time': '2011-12-31 23:59:59',
-      'lat': '53.54525',
-      'lon': '10.00127',
-      'ele': '0.0'
-    }
-  ]}
-]}";
+        private readonly DatabaseContentService _databaseContentService;
 
         public TrackService()
         {
+            _databaseContentService = new DatabaseContentService();
             _tracks = new List<Track>();
             _heatPoints = new Dictionary<string, HeatPoint>();
 
@@ -125,15 +90,18 @@ namespace CycleCity_6.Services
             }
         }
 
-    //TODO erst einkommentieren wenn wir daten vom Server kriegen
-    private void CollectData_OnTimedEvent(Object souce, System.Timers.ElapsedEventArgs e)
-    {
-        var tracks = GpsToEsriParser.ParseJsonToEsriPolyline (data)[0];
-        TrackAddedEvent (this, tracks);
+        private void CollectData_OnTimedEvent(Object souce, System.Timers.ElapsedEventArgs e)
+        {
+            var data = _databaseContentService.GetNewData();
+            var tracks = GpsToEsriParser.ParseJsonToEsriPolyline(data);
+            foreach (Track track in tracks)
+            {
+                TrackAddedEvent(this, track);
+            }
 
-        //var heatPoints = GpsToEsriParser.ParseJsonToPoinList(data);
-        //GenerateNewHeatMap(heatPoints);
-        //HeatPointAddedEvent(this, GetAllHeatPoints());
-    }
+            //var heatPoints = GpsToEsriParser.ParseJsonToPoinList(data);
+            //GenerateNewHeatMap(heatPoints);
+            //HeatPointAddedEvent(this, GetAllHeatPoints());
+        }
     }
 }

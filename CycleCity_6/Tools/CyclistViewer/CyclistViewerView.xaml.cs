@@ -55,11 +55,34 @@ namespace CycleCity_6.Tools.CyclistViewer
             pointGraphic.Geometry = mapPoint;
             pointGraphic.Symbol = markerSym;
             this.CycleMapView.Dispatcher.InvokeAsync (() => gLayer.Graphics.Add (pointGraphic));
+
+            //Aktuallisiert die Zeit
+            this.CycleMapView.Dispatcher.InvokeAsync(() => letzteAktuallisierung.Text = "Letzte Aktuallisierung: " + DateTime.Now.ToLongTimeString());
         }
 
         private void HeatMapOrTracksAnzeigen_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            if (sender.Equals(TrackAnzeigen))
+            {
+                //TODO Heatmap ausblenden 
+                //TODO Tracks Einblenden
+                TrackAnzeigen.Visibility = Visibility.Collapsed;
+                HeatMapAnzeigen.Visibility = Visibility.Visible;
+
+            }
+            if (sender.Equals(HeatMapAnzeigen))
+            {
+                //TODO Heatmap  einblenden
+                //TODO Tracks ausblenden
+                TrackAnzeigen.Visibility = Visibility.Visible;
+                HeatMapAnzeigen.Visibility = Visibility.Collapsed;
+            }
+
+        }
+
+        private void Slider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            //TODO Daten nach der ausgewählten Zeit anzeigen lassen
         }
     }
 }

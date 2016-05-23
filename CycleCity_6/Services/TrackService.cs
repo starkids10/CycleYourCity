@@ -57,7 +57,7 @@ namespace CycleCity_6.Services
             _tracks = new List<Track>();
             _heatPoints = new Dictionary<string, HeatPoint>();
 
-            aTimer = new Timer (10000);
+            aTimer = new Timer (1000);
             aTimer.Elapsed += CollectData_OnTimedEvent;
             aTimer.Enabled = true;
         }
@@ -112,33 +112,28 @@ namespace CycleCity_6.Services
                         locator.ReverseGeocodeAsync(newPoint.Coordinates,50, newPoint.Coordinates.SpatialReference,
                             CancellationToken.None);
                 string adresse = addressInfo.AddressFields["Address"];
-                Console.WriteLine (adresse);
                 HeatPoint heatPoint = null;
                 if (_heatPoints.TryGetValue(adresse, out heatPoint))
                 {
                     heatPoint.Points.Add(newPoint);
-                    Console.WriteLine ("hinzufügen");
                 }
                 else
                 {
                     _heatPoints.Add(adresse, new HeatPoint(new List<Point>() {newPoint}));
-                    Console.WriteLine ("neu");
                 }
 
             }
         }
 
-//        //TODO erst einkommentieren wenn wir daten vom Server kriegen
-          private void CollectData_OnTimedEvent(Object souce, System.Timers.ElapsedEventArgs e)
-         {
+    //TODO erst einkommentieren wenn wir daten vom Server kriegen
+    private void CollectData_OnTimedEvent(Object souce, System.Timers.ElapsedEventArgs e)
+    {
+        var tracks = GpsToEsriParser.ParseJsonToEsriPolyline (data)[0];
+        TrackAddedEvent (this, tracks);
 
-//            string data = DatabaseContentService.GetNewData();
-              
-
-              var heatPoints = GpsToEsriParser.ParseJsonToPoinList(data);
-              GenerateNewHeatMap(heatPoints);
-              HeatPointAddedEvent(this, GetAllHeatPoints());
-
-         }
+        //var heatPoints = GpsToEsriParser.ParseJsonToPoinList(data);
+        //GenerateNewHeatMap(heatPoints);
+        //HeatPointAddedEvent(this, GetAllHeatPoints());
+    }
     }
 }

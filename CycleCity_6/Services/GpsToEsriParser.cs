@@ -61,6 +61,7 @@ namespace CycleCity_6.Services
         {
             List<MapPoint> pointList = new List<MapPoint>();
             List<Track> trackList = new List<Track>();
+            //Hier stürzt beim gleichzeitigen starten das programm ab, weil der token neu vergeben wurde
             JObject jObject = JObject.Parse (json);
             var tracks = jObject.Values();
 
@@ -99,6 +100,7 @@ namespace CycleCity_6.Services
         {
 
             List<Point> pointList = new List<Point>();
+            //Hier stürzt beim gleichzeitigen starten das programm ab, weil der token neu vergeben wurde
             JObject jObject = JObject.Parse(json);
             var tracks = jObject.Values();
             

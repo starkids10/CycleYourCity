@@ -72,7 +72,7 @@ namespace CycleCity_6.Services
             var locator = new Esri.ArcGISRuntime.Tasks.Geocoding.OnlineLocatorTask(new Uri(@"http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"), String.Empty);
             foreach (Point newPoint in newPoints)
             {
-
+                Thread.Sleep(1000);
                 var addressInfo =
                     await
                         locator.ReverseGeocodeAsync(newPoint.Coordinates,50, newPoint.Coordinates.SpatialReference,
@@ -95,10 +95,11 @@ namespace CycleCity_6.Services
         {
             var data = _databaseContentService.GetNewData();
             var tracks = GpsToEsriParser.ParseJsonToEsriPolyline(data);
-            foreach (Track track in tracks)
-            {
-                TrackAddedEvent(this, track);
-            }
+            TrackAddedEvent(this, tracks[0]);
+            //foreach (Track track in tracks)
+            //{
+            //    TrackAddedEvent(this, track);
+            //}
 
             //var heatPoints = GpsToEsriParser.ParseJsonToPoinList(data);
             //GenerateNewHeatMap(heatPoints);

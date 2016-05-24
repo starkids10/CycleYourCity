@@ -16,17 +16,11 @@ namespace CycleCity_6.Tools.CyclistViewer
     /// </summary>
     public partial class CyclistViewerView : UserControl
     {
-
-        GraphicsLayer gLayer;
-
         public CyclistViewerView()
         {
             InitializeComponent ();
 
-            gLayer = (GraphicsLayer)CycleMapView.Map.Layers["CyclistLayer"];
-
-            GetViewModel ().MapLayer = gLayer;
-            GetViewModel ().GraphicsCollection += DisplayGraphics;
+            GetViewModel ().mapView = CycleMapView;
         }
 
         private CyclistViewerViewModel GetViewModel()
@@ -34,30 +28,6 @@ namespace CycleCity_6.Tools.CyclistViewer
             Contract.Requires (DataContext is CyclistViewerViewModel);
 
             return (CyclistViewerViewModel)DataContext;
-        }
-
-        private void DisplayGraphics(object sender, List<Graphic> graphics)
-        {
-            //gLayer.Graphics.AddRange (graphics);
-
-            // löscht alle vorherigen elemente von dem graphicslayer
-            this.CycleMapView.Dispatcher.InvokeAsync (() => gLayer.Graphics.Clear ());
-            // Zeichnet die neue Graphics Collection auf den graphicslayer 
-            this.CycleMapView.Dispatcher.InvokeAsync (() => gLayer.Graphics.AddRange (graphics));
-
-            //var mapPoint = new MapPoint (1091513, 7102386);
-            //var markerSym = new Esri.ArcGISRuntime.Symbology.SimpleMarkerSymbol ();
-            //markerSym.Color = Colors.Red;
-            //markerSym.Style = Esri.ArcGISRuntime.Symbology.SimpleMarkerStyle.Circle;
-            //markerSym.Size = 5;
-
-            //var pointGraphic = new Esri.ArcGISRuntime.Layers.Graphic ();
-            //pointGraphic.Geometry = mapPoint;
-            //pointGraphic.Symbol = markerSym;
-            //this.CycleMapView.Dispatcher.InvokeAsync (() => gLayer.Graphics.Add (pointGraphic));
-
-            //Aktuallisiert die Zeit
-            this.CycleMapView.Dispatcher.InvokeAsync(() => letzteAktuallisierung.Text = "Letzte Aktuallisierung: " + DateTime.Now.ToLongTimeString());
         }
 
         private void HeatMapOrTracksAnzeigen_OnClick(object sender, RoutedEventArgs e)

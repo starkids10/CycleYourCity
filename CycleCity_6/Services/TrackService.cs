@@ -47,7 +47,7 @@ namespace CycleCity_6.Services
             Contract.Ensures(Contract.Result<IEnumerable<HeatPoint>>() != null);
             Contract.Ensures(Contract.Result<IEnumerable<HeatPoint>>().Any());
             return _heatPoints.Values;
-        }
+        } 
 
         /// <summary>
         /// Adds a new Tour to the list
@@ -92,12 +92,11 @@ namespace CycleCity_6.Services
 
         private void CollectData_OnTimedEvent(Object souce, System.Timers.ElapsedEventArgs e)
         {
-
-            var data = _databaseContentService.GetNewData();
-            var tracks = GpsToEsriParser.ParseJsonToEsriPolyline(data);
-            foreach (Track track in tracks)
+            var data = _databaseContentService.GetNewData ();
+            var tracks = GpsToEsriParser.ParseJsonToEsriPolyline (data);
+            foreach(Track track in tracks)
             {
-                TrackAddedEvent(this, track);
+                TrackAddedEvent (this, track);
             }
 
             //var heatPoints = GpsToEsriParser.ParseJsonToPoinList(data);

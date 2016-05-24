@@ -26,7 +26,7 @@ namespace CycleCity_6.Tools.CyclistViewer
         {
             Contract.Requires (trackService != null);
 
-            //InitializeMap ();
+         
 
             //Tracks = new ObservableCollection<Track> (trackService.GetAllTracks ());
             //HeatMap = new ObservableCollection<HeatPoint>(trackService.GetAllHeatPoints());
@@ -124,26 +124,14 @@ namespace CycleCity_6.Tools.CyclistViewer
 
         private void TrackService_OnHeatMapChanged(object sender, IEnumerable<HeatPoint> heatPoints)
         {
-            //HeatMap.Concat(heatPoints);
-
-            //if (HasMapLayer())
-            //{
-            //    AddHeatmapToMapLayer(MapLayer);
-            //}
-
-            AddHeatmapToMapLayer (new List<Graphic>(), heatPoints);
+            //Liste wird kopiert um gleichzeitigen Zugriff zu verhindern
+            var heatPointsCopy = heatPoints.ToList();
+            AddHeatmapToMapLayer (new List<Graphic>(), heatPointsCopy);
         }
 
         private void TrackService_OnTrackAdded(object sender, Track track)
         {
             Contract.Requires (track != null);
-
-            //Tracks.Add (track);
-
-            //if(HasMapLayer ())
-            //{
-            //    AddTrackToMapLayer (MapLayer, track);
-            //}
             AddTrackToMapLayer (new List<Graphic>(), track);
         }
     }

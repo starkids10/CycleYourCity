@@ -45,16 +45,16 @@ namespace CycleCity_6.Tools.CyclistViewer
             // Zeichnet die neue Graphics Collection auf den graphicslayer 
             this.CycleMapView.Dispatcher.InvokeAsync (() => gLayer.Graphics.AddRange (graphics));
 
-            var mapPoint = new MapPoint (1091513, 7102386);
-            var markerSym = new Esri.ArcGISRuntime.Symbology.SimpleMarkerSymbol ();
-            markerSym.Color = Colors.Red;
-            markerSym.Style = Esri.ArcGISRuntime.Symbology.SimpleMarkerStyle.Circle;
-            markerSym.Size = 5;
+            //var mapPoint = new MapPoint (1091513, 7102386);
+            //var markerSym = new Esri.ArcGISRuntime.Symbology.SimpleMarkerSymbol ();
+            //markerSym.Color = Colors.Red;
+            //markerSym.Style = Esri.ArcGISRuntime.Symbology.SimpleMarkerStyle.Circle;
+            //markerSym.Size = 5;
 
-            var pointGraphic = new Esri.ArcGISRuntime.Layers.Graphic ();
-            pointGraphic.Geometry = mapPoint;
-            pointGraphic.Symbol = markerSym;
-            this.CycleMapView.Dispatcher.InvokeAsync (() => gLayer.Graphics.Add (pointGraphic));
+            //var pointGraphic = new Esri.ArcGISRuntime.Layers.Graphic ();
+            //pointGraphic.Geometry = mapPoint;
+            //pointGraphic.Symbol = markerSym;
+            //this.CycleMapView.Dispatcher.InvokeAsync (() => gLayer.Graphics.Add (pointGraphic));
 
             //Aktuallisiert die Zeit
             this.CycleMapView.Dispatcher.InvokeAsync(() => letzteAktuallisierung.Text = "Letzte Aktuallisierung: " + DateTime.Now.ToLongTimeString());

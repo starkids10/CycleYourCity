@@ -10,8 +10,8 @@
     </UserControl.DataContext>
 
     <Grid>
-        <esri:MapView  x:Name="CycleMapView">
-            <esri:Map x:Name="CycleMap">
+        <esri:MapView  x:Name="CycleMapView" Map="{Binding Map}">
+            <!--<esri:Map x:Name="CycleMap">
 
                 <esri:Map.InitialViewpoint>
                     <esri:ViewpointExtent XMin="1091513"
@@ -23,8 +23,8 @@
                 <esri:ArcGISTiledMapServiceLayer x:Name="DarkMap"
  			ServiceUri="http://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer"
  			IsVisible="True"/>
-                <!--<esri:WmsLayer ServiceUri="http://geodienste.hamburg.de/HH_WMS_RadwegeGIS" 
-                               x:Name="FahrradwegLayer"/>-->
+                <esri:WmsLayer ServiceUri="http://geodienste.hamburg.de/HH_WMS_RadwegeGIS" 
+                               x:Name="FahrradwegLayer"/>
 
                 <esri:GraphicsLayer ID="CyclistLayer">
                     <esri:GraphicsLayer.Renderer>
@@ -33,7 +33,7 @@
                         </esri:SimpleRenderer>
                     </esri:GraphicsLayer.Renderer>
                 </esri:GraphicsLayer>
-            </esri:Map>
+            </esri:Map>-->
         </esri:MapView>
         <TextBlock x:Name="letzteAktuallisierung" Text="Letzte Aktuallisierung: " HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Top" Margin="10"/>
         <StackPanel Name="ControlPanel"  VerticalAlignment="Bottom" Margin="5" Orientation="Horizontal" HorizontalAlignment="Center">

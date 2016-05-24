@@ -24,7 +24,7 @@ namespace CycleCity_6.Services
 
             aTimer = new Timer (1000);
             aTimer.Elapsed += CollectData_OnTimedEvent;
-            aTimer.Enabled = true;
+            //aTimer.Enabled = true;
         }
 
         public event EventHandler<Track> TrackAddedEvent = delegate { };

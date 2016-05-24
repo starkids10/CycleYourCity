@@ -26,7 +26,7 @@ namespace CycleCity_6.Tools.CyclistViewer
         {
             Contract.Requires (trackService != null);
 
-            //InitializeMap ();
+            InitializeMap ();
 
             //Tracks = new ObservableCollection<Track> (trackService.GetAllTracks ());
             //HeatMap = new ObservableCollection<HeatPoint>(trackService.GetAllHeatPoints());
@@ -35,6 +35,36 @@ namespace CycleCity_6.Tools.CyclistViewer
 
             //List<Track> trackList = GpsToEsriParser.ParseJsonToEsriPolyline (trackService.data);
 
+        }
+
+        public Map Map
+        {
+            get;
+            private set;
+        }
+
+        public void InitializeMap()
+        {
+            Map = new Map ();
+
+            // create a new layer (world street map tiled layer)
+            var uri = new Uri ("http://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer");
+            var baseLayer = new Esri.ArcGISRuntime.Layers.ArcGISTiledMapServiceLayer (uri);
+            // (give the layer an ID so it can be found later)
+            baseLayer.ID = "BaseMap";
+
+            var gLayer = new GraphicsLayer ();
+
+
+            // add the layer to the Map
+            Map.Layers.Add (baseLayer);
+            Map.Layers.Add(gLayer);
+            // set the initial view point
+            var mapPoint = new Esri.ArcGISRuntime.Geometry.MapPoint (9.993888, 53.548401,
+                Esri.ArcGISRuntime.Geometry.SpatialReferences.Wgs84);
+            var initViewPoint = new Esri.ArcGISRuntime.Controls.ViewpointCenter (mapPoint, 250000);
+
+            Map.InitialViewpoint = initViewPoint;            
         }
 
         public GraphicsLayer MapLayer

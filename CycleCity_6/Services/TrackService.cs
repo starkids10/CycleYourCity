@@ -22,7 +22,7 @@ namespace CycleCity_6.Services
             _tracks = new List<Track>();
             _heatPoints = new Dictionary<string, HeatPoint>();
 
-            aTimer = new Timer (1000);
+            aTimer = new Timer(1000);
             aTimer.Elapsed += CollectData_OnTimedEvent;
             aTimer.Enabled = true;
         }
@@ -47,7 +47,7 @@ namespace CycleCity_6.Services
             Contract.Ensures(Contract.Result<IEnumerable<HeatPoint>>() != null);
             Contract.Ensures(Contract.Result<IEnumerable<HeatPoint>>().Any());
             return _heatPoints.Values;
-        } 
+        }
 
         /// <summary>
         /// Adds a new Tour to the list
@@ -74,7 +74,7 @@ namespace CycleCity_6.Services
             {
                 var addressInfo =
                     await
-                        locator.ReverseGeocodeAsync(newPoint.Coordinates,50, newPoint.Coordinates.SpatialReference,
+                        locator.ReverseGeocodeAsync(newPoint.Coordinates, 50, newPoint.Coordinates.SpatialReference,
                             CancellationToken.None);
                 string adresse = addressInfo.AddressFields["Address"];
                 HeatPoint heatPoint = null;
@@ -84,7 +84,7 @@ namespace CycleCity_6.Services
                 }
                 else
                 {
-                    _heatPoints.Add(adresse, new HeatPoint(new List<Point>() {newPoint}));
+                    _heatPoints.Add(adresse, new HeatPoint(new List<Point>() { newPoint }));
                 }
 
             }
@@ -92,6 +92,7 @@ namespace CycleCity_6.Services
 
         private void CollectData_OnTimedEvent(Object souce, System.Timers.ElapsedEventArgs e)
         {
+
             var data = _databaseContentService.GetNewData();
             var tracks = GpsToEsriParser.ParseJsonToEsriPolyline(data);
             foreach (Track track in tracks)

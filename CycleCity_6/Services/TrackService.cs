@@ -54,7 +54,7 @@ namespace CycleCity_6.Services
         /// </summary>
         /// <param name="id">id of the track</param>
         /// <param tour="tour">Polyline for the track which simulates the tour</param>
-        public void AddNewTrack(int id, Polyline tour)
+        public void AddNewTrack(string id, Polyline tour)
         {
             var newTrack = new Track(id, tour);
 
@@ -72,7 +72,6 @@ namespace CycleCity_6.Services
             var locator = new Esri.ArcGISRuntime.Tasks.Geocoding.OnlineLocatorTask(new Uri(@"http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"), String.Empty);
             foreach (Point newPoint in newPoints)
             {
-
                 var addressInfo =
                     await
                         locator.ReverseGeocodeAsync(newPoint.Coordinates,50, newPoint.Coordinates.SpatialReference,

@@ -10,7 +10,7 @@ namespace CycleCity_6.Materials
 {
     public class Track
     {
-        public Track(int id, Polyline tour)
+        public Track(string id, Polyline tour)
         {
             Contract.Requires (tour != null);
 
@@ -18,7 +18,7 @@ namespace CycleCity_6.Materials
             Tour = tour;
         }
 
-        public Track(int id, Polyline tour, DateTime start, DateTime end)
+        public Track(string id, Polyline tour, DateTime start, DateTime end)
             : this(id, tour)
         {
             Contract.Requires(start != null);
@@ -30,7 +30,7 @@ namespace CycleCity_6.Materials
 
 
 
-        public int Id { get; }
+        public string Id { get; }
         public Polyline Tour { get; set; }
         public DateTime Startzeit { get; }
         public DateTime Endzeit { get; set; }
@@ -51,7 +51,8 @@ namespace CycleCity_6.Materials
 
         public override int GetHashCode()
         {
-            return Id;
+            //TODO besseren Hashcode ausdenken
+            return Id.Length;
         }
     }
 }

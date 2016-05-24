@@ -24,7 +24,7 @@ namespace CycleCity_6.Services
 
             aTimer = new Timer (1000);
             aTimer.Elapsed += CollectData_OnTimedEvent;
-            //aTimer.Enabled = true;
+            aTimer.Enabled = true;
         }
 
         public event EventHandler<Track> TrackAddedEvent = delegate { };
@@ -93,11 +93,11 @@ namespace CycleCity_6.Services
 
         private void CollectData_OnTimedEvent(Object souce, System.Timers.ElapsedEventArgs e)
         {
-            var data = _databaseContentService.GetNewData();
-            var tracks = GpsToEsriParser.ParseJsonToEsriPolyline(data);
-            foreach (Track track in tracks)
+            var data = _databaseContentService.GetNewData ();
+            var tracks = GpsToEsriParser.ParseJsonToEsriPolyline (data);
+            foreach(Track track in tracks)
             {
-                TrackAddedEvent(this, track);
+                TrackAddedEvent (this, track);
             }
 
             //var heatPoints = GpsToEsriParser.ParseJsonToPoinList(data);

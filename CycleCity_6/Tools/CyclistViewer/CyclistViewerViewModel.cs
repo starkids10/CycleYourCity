@@ -15,14 +15,12 @@ using System.ComponentModel;
 
 namespace CycleCity_6.Tools.CyclistViewer
 {
-    internal class CyclistViewerViewModel : ToolViewModel
+    internal class CyclistViewerViewModel : INotifyPropertyChanged
     {
-        //private String _LetzteAktuallisierung;
+        private String _LetzteAktuallisierung;
 
         private GraphicsLayer gLayer;
         public MapView mapView;
-
-        public event EventHandler<List<Graphic>> GraphicsCollection = delegate { };
 
         public CyclistViewerViewModel(TrackService trackService)
         {
@@ -30,7 +28,7 @@ namespace CycleCity_6.Tools.CyclistViewer
 
             InitializeMap ();
 
-            //LetzteAktuallisierung = "Letzte Aktuallisierung: " + DateTime.Now.ToLongTimeString ();
+            LetzteAktuallisierung = "Letzte Aktuallisierung: " + DateTime.Now.ToLongTimeString ();
 
             trackService.TrackAddedEvent += TrackService_OnTrackAdded;
             trackService.HeatPointAddedEvent += TrackService_OnHeatMapChanged;
@@ -42,11 +40,11 @@ namespace CycleCity_6.Tools.CyclistViewer
             private set;
         }
 
-        //public String LetzteAktuallisierung
-        //{
-        //    get { return _LetzteAktuallisierung; }
-        //    private set { _LetzteAktuallisierung = value; }
-        //}
+        public String LetzteAktuallisierung
+        {
+            get { return _LetzteAktuallisierung; }
+            private set { _LetzteAktuallisierung = value; Notify ("LetzteAktuallisierung");}
+        }
 
         public void InitializeMap()
         {
@@ -71,6 +69,13 @@ namespace CycleCity_6.Tools.CyclistViewer
             Map.InitialViewpoint = initViewPoint;            
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void Notify(string argument)
+        {   
+            PropertyChanged?.Invoke (this, new PropertyChangedEventArgs (argument));
+        }
+
         private void AddHeatmapToMapLayer(List<Graphic> collection, IEnumerable<HeatPoint> HeatMap)
         {
             //Contract.Requires(MapLayer != null);
@@ -92,15 +97,10 @@ namespace CycleCity_6.Tools.CyclistViewer
             simpleLineSymbol.Color = randomColor;
             collection.Add (new Graphic (track.Tour, simpleLineSymbol));
 
-            //GraphicsCollection (this, collection);
-            Console.WriteLine ("Draw Tracks");
-
             mapView.Dispatcher.InvokeAsync (() => gLayer.Graphics.Clear ());
             mapView.Dispatcher.InvokeAsync (() => gLayer.Graphics.AddRange(collection));
             //TODO aktuelle Zeit aktualisieren
-            //LetzteAktuallisierung = "Letzte Aktuallisierung: " + DateTime.Now.ToLongTimeString ();
-            //Console.WriteLine (LetzteAktuallisierung);
-
+            LetzteAktuallisierung = "Letzte Aktuallisierung: " + DateTime.Now.ToLongTimeString ();
         }
 
         private void AddHeatpointToMapLayer(List<Graphic> collection, HeatPoint heatPoint)

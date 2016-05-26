@@ -12,7 +12,7 @@
     <Grid>
         <esri:MapView  x:Name="CycleMapView" Map="{Binding Map}" />
 
-        <TextBlock x:Name="letzteAktuallisierung" Text="{Binding Name2}" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Top" Margin="10"/>
+        <TextBlock x:Name="letzteAktuallisierung" Text="{Binding Path=LetzteAktuallisierung, UpdateSourceTrigger=PropertyChanged}" Foreground="White" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Top" Margin="10"/>
         <StackPanel Name="ControlPanel"  VerticalAlignment="Bottom" Margin="5" Orientation="Horizontal" HorizontalAlignment="Center">
             <DockPanel VerticalAlignment="Center" Margin="10">
                 <TextBox Text="{Binding ElementName=slider, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Width="40" />

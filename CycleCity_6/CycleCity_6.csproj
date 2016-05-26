@@ -71,7 +71,6 @@
       <DependentUpon>CyclistViewerView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tools\CyclistViewer\CyclistViewerViewModel.cs" />
-    <Compile Include="Tools\ToolViewModel.cs" />
     <Compile Include="Tools\ViewModelLocator.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

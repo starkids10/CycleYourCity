@@ -20,67 +20,61 @@ namespace CycleCity_6.Services
         /// <returns>represents the track in the gpx file as a polyline</returns>
         public static Polyline ParseGpxToEsriPolyline(string url)
         {
-            List<MapPoint> points = new List<MapPoint> ();
+            List<MapPoint> points = new List<MapPoint>();
             try
             {
-                XDocument gpxDoc = XDocument.Load (@url);
-                XNamespace gpx = XNamespace.Get ("http://www.topografix.com/GPX/1/1");
-                var tracks = from track in gpxDoc.Descendants (gpx + "trk")
-                                select new
-                                {
-                                    Segs = (
-                                        from trackpoint in track.Descendants (gpx + "trkpt")
-                                        select new
-                                        {
-                                    Latitude = trackpoint.Attribute ("lat").Value,
-                                    Longitude = trackpoint.Attribute ("lon").Value,
-                                        })
-                                };
+                XDocument gpxDoc = XDocument.Load(@url);
+                XNamespace gpx = XNamespace.Get("http://www.topografix.com/GPX/1/1");
+                var tracks = from track in gpxDoc.Descendants(gpx + "trk")
+                             select new
+                             {
+                                 Segs = (
+                                     from trackpoint in track.Descendants(gpx + "trkpt")
+                                     select new
+                                     {
+                                         Latitude = trackpoint.Attribute("lat").Value,
+                                         Longitude = trackpoint.Attribute("lon").Value,
+                                     })
+                             };
 
-                foreach(var track in tracks)
+                foreach (var track in tracks)
                 {
-                    foreach(var trekSeg in track.Segs)
+                    foreach (var trekSeg in track.Segs)
                     {
-                        var y = Double.Parse (trekSeg.Latitude, CultureInfo.InvariantCulture);
-                        var x = Double.Parse (trekSeg.Longitude, CultureInfo.InvariantCulture);
-                        points.Add (new MapPoint (x, y));
+                        var y = Double.Parse(trekSeg.Latitude, CultureInfo.InvariantCulture);
+                        var x = Double.Parse(trekSeg.Longitude, CultureInfo.InvariantCulture);
+                        points.Add(new MapPoint(x, y));
                     }
                 }
-                Console.WriteLine (points.Count);
-                }
-            catch(FileNotFoundException)
-                {
-                Console.WriteLine ("File not found");
-                points = new List<MapPoint> ();
-                }
-            return new Polyline (points, SpatialReferences.Wgs84);
+                Console.WriteLine(points.Count);
+            }
+            catch (FileNotFoundException)
+            {
+                Console.WriteLine("File not found");
+                points = new List<MapPoint>();
+            }
+            return new Polyline(points, SpatialReferences.Wgs84);
         }
 
 
         public static List<Track> ParseJsonToEsriPolyline(String json)
         {
-            List<MapPoint> pointList = new List<MapPoint>();
             List<Track> trackList = new List<Track>();
             //Hier stürzt beim gleichzeitigen starten das programm ab, weil der token neu vergeben wurde
-            JObject jObject = JObject.Parse (json);
+            JObject jObject = JObject.Parse(json);
             var tracks = jObject.Values();
 
-            foreach(var track in tracks)
+            foreach (var track in tracks)
             {
                 var id = track.Path;
-               
                 var start = getDate((string)track.First["time"]);
                 var end = getDate((string)track.Last["time"]);
 
-                var waypoints = from points in track.Children ()
-                    select points;
-                foreach(var point in waypoints)
-                {
-                    pointList.Add(new MapPoint((double) point["lon"], (double) point["lat"]));
-                }
+                var waypoints = track.Children();
+                List<MapPoint> pointList = waypoints.Select(point => new MapPoint((double) point["lon"], (double) point["lat"])).ToList();
                 var tour = new Polyline(pointList, SpatialReferences.Wgs84);
-                trackList.Add(new Track(id,tour,start,end));
-             }
+                trackList.Add(new Track(id, tour, start, end));
+            }
 
             //Debug
             foreach (var track in trackList)
@@ -95,7 +89,7 @@ namespace CycleCity_6.Services
         /// Liefert alle Points aus dem Json-String in Form einer Liste von Points
         /// </summary>
         /// <param name="json"></param>
-        /// <returns></returns>
+        /// <returns>alle punkte von allen tracks in dem übergebenen json string</returns>
         public static List<Point> ParseJsonToPoinList(string json)
         {
 
@@ -103,7 +97,7 @@ namespace CycleCity_6.Services
             //Hier stürzt beim gleichzeitigen starten das programm ab, weil der token neu vergeben wurde
             JObject jObject = JObject.Parse(json);
             var tracks = jObject.Values();
-            
+
             foreach (var track in tracks)
             {
                 var waypoints = from points in track.Children()
@@ -113,13 +107,13 @@ namespace CycleCity_6.Services
                     //Zeit+Datum für jeden Punkt extrahieren
                     var tempTime = (string)point["time"];
                     var time = getDate(tempTime);
-                    var mappoint = new MapPoint((double) point["lon"], (double) point["lat"],0,SpatialReferences.Wgs84);
-                    pointList.Add(new Point(mappoint,time));
+                    var mappoint = new MapPoint((double)point["lon"], (double)point["lat"], (double)point["ele"], SpatialReferences.Wgs84);
+                    pointList.Add(new Point(mappoint, time));
                 }
             }
             return pointList;
         }
-        
+
         /// <summary>
         /// Erstellt aus einem Json String ein DateTime-Objekt
         /// </summary>

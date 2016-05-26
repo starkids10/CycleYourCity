@@ -47,7 +47,7 @@ namespace CycleCity_6.Services
             Contract.Ensures(Contract.Result<IEnumerable<HeatPoint>>() != null);
             Contract.Ensures(Contract.Result<IEnumerable<HeatPoint>>().Any());
             return _heatPoints.Values;
-        } 
+        }
 
         /// <summary>
         /// Adds a new Tour to the list
@@ -72,11 +72,22 @@ namespace CycleCity_6.Services
             var locator = new Esri.ArcGISRuntime.Tasks.Geocoding.OnlineLocatorTask(new Uri(@"http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"), String.Empty);
             foreach (Point newPoint in newPoints)
             {
-                var addressInfo =
-                    await
-                        locator.ReverseGeocodeAsync(newPoint.Coordinates, 50, newPoint.Coordinates.SpatialReference,
-                            CancellationToken.None);
-                string adresse = addressInfo.AddressFields["Address"];
+                string adresse = "";
+                try
+                {
+                    var addressInfo =
+                        await
+                            locator.ReverseGeocodeAsync(newPoint.Coordinates, 50, newPoint.Coordinates.SpatialReference,
+                                CancellationToken.None);
+                     adresse = addressInfo.AddressFields["Address"];
+
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Esri Geocode-Server reagiert nicht oder Adresse unbekannt");
+                    adresse = "unbekannt";
+                }
+              
                 HeatPoint heatPoint = null;
                 if (_heatPoints.TryGetValue(adresse, out heatPoint))
                 {
@@ -92,16 +103,21 @@ namespace CycleCity_6.Services
 
         private void CollectData_OnTimedEvent(Object souce, System.Timers.ElapsedEventArgs e)
         {
-            var data = _databaseContentService.GetNewData ();
-            var tracks = GpsToEsriParser.ParseJsonToEsriPolyline (data);
-            foreach(Track track in tracks)
+            var data = _databaseContentService.GetNewData();
+            var tracks = GpsToEsriParser.ParseJsonToEsriPolyline(data);
+            foreach (Track track in tracks)
             {
-                TrackAddedEvent (this, track);
+                TrackAddedEvent(this, track);
             }
 
             //var heatPoints = GpsToEsriParser.ParseJsonToPoinList(data);
             //GenerateNewHeatMap(heatPoints);
             //HeatPointAddedEvent(this, GetAllHeatPoints());
+        }
+
+        public void AktiviereUpdate(bool x)
+        {
+            aTimer.Enabled = x;
         }
     }
 }

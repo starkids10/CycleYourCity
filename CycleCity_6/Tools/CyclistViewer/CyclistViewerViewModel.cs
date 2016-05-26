@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using CycleCity_6.Materials;
 using CycleCity_6.Services;
@@ -21,6 +22,7 @@ namespace CycleCity_6.Tools.CyclistViewer
 
         private GraphicsLayer gLayer;
         public MapView mapView;
+        private TrackService _trackService;
 
         public event EventHandler<List<Graphic>> GraphicsCollection = delegate { };
 
@@ -31,7 +33,7 @@ namespace CycleCity_6.Tools.CyclistViewer
             InitializeMap ();
 
             //LetzteAktuallisierung = "Letzte Aktuallisierung: " + DateTime.Now.ToLongTimeString ();
-
+            _trackService = trackService;
             trackService.TrackAddedEvent += TrackService_OnTrackAdded;
             trackService.HeatPointAddedEvent += TrackService_OnHeatMapChanged;
         }
@@ -80,10 +82,11 @@ namespace CycleCity_6.Tools.CyclistViewer
             }
         }
 
-        private void AddTrackToMapLayer(List<Graphic> collection, Track track)
+        private void  AddTrackToMapLayer(List<Graphic> collection, Track track)
         {
             //Contract.Requires (MapLayer != null);
             Contract.Requires (track != null);
+
 
             var simpleLineSymbol = new SimpleLineSymbol {Width = 3};
             Random randomGen = new Random ();
@@ -105,6 +108,7 @@ namespace CycleCity_6.Tools.CyclistViewer
 
         private void AddHeatpointToMapLayer(List<Graphic> collection, HeatPoint heatPoint)
         {
+            _trackService.AktiviereUpdate(false);
             var punktStyle = new SimpleMarkerSymbol();
             var heat = heatPoint.Heat;
 
@@ -130,21 +134,23 @@ namespace CycleCity_6.Tools.CyclistViewer
             }
 
             List<Point> points = heatPoint.Points;
+            Point[] pointsClone = new Point[points.Count];
+            points.ToArray().CopyTo(pointsClone, 0);
 
-            foreach (Point point in points)
+            foreach (Point point in pointsClone)
             {
                collection.Add(new Graphic(point.Coordinates,punktStyle));
+               
             }
 
             mapView.Dispatcher.InvokeAsync (() => gLayer.Graphics.Clear ());
             mapView.Dispatcher.InvokeAsync (() => gLayer.Graphics.AddRange (collection));
+            _trackService.AktiviereUpdate(true);
         }
 
         private void TrackService_OnHeatMapChanged(object sender, IEnumerable<HeatPoint> heatPoints)
         {
-            //Liste wird kopiert um gleichzeitigen Zugriff zu verhindern
-            var heatPointsCopy = heatPoints.ToList();
-            AddHeatmapToMapLayer (new List<Graphic>(), heatPointsCopy);
+            AddHeatmapToMapLayer (new List<Graphic>(), heatPoints);
         }
 
         private void TrackService_OnTrackAdded(object sender, Track track)
@@ -152,5 +158,7 @@ namespace CycleCity_6.Tools.CyclistViewer
             Contract.Requires (track != null);
             AddTrackToMapLayer (new List<Graphic>(), track);
         }
+
+
     }
 }

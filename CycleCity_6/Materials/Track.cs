@@ -10,28 +10,23 @@ namespace CycleCity_6.Materials
 {
     public class Track
     {
-        public Track(string id, Polyline tour)
+        public Track(string id, Polyline tour, Point start, Point ende)
         {
             Contract.Requires (tour != null);
 
             Id = id;
             Tour = tour;
+            Startpunkt = start;
+            Endpunkt = ende;
+            Startzeit = start.Time;
+            Endzeit = ende.Time;
+
         }
-
-        public Track(string id, Polyline tour, DateTime start, DateTime end)
-            : this(id, tour)
-        {
-            Contract.Requires(start != null);
-            Contract.Requires(end != null);
-
-            Startzeit = start;
-            Endzeit = end;
-        }
-
-
 
         public string Id { get; }
         public Polyline Tour { get; set; }
+        public Point Startpunkt { get; set; }
+        public Point Endpunkt { get; set; }
         public DateTime Startzeit { get; }
         public DateTime Endzeit { get; set; }
 

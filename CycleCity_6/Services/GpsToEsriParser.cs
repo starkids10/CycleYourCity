@@ -67,13 +67,16 @@ namespace CycleCity_6.Services
             foreach (var track in tracks)
             {
                 var id = track.Path;
-                var start = getDate((string)track.First["time"]);
-                var end = getDate((string)track.Last["time"]);
+                var startzeit = getDate((string)track.First["time"]);
+                var endzeit = getDate((string)track.Last["time"]);
 
                 var waypoints = track.Children();
                 List<MapPoint> pointList = waypoints.Select(point => new MapPoint((double) point["lon"], (double) point["lat"])).ToList();
                 var tour = new Polyline(pointList, SpatialReferences.Wgs84);
-                trackList.Add(new Track(id, tour, start, end));
+
+                var startpunkt = new Point(pointList.First(),startzeit);
+                var endpunkt = new Point(pointList.Last(), endzeit);
+                trackList.Add(new Track(id, tour, startpunkt, endpunkt));
             }
 
             //Debug

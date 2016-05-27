@@ -50,20 +50,6 @@ namespace CycleCity_6.Services
         }
 
         /// <summary>
-        /// Adds a new Tour to the list
-        /// </summary>
-        /// <param name="id">id of the track</param>
-        /// <param tour="tour">Polyline for the track which simulates the tour</param>
-        public void AddNewTrack(string id, Polyline tour)
-        {
-            var newTrack = new Track(id, tour);
-
-            _tracks.Add(newTrack);
-
-            TrackAddedEvent(this, newTrack);
-        }
-
-        /// <summary>
         /// Generiert die HeatMap neu.
         /// </summary>
         /// <param name="newPoints">Liste von neu hinzuzufügenden Punkten</param>
@@ -103,6 +89,7 @@ namespace CycleCity_6.Services
 
         private void CollectData_OnTimedEvent(Object souce, System.Timers.ElapsedEventArgs e)
         {
+
             var data = _databaseContentService.GetNewData();
             var tracks = GpsToEsriParser.ParseJsonToEsriPolyline(data);
             foreach (Track track in tracks)

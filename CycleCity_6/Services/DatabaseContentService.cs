@@ -14,7 +14,15 @@ namespace CycleCity_6.Services
 
         public DatabaseContentService()
         {
-            _token = getToken();
+            try
+            {
+                _token = getToken();
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
         }
 
         /// <summary>
@@ -70,7 +78,7 @@ namespace CycleCity_6.Services
             }
             catch (Exception)
             {
-                throw new WebException("Keine Verbindung zum CycleYourCity-Server");
+                throw new WebException("Token kann nicht angefordert werden.");
             }
         }
     }

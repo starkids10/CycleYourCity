@@ -13,6 +13,9 @@ using System.Linq;
 
 using System.Windows.Media;
 using System.ComponentModel;
+using System.Net;
+using System.Windows;
+using Point = CycleCity_6.Materials.Point;
 
 namespace CycleCity_6.Tools.CyclistViewer
 {
@@ -26,14 +29,15 @@ namespace CycleCity_6.Tools.CyclistViewer
 
         public CyclistViewerViewModel(TrackService trackService)
         {
-            Contract.Requires (trackService != null);
+            Contract.Requires(trackService != null);
 
-            InitializeMap ();
+            InitializeMap();
 
-            LetzteAktuallisierung = "Letzte Aktuallisierung: " + DateTime.Now.ToLongTimeString ();
+            LetzteAktuallisierung = "Letzte Aktuallisierung: " + DateTime.Now.ToLongTimeString();
             _trackService = trackService;
             trackService.TrackAddedEvent += TrackService_OnTrackAdded;
             trackService.HeatPointAddedEvent += TrackService_OnHeatMapChanged;
+            trackService.KeineInternetVerbindungEvent += TrackService_OnKeineInternetVerbindung;
         }
 
         public Map Map
@@ -45,37 +49,37 @@ namespace CycleCity_6.Tools.CyclistViewer
         public String LetzteAktuallisierung
         {
             get { return _LetzteAktuallisierung; }
-            private set { _LetzteAktuallisierung = value; Notify ("LetzteAktuallisierung");}
+            private set { _LetzteAktuallisierung = value; Notify("LetzteAktuallisierung"); }
         }
 
         public void InitializeMap()
         {
-            Map = new Map ();
+            Map = new Map();
 
             // create a new layer (world street map tiled layer)
-            var uri = new Uri ("http://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer");
-            var baseLayer = new Esri.ArcGISRuntime.Layers.ArcGISTiledMapServiceLayer (uri);
+            var uri = new Uri("http://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer");
+            var baseLayer = new Esri.ArcGISRuntime.Layers.ArcGISTiledMapServiceLayer(uri);
             // (give the layer an ID so it can be found later)
             baseLayer.ID = "BaseMap";
 
-            gLayer = new GraphicsLayer ();
+            gLayer = new GraphicsLayer();
 
             // add the layer to the Map
-            Map.Layers.Add (baseLayer);
+            Map.Layers.Add(baseLayer);
             Map.Layers.Add(gLayer);
             // set the initial view point
-            var mapPoint = new Esri.ArcGISRuntime.Geometry.MapPoint (9.993888, 53.548401,
+            var mapPoint = new Esri.ArcGISRuntime.Geometry.MapPoint(9.993888, 53.548401,
                 Esri.ArcGISRuntime.Geometry.SpatialReferences.Wgs84);
-            var initViewPoint = new Esri.ArcGISRuntime.Controls.ViewpointCenter (mapPoint, 250000);
+            var initViewPoint = new Esri.ArcGISRuntime.Controls.ViewpointCenter(mapPoint, 250000);
 
-            Map.InitialViewpoint = initViewPoint;            
+            Map.InitialViewpoint = initViewPoint;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void Notify(string argument)
-        {   
-            PropertyChanged?.Invoke (this, new PropertyChangedEventArgs (argument));
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(argument));
         }
 
         private void AddHeatmapToMapLayer(List<Graphic> collection, IEnumerable<HeatPoint> HeatMap)
@@ -87,23 +91,22 @@ namespace CycleCity_6.Tools.CyclistViewer
             }
         }
 
-        private void  AddTrackToMapLayer(List<Graphic> collection, Track track)
+        private void AddTrackToMapLayer(List<Graphic> collection, Track track)
         {
             //Contract.Requires (MapLayer != null);
-            Contract.Requires (track != null);
+            Contract.Requires(track != null);
 
 
-            var simpleLineSymbol = new SimpleLineSymbol {Width = 3};
-            Random randomGen = new Random ();
-            var randomColor = Color.FromRgb ((byte)randomGen.Next (255), (byte)randomGen.Next (255), (byte)randomGen.Next (255));
+            var simpleLineSymbol = new SimpleLineSymbol { Width = 3 };
+            Random randomGen = new Random();
+            var randomColor = Color.FromRgb((byte)randomGen.Next(255), (byte)randomGen.Next(255), (byte)randomGen.Next(255));
 
             simpleLineSymbol.Color = randomColor;
-            collection.Add (new Graphic (track.Tour, simpleLineSymbol));
+            collection.Add(new Graphic(track.Tour, simpleLineSymbol));
 
-            mapView.Dispatcher.InvokeAsync (() => gLayer.Graphics.Clear ());
-            mapView.Dispatcher.InvokeAsync (() => gLayer.Graphics.AddRange(collection));
-            //TODO aktuelle Zeit aktualisieren
-            LetzteAktuallisierung = "Letzte Aktuallisierung: " + DateTime.Now.ToLongTimeString ();
+            mapView.Dispatcher.InvokeAsync(() => gLayer.Graphics.Clear());
+            mapView.Dispatcher.InvokeAsync(() => gLayer.Graphics.AddRange(collection));
+            LetzteAktuallisierung = "Letzte Aktuallisierung: " + DateTime.Now.ToLongTimeString();
         }
 
         private void AddHeatpointToMapLayer(List<Graphic> collection, HeatPoint heatPoint)
@@ -139,24 +142,38 @@ namespace CycleCity_6.Tools.CyclistViewer
 
             foreach (Point point in pointsClone)
             {
-               collection.Add(new Graphic(point.Coordinates,punktStyle));
-               
+                collection.Add(new Graphic(point.Coordinates, punktStyle));
+
             }
 
-            mapView.Dispatcher.InvokeAsync (() => gLayer.Graphics.Clear ());
-            mapView.Dispatcher.InvokeAsync (() => gLayer.Graphics.AddRange (collection));
+            mapView.Dispatcher.InvokeAsync(() => gLayer.Graphics.Clear());
+            mapView.Dispatcher.InvokeAsync(() => gLayer.Graphics.AddRange(collection));
             _trackService.AktiviereUpdate(true);
         }
 
         private void TrackService_OnHeatMapChanged(object sender, IEnumerable<HeatPoint> heatPoints)
         {
-            AddHeatmapToMapLayer (new List<Graphic>(), heatPoints);
+            AddHeatmapToMapLayer(new List<Graphic>(), heatPoints);
         }
 
         private void TrackService_OnTrackAdded(object sender, Track track)
         {
-            Contract.Requires (track != null);
-            AddTrackToMapLayer (new List<Graphic>(), track);
+            Contract.Requires(track != null);
+            AddTrackToMapLayer(new List<Graphic>(), track);
+        }
+
+        private void TrackService_OnKeineInternetVerbindung(object sender, UnhandledExceptionEventArgs e)
+        {
+            var result = MessageBox.Show("Es besteht keine Verbindung zum Server. Drücken Sie 'Ok' um es erneut zu versuchen oder 'Cancel' zum Beenden des Programms.", "Netzwerkfehler", MessageBoxButton.OKCancel,
+                   MessageBoxImage.Error);
+            if (result == MessageBoxResult.OK)
+            {
+                _trackService.AktiviereUpdate(true);
+            }
+            else
+            {
+                Environment.Exit(-1);
+            }
         }
 
 

@@ -129,8 +129,17 @@ namespace CycleCity_6.Services
             var time = tempTime[1];
             var dateArray = date.Split('-');
             var timeArray = time.Split(':');
+            try
+            {
             return new DateTime(int.Parse(dateArray[0]), int.Parse(dateArray[1]), int.Parse(dateArray[2]),
                 int.Parse(timeArray[0]), int.Parse(timeArray[1]), int.Parse(timeArray[2]));
+
+            }
+            catch (Exception)
+            {
+
+                return DateTime.Now;
+            }
         }
     }
 }

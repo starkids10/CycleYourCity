@@ -142,6 +142,7 @@ namespace CycleCity_6.Tools.CyclistViewer
 
             List<Point> points = heatPoint.Points;
             Point[] pointsClone = new Point[points.Count];
+            // TODO hier fliegt er raus wenn die heatmap zu lange offen ist
             points.ToArray().CopyTo(pointsClone, 0);
 
             foreach (Point point in pointsClone)

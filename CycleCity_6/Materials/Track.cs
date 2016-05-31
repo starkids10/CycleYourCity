@@ -28,8 +28,6 @@ namespace CycleCity_6.Materials
             Endzeit = end;
         }
 
-
-
         public string Id { get; }
         public Polyline Tour { get; set; }
         public DateTime Startzeit { get; }

@@ -71,7 +71,7 @@ namespace CycleCity_6.Services
                 var endzeit = getDate((string)track.Last["time"]);
 
                 var waypoints = track.Children();
-                var pointList = waypoints.Select(point => new MapPoint((double)point["lon"], (double)point["lat"])).ToList();
+                var pointList = waypoints.Select(point => new MapPoint((double)point["lon"], (double)point["lat"], SpatialReferences.Wgs84)).ToList();
                 var tour = new Polyline(pointList, SpatialReferences.Wgs84);
 
                 var startpunkt = new Point(pointList.First(), startzeit);
@@ -80,10 +80,10 @@ namespace CycleCity_6.Services
             }
 
             //Debug
-            foreach (var track in trackList)
-            {
-                Console.WriteLine(track.Startzeit + "\n" + track.Endzeit + "\n" + track.Tour);
-            }
+            //foreach (var track in trackList)
+            //{
+            //    Console.WriteLine(track.Startzeit + "\n" + track.Endzeit + "\n" + track.Tour);
+            //}
 
             return trackList;
         }

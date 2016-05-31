@@ -174,12 +174,30 @@ namespace CycleCity_6.Tools.CyclistViewer
             foreach(var track in tracks)
             {
                 var simpleLineSymbol = new SimpleLineSymbol { Width = 3 };
-                
-                //var randomColor = Color.FromRgb ((byte)randomGen.Next (255), (byte)randomGen.Next (255), (byte)randomGen.Next (255));
-                var randomColor = Colors.Blue;
+                simpleLineSymbol.Color = Colors.Blue;
 
-                simpleLineSymbol.Color = randomColor;
+                var markerSym = new SimpleMarkerSymbol ();
+                markerSym.Color = Colors.Red;
+                markerSym.Style = SimpleMarkerStyle.Diamond;
+                markerSym.Size = 8;
+
+                var pointGraphic = new Graphic ();
+                pointGraphic.Geometry = track.Endpunkt.Coordinates;
+                pointGraphic.Symbol = markerSym;
+
+                var markerSym2 = new SimpleMarkerSymbol ();
+                markerSym2.Color = Colors.Black;
+                markerSym2.Style = SimpleMarkerStyle.Circle;
+                markerSym2.Size = 8;
+
+                var pointGraphic2 = new Graphic ();
+                pointGraphic2.Geometry = track.Startpunkt.Coordinates;
+                pointGraphic2.Symbol = markerSym2;
+
+
                 collection.Add (new Graphic (track.Tour, simpleLineSymbol));
+                collection.Add (pointGraphic);
+                collection.Add (pointGraphic2);
             }
 
             mapView.Dispatcher.InvokeAsync (() => gLayer.Graphics.Clear ());

@@ -99,7 +99,7 @@ namespace CycleCity_6.Tools.CyclistViewer
 
             mapView.Dispatcher.InvokeAsync (() => gLayer.Graphics.Clear ());
             mapView.Dispatcher.InvokeAsync (() => gLayer.Graphics.AddRange(collection));
-            //TODO aktuelle Zeit aktualisieren
+
             LetzteAktuallisierung = "Letzte Aktuallisierung: " + DateTime.Now.ToLongTimeString ();
         }
 

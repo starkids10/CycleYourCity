@@ -16,12 +16,14 @@ namespace CycleCity_6.Services
         private readonly Dictionary<string, HeatPoint> _heatPoints;
         private Timer aTimer;
         private readonly DatabaseContentService _databaseContentService;
+        public bool heatmapAnzeigen { get; set; }
 
         public TrackService()
         {
             _databaseContentService = initServerConnection();
             _tracks = new List<Track>();
             _heatPoints = new Dictionary<string, HeatPoint>();
+            heatmapAnzeigen = false;
 
             aTimer = new Timer(1000);
             aTimer.Elapsed += CollectData_OnTimedEvent;
@@ -65,25 +67,25 @@ namespace CycleCity_6.Services
 
         public List<Track> Test()
         {
-            List<Track> data = new List<Track> ();
+            List<Track> data = new List<Track>();
 
-            data.Add (new Track ("125", GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\124744.gpx")));
-            data.Add (new Track ("125", GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\124744.gpx")));
-            data.Add (new Track ("125", GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\268452.gpx")));
-            data.Add (new Track ("125", GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\371034.gpx")));
-            data.Add (new Track ("125", GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\1176550.gpx")));
-            data.Add (new Track ("125", GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\1383637.gpx")));
-            data.Add (new Track ("125", GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\1689922.gpx")));
-            data.Add (new Track ("125", GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\1936187.gpx")));
-            data.Add (new Track ("125", GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\2676847.gpx")));
-            data.Add (new Track ("125", GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\2760562.gpx")));
-            data.Add (new Track ("125", GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\2786928.gpx")));
-            data.Add (new Track ("125", GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\2830496.gpx")));
-            data.Add (new Track ("125", GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\2938461.gpx")));
-            data.Add (new Track ("125", GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\3012989.gpx")));
-            data.Add (new Track ("125", GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\3014395.gpx")));
-            data.Add (new Track ("125", GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\3033481.gpx")));
-            data.Add (new Track ("125", GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\3041433.gpx")));
+            data.Add(new Track("125", GpsToEsriParser.ParseGpxToEsriPolyline(@"C:\Users\David\Desktop\124744.gpx")));
+            data.Add(new Track("125", GpsToEsriParser.ParseGpxToEsriPolyline(@"C:\Users\David\Desktop\124744.gpx")));
+            data.Add(new Track("125", GpsToEsriParser.ParseGpxToEsriPolyline(@"C:\Users\David\Desktop\268452.gpx")));
+            data.Add(new Track("125", GpsToEsriParser.ParseGpxToEsriPolyline(@"C:\Users\David\Desktop\371034.gpx")));
+            data.Add(new Track("125", GpsToEsriParser.ParseGpxToEsriPolyline(@"C:\Users\David\Desktop\1176550.gpx")));
+            data.Add(new Track("125", GpsToEsriParser.ParseGpxToEsriPolyline(@"C:\Users\David\Desktop\1383637.gpx")));
+            data.Add(new Track("125", GpsToEsriParser.ParseGpxToEsriPolyline(@"C:\Users\David\Desktop\1689922.gpx")));
+            data.Add(new Track("125", GpsToEsriParser.ParseGpxToEsriPolyline(@"C:\Users\David\Desktop\1936187.gpx")));
+            data.Add(new Track("125", GpsToEsriParser.ParseGpxToEsriPolyline(@"C:\Users\David\Desktop\2676847.gpx")));
+            data.Add(new Track("125", GpsToEsriParser.ParseGpxToEsriPolyline(@"C:\Users\David\Desktop\2760562.gpx")));
+            data.Add(new Track("125", GpsToEsriParser.ParseGpxToEsriPolyline(@"C:\Users\David\Desktop\2786928.gpx")));
+            data.Add(new Track("125", GpsToEsriParser.ParseGpxToEsriPolyline(@"C:\Users\David\Desktop\2830496.gpx")));
+            data.Add(new Track("125", GpsToEsriParser.ParseGpxToEsriPolyline(@"C:\Users\David\Desktop\2938461.gpx")));
+            data.Add(new Track("125", GpsToEsriParser.ParseGpxToEsriPolyline(@"C:\Users\David\Desktop\3012989.gpx")));
+            data.Add(new Track("125", GpsToEsriParser.ParseGpxToEsriPolyline(@"C:\Users\David\Desktop\3014395.gpx")));
+            data.Add(new Track("125", GpsToEsriParser.ParseGpxToEsriPolyline(@"C:\Users\David\Desktop\3033481.gpx")));
+            data.Add(new Track("125", GpsToEsriParser.ParseGpxToEsriPolyline(@"C:\Users\David\Desktop\3041433.gpx")));
 
             return data;
         }
@@ -131,22 +133,36 @@ namespace CycleCity_6.Services
         {
             if (_databaseContentService != null)
             {
-                //TODO Wenn während das Benutzens das Internet ausfällt, wird hier eine exception geworfen.
-                var data = _databaseContentService.GetNewData ();
-                var tracks = GpsToEsriParser.ParseJsonToEsriPolyline (data);
+                try
+                {
+                    //TODO Wenn während das Benutzens das Internet ausfällt, wird hier eine exception geworfen.
+                    var data = _databaseContentService.GetNewData();
 
-                TrackAddedEvent (this, tracks);
+                    if (heatmapAnzeigen)
+                    {
+                        var heatPoints = GpsToEsriParser.ParseJsonToPoinList(data);
+                        GenerateNewHeatMap(heatPoints);
+                        HeatPointAddedEvent(this, _heatPoints.Values);
+                    }
+                    else
+                    {
+                        var tracks = GpsToEsriParser.ParseJsonToEsriPolyline(data);
+                        TrackAddedEvent(this, tracks);
 
-                //TrackAddedEvent (this, Test ());
+                    }
 
-                //var heatPoints = GpsToEsriParser.ParseJsonToPoinList(data);
-                //GenerateNewHeatMap(heatPoints);
-                //HeatPointAddedEvent(this, heatPoints);
+
+                }
+                catch (WebException webException)
+                {
+                    aTimer.Enabled = false;
+                    KeineInternetVerbindungEvent(this, new UnhandledExceptionEventArgs(webException.Status, false));
+                }
             }
             else
             {
                 aTimer.Enabled = false;
-                KeineInternetVerbindungEvent(this, new UnhandledExceptionEventArgs(new WebException("Keine Internetverbindung"),false ));
+                KeineInternetVerbindungEvent(this, new UnhandledExceptionEventArgs(new WebException("Keine Internetverbindung"), false));
             }
         }
 

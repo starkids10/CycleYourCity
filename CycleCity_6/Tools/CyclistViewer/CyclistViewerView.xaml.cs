@@ -33,17 +33,17 @@ namespace CycleCity_6.Tools.CyclistViewer
         private void HeatMapOrTracksAnzeigen_OnClick(object sender, RoutedEventArgs e)
         {
             if (sender.Equals(TrackAnzeigen))
-            {
-                //TODO Heatmap ausblenden 
-                //TODO Tracks Einblenden
+            {                 
+                GetViewModel().HeatmapAnzeigen(false);
+                
                 TrackAnzeigen.Visibility = Visibility.Collapsed;
                 HeatMapAnzeigen.Visibility = Visibility.Visible;
 
             }
             if (sender.Equals(HeatMapAnzeigen))
-            {
-                //TODO Heatmap  einblenden
-                //TODO Tracks ausblenden
+            {                
+                GetViewModel().HeatmapAnzeigen(true);
+              
                 TrackAnzeigen.Visibility = Visibility.Visible;
                 HeatMapAnzeigen.Visibility = Visibility.Collapsed;
             }

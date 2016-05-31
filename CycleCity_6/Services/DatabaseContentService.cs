@@ -46,7 +46,7 @@ namespace CycleCity_6.Services
                     stream.Write(data, 0, data.Length);
                 }
                 var response = (HttpWebResponse)request.GetResponse();
-                return new StreamReader(stream: response.GetResponseStream()).ReadToEnd();
+                return new StreamReader(response.GetResponseStream()).ReadToEnd();
             }
             catch (Exception)
             {

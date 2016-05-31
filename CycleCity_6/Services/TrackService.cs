@@ -26,9 +26,10 @@ namespace CycleCity_6.Services
             aTimer = new Timer(1000);
             aTimer.Elapsed += CollectData_OnTimedEvent;
             aTimer.Enabled = true;
+
         }
 
-        public event EventHandler<Track> TrackAddedEvent = delegate { };
+        public event EventHandler<List<Track>> TrackAddedEvent = delegate { };
         public event EventHandler<IEnumerable<HeatPoint>> HeatPointAddedEvent = delegate { };
         public event UnhandledExceptionEventHandler KeineInternetVerbindungEvent = delegate { };
 
@@ -60,6 +61,31 @@ namespace CycleCity_6.Services
             Contract.Ensures(Contract.Result<IEnumerable<HeatPoint>>() != null);
             Contract.Ensures(Contract.Result<IEnumerable<HeatPoint>>().Any());
             return _heatPoints.Values;
+        }
+
+        public List<Track> Test()
+        {
+            List<Track> data = new List<Track> ();
+
+            data.Add (new Track ("125", GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\124744.gpx")));
+            data.Add (new Track ("125", GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\124744.gpx")));
+            data.Add (new Track ("125", GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\268452.gpx")));
+            data.Add (new Track ("125", GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\371034.gpx")));
+            data.Add (new Track ("125", GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\1176550.gpx")));
+            data.Add (new Track ("125", GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\1383637.gpx")));
+            data.Add (new Track ("125", GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\1689922.gpx")));
+            data.Add (new Track ("125", GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\1936187.gpx")));
+            data.Add (new Track ("125", GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\2676847.gpx")));
+            data.Add (new Track ("125", GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\2760562.gpx")));
+            data.Add (new Track ("125", GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\2786928.gpx")));
+            data.Add (new Track ("125", GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\2830496.gpx")));
+            data.Add (new Track ("125", GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\2938461.gpx")));
+            data.Add (new Track ("125", GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\3012989.gpx")));
+            data.Add (new Track ("125", GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\3014395.gpx")));
+            data.Add (new Track ("125", GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\3033481.gpx")));
+            data.Add (new Track ("125", GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\3041433.gpx")));
+
+            return data;
         }
 
 
@@ -107,18 +133,18 @@ namespace CycleCity_6.Services
             {
                 try
                 {
-                    //TODO Wenn während das Benutzens das Internet ausfällt, wird hier eine exception geworfen.
-                    var data = _databaseContentService.GetNewData();
-                    var tracks = GpsToEsriParser.ParseJsonToEsriPolyline(data);
-                    foreach (Track track in tracks)
-                    {
-                        TrackAddedEvent(this, track);
-                    }
+                //TODO Wenn während das Benutzens das Internet ausfällt, wird hier eine exception geworfen.
+                var data = _databaseContentService.GetNewData ();
+                var tracks = GpsToEsriParser.ParseJsonToEsriPolyline (data);
 
-                    //var heatPoints = GpsToEsriParser.ParseJsonToPoinList(data);
-                    //GenerateNewHeatMap(heatPoints);
-                    //HeatPointAddedEvent(this, heatPoints);
-                }
+                TrackAddedEvent (this, tracks);
+
+                //TrackAddedEvent (this, Test ());
+
+                //var heatPoints = GpsToEsriParser.ParseJsonToPoinList(data);
+                //GenerateNewHeatMap(heatPoints);
+                //HeatPointAddedEvent(this, heatPoints);
+            }
                 catch (WebException webException)
                 {
                     aTimer.Enabled = false;

@@ -105,22 +105,30 @@ namespace CycleCity_6.Services
         {
             if (_databaseContentService != null)
             {
-                //TODO Wenn während das Benutzens das Internet ausfällt, wird hier eine exception geworfen.
-                var data = _databaseContentService.GetNewData();
-                var tracks = GpsToEsriParser.ParseJsonToEsriPolyline(data);
-                foreach (Track track in tracks)
+                try
                 {
-                    TrackAddedEvent(this, track);
-                }
+                    //TODO Wenn während das Benutzens das Internet ausfällt, wird hier eine exception geworfen.
+                    var data = _databaseContentService.GetNewData();
+                    var tracks = GpsToEsriParser.ParseJsonToEsriPolyline(data);
+                    foreach (Track track in tracks)
+                    {
+                        TrackAddedEvent(this, track);
+                    }
 
-                //var heatPoints = GpsToEsriParser.ParseJsonToPoinList(data);
-                //GenerateNewHeatMap(heatPoints);
-                //HeatPointAddedEvent(this, heatPoints);
+                    //var heatPoints = GpsToEsriParser.ParseJsonToPoinList(data);
+                    //GenerateNewHeatMap(heatPoints);
+                    //HeatPointAddedEvent(this, heatPoints);
+                }
+                catch (WebException webException)
+                {
+                    aTimer.Enabled = false;
+                    KeineInternetVerbindungEvent(this, new UnhandledExceptionEventArgs(webException.Status, false));
+                }
             }
             else
             {
                 aTimer.Enabled = false;
-                KeineInternetVerbindungEvent(this, new UnhandledExceptionEventArgs(new WebException("Keine Internetverbindung"),false ));
+                KeineInternetVerbindungEvent(this, new UnhandledExceptionEventArgs(new WebException("Keine Internetverbindung"), false));
             }
         }
 

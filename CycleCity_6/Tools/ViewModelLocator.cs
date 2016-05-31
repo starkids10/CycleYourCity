@@ -9,8 +9,8 @@ namespace CycleCity_6.Tools
         public ViewModelLocator()
         {
 
-                var cyclistService = new TrackService();
-                CyclistViewerViewModel = new CyclistViewerViewModel(cyclistService);
+                var trackService = new TrackService();
+                CyclistViewerViewModel = new CyclistViewerViewModel(trackService);
         }
 
         public CyclistViewerViewModel CyclistViewerViewModel { get; }

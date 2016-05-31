@@ -176,6 +176,11 @@ namespace CycleCity_6.Tools.CyclistViewer
             }
         }
 
+        public void HeatmapAnzeigen(bool heatmapanzeigen)
+        {
+            _trackService.heatmapAnzeigen = heatmapanzeigen;
+        }
+
 
     }
 }

@@ -16,12 +16,14 @@ namespace CycleCity_6.Services
         private readonly Dictionary<string, HeatPoint> _heatPoints;
         private Timer aTimer;
         private readonly DatabaseContentService _databaseContentService;
+        public bool heatmapAnzeigen { get;  set; }
 
         public TrackService()
         {
             _databaseContentService = initServerConnection();
             _tracks = new List<Track>();
             _heatPoints = new Dictionary<string, HeatPoint>();
+            heatmapAnzeigen = false;
 
             aTimer = new Timer(1000);
             aTimer.Elapsed += CollectData_OnTimedEvent;
@@ -107,20 +109,28 @@ namespace CycleCity_6.Services
             {
                 //TODO Wenn während das Benutzens das Internet ausfällt, wird hier eine exception geworfen.
                 var data = _databaseContentService.GetNewData();
-                var tracks = GpsToEsriParser.ParseJsonToEsriPolyline(data);
-                foreach (Track track in tracks)
+
+                if (heatmapAnzeigen)
                 {
-                    TrackAddedEvent(this, track);
+                    var heatPoints = GpsToEsriParser.ParseJsonToPoinList(data);
+                    GenerateNewHeatMap(heatPoints);
+                    HeatPointAddedEvent(this, _heatPoints.Values);
+                }
+                else
+                {
+                    var tracks = GpsToEsriParser.ParseJsonToEsriPolyline(data);
+                    foreach (Track track in tracks)
+                    {
+                        TrackAddedEvent(this, track);
+                    }
                 }
 
-                //var heatPoints = GpsToEsriParser.ParseJsonToPoinList(data);
-                //GenerateNewHeatMap(heatPoints);
-                //HeatPointAddedEvent(this, heatPoints);
+
             }
             else
             {
                 aTimer.Enabled = false;
-                KeineInternetVerbindungEvent(this, new UnhandledExceptionEventArgs(new WebException("Keine Internetverbindung"),false ));
+                KeineInternetVerbindungEvent(this, new UnhandledExceptionEventArgs(new WebException("Keine Internetverbindung"), false));
             }
         }
 

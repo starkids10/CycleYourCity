@@ -23,6 +23,19 @@ namespace CycleCity_6.Materials
 
         }
 
+        public Track(string id, Polyline tour)
+        {
+            Contract.Requires (tour != null);
+
+            Id = id;
+            Tour = tour;
+            Startpunkt = null;
+            Endpunkt = null;
+            Startzeit = DateTime.Now;
+            Endzeit = DateTime.Now;
+
+        }
+
         public string Id { get; }
         public Polyline Tour { get; set; }
         public Point Startpunkt { get; set; }

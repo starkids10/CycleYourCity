@@ -38,6 +38,7 @@ namespace CycleCity_6.Tools.CyclistViewer
             trackService.TrackAddedEvent += TrackService_OnTrackAdded;
             trackService.HeatPointAddedEvent += TrackService_OnHeatMapChanged;
             trackService.KeineInternetVerbindungEvent += TrackService_OnKeineInternetVerbindung;
+
         }
 
         public Map Map
@@ -57,8 +58,10 @@ namespace CycleCity_6.Tools.CyclistViewer
             Map = new Map();
 
             // create a new layer (world street map tiled layer)
-            var uri = new Uri("http://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer");
-            var baseLayer = new Esri.ArcGISRuntime.Layers.ArcGISTiledMapServiceLayer(uri);
+            var uriStreet = new Uri ("http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer");
+            var uriDark = new Uri("http://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer");
+            var uriLight = new Uri ("http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer");
+            var baseLayer = new Esri.ArcGISRuntime.Layers.ArcGISTiledMapServiceLayer(uriLight);
             // (give the layer an ID so it can be found later)
             baseLayer.ID = "BaseMap";
 
@@ -157,11 +160,34 @@ namespace CycleCity_6.Tools.CyclistViewer
             AddHeatmapToMapLayer(new List<Graphic>(), heatPoints);
         }
 
-        private void TrackService_OnTrackAdded(object sender, Track track)
+        private void TrackService_OnTrackAdded(object sender, List<Track> tracks)
         {
-            Contract.Requires(track != null);
-            AddTrackToMapLayer(new List<Graphic>(), track);
+            Contract.Requires(tracks != null);
+            AddTracksToMapLayer(tracks);
         }
+
+        public void AddTracksToMapLayer(List<Track> tracks)
+        {
+            List<Graphic> collection = new List<Graphic> ();
+            Random randomGen = new Random ();
+
+            foreach(var track in tracks)
+            {
+                var simpleLineSymbol = new SimpleLineSymbol { Width = 3 };
+                
+                //var randomColor = Color.FromRgb ((byte)randomGen.Next (255), (byte)randomGen.Next (255), (byte)randomGen.Next (255));
+                var randomColor = Colors.Blue;
+
+                simpleLineSymbol.Color = randomColor;
+                collection.Add (new Graphic (track.Tour, simpleLineSymbol));
+            }
+
+            mapView.Dispatcher.InvokeAsync (() => gLayer.Graphics.Clear ());
+            mapView.Dispatcher.InvokeAsync (() => gLayer.Graphics.AddRange (collection));
+
+            LetzteAktuallisierung = "Letzte Aktuallisierung: " + DateTime.Now.ToLongTimeString ();
+        }
+
 
         private void TrackService_OnKeineInternetVerbindung(object sender, UnhandledExceptionEventArgs e)
         {

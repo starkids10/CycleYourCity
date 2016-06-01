@@ -19,7 +19,12 @@ namespace CycleCity_6.Materials
             if (obj is Point)
             {
                 Point point = (Point)obj;
-                return this.Coordinates.Equals(point.Coordinates) && this.Time.Equals(point.Time);
+
+                var x1 = this.Coordinates.X;
+                var x2 = point.Coordinates.X;
+                var y1 = this.Coordinates.Y;
+                var y2 = point.Coordinates.Y;
+                return x1 == x2 && y1 == y2 ;
             }
             return false;
         }

@@ -175,7 +175,6 @@ namespace CycleCity_6.Tools.CyclistViewer
             {
                 var simpleLineSymbol = new SimpleLineSymbol { Width = 3 };
                 
-                //var randomColor = Color.FromRgb ((byte)randomGen.Next (255), (byte)randomGen.Next (255), (byte)randomGen.Next (255));
                 var randomColor = Colors.Blue;
 
                 simpleLineSymbol.Color = randomColor;

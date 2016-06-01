@@ -11,7 +11,12 @@ namespace CycleCity_6.Services
     class DatabaseContentService
     {
         private readonly string _token;
-
+        
+        /// <summary>
+        /// Der DatabaseContentService erzeugt eine Verbindung zu unserem Server und holt Daten von diesem.
+        /// 
+        /// Wenn während des Erzeugens keine Verbindung zum Server besteht, wird hier eine Exceptions geworfen.
+        /// </summary>
         public DatabaseContentService()
         {
             try

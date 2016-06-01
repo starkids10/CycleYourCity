@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CycleCity_6", "CycleCity_6\CycleCity_6.csproj", "{8403862B-4672-4D4F-AE70-DB851E97DBE8}"
 EndProject
@@ -10,6 +10,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{E457A1C3-A098-41A4-B0AB-BF679522FC03}"
 	ProjectSection(SolutionItems) = preProject
 		TextFile1.txt = TextFile1.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{37C3BAB4-7797-426A-86EC-62E7F6586925}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\Desktop\Projekt Cycle\UML_CycleCity.class.violet.html = ..\..\..\Desktop\Projekt Cycle\UML_CycleCity.class.violet.html
 	EndProjectSection
 EndProject
 Global

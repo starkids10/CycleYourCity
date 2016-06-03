@@ -16,7 +16,7 @@
         <StackPanel Name="ControlPanel"  VerticalAlignment="Bottom" Margin="5" Orientation="Horizontal" HorizontalAlignment="Center">
             <DockPanel VerticalAlignment="Center" Margin="10">
                 <TextBox Text="{Binding ElementName=slider, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Width="40" />
-                <Slider x:Name="slider" Maximum="24" TickPlacement="BottomRight"   Width="300" VerticalAlignment="Center" IsSnapToTickEnabled="True" ValueChanged="Slider_OnValueChanged"/>
+                <Slider x:Name="ZeitSlider" Maximum="24" TickPlacement="BottomRight"   Width="300" VerticalAlignment="Center" IsSnapToTickEnabled="True" ValueChanged="Slider_OnValueChanged"/>
             </DockPanel>
             <Button x:Name="HeatMapAnzeigen"  Width="100"  Height="100"  Opacity="0.5" Click="HeatMapOrTracksAnzeigen_OnClick">
                 <Button.Content>

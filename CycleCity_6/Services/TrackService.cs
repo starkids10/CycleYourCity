@@ -25,7 +25,7 @@ namespace CycleCity_6.Services
             _heatPoints = new Dictionary<string, HeatPoint>();
             heatmapAnzeigen = false;
 
-            aTimer = new Timer(1000);
+            aTimer = new Timer(10000);
             aTimer.Elapsed += CollectData_OnTimedEvent;
             aTimer.Enabled = true;
 

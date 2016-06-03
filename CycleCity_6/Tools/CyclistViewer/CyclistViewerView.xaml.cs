@@ -53,6 +53,8 @@ namespace CycleCity_6.Tools.CyclistViewer
         private void Slider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             //TODO Daten nach der ausgewählten Zeit anzeigen lassen
+            Console.WriteLine(ZeitSlider.Value);
+
         }
     }
 }

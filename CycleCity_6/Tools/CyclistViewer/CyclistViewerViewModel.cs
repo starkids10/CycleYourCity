@@ -21,7 +21,7 @@ namespace CycleCity_6.Tools.CyclistViewer
 {
     internal class CyclistViewerViewModel : INotifyPropertyChanged
     {
-        private String _LetzteAktuallisierung;
+        private string _LetzteAktuallisierung;
 
         private GraphicsLayer gLayer;
         public MapView mapView;
@@ -47,7 +47,7 @@ namespace CycleCity_6.Tools.CyclistViewer
             private set;
         }
 
-        public String LetzteAktuallisierung
+        public string LetzteAktuallisierung
         {
             get { return _LetzteAktuallisierung; }
             private set { _LetzteAktuallisierung = value; Notify("LetzteAktuallisierung"); }
@@ -142,8 +142,7 @@ namespace CycleCity_6.Tools.CyclistViewer
 
             List<Point> points = heatPoint.Points;
             Point[] pointsClone = new Point[points.Count];
-            // TODO hier fliegt er raus wenn die heatmap zu lange offen ist
-            points.ToArray().CopyTo(pointsClone, 0);
+            // TODO hier fliegt er raus wenn die heatmap zu lange offen istpoints.ToArray().CopyTo(pointsClone, 0);
 
             foreach (Point point in pointsClone)
             {

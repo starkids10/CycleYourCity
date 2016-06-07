@@ -54,7 +54,8 @@ namespace CycleCity_6.Tools.CyclistViewer
         {
             //TODO Daten nach der ausgewählten Zeit anzeigen lassen
             Console.WriteLine(ZeitSlider.Value);
-            GetViewModel().SetzeUhrzeit((int)ZeitSlider.Value);
+            //Hier müsst ihr jeweils ein DateTime Objekt nach dem Schema yyyy-MM-dd hh-mm-ss für Start und Endzeit erstellen. Wenn ihr von einem bestimmen Zeitpunkt aus alles haben wollt, setzt die Endzeit auf DateTime.Min_Value
+            //GetViewModel().SetzeUhrzeit();
             
 
         }

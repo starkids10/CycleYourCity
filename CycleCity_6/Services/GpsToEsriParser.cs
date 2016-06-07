@@ -129,7 +129,6 @@ namespace CycleCity_6.Services
             }
             catch (Exception)
             {
-                Console.WriteLine("test");
                 return DateTime.Now;
             }
         }

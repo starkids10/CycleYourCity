@@ -39,6 +39,8 @@ namespace CycleCity_6.Tools.CyclistViewer
             trackService.HeatPointAddedEvent += TrackService_OnHeatMapChanged;
             trackService.KeineInternetVerbindungEvent += TrackService_OnKeineInternetVerbindung;
 
+            
+
         }
 
         public Map Map
@@ -87,7 +89,6 @@ namespace CycleCity_6.Tools.CyclistViewer
 
         private void AddHeatmapToMapLayer(List<Graphic> collection, IEnumerable<HeatPoint> HeatMap)
         {
-            //Contract.Requires(MapLayer != null);
             foreach (HeatPoint heatPoint in HeatMap)
             {
                 AddHeatpointToMapLayer(collection, heatPoint);
@@ -96,9 +97,7 @@ namespace CycleCity_6.Tools.CyclistViewer
 
         private void AddTrackToMapLayer(List<Graphic> collection, Track track)
         {
-            //Contract.Requires (MapLayer != null);
             Contract.Requires(track != null);
-
 
             var simpleLineSymbol = new SimpleLineSymbol { Width = 3 };
             Random randomGen = new Random();
@@ -204,12 +203,21 @@ namespace CycleCity_6.Tools.CyclistViewer
 
         public void HeatmapAnzeigen(bool heatmapanzeigen)
         {
-            _trackService.heatmapAnzeigen = heatmapanzeigen;
+            _trackService.HeatmapAnzeigen = heatmapanzeigen;
         }
 
-        public void SetzeUhrzeit(int zeit)
+
+        
+        /// <summary>
+        /// Setzt das Datum und die Uhrzeit für Start und Endpunkt des anzuzeigenden Zeitintervalls.
+        /// Wenn der Endzeitpunkt DateTime.Min_Value ist, werden alle Daten vom Startzeitpunkt aus angefordert.
+        /// </summary>
+        /// <param name="startzeit">Start des Zeitintervalls.</param>
+        /// <param name="endzeit">Ende des Zeitintervalls</param>
+        public void SetzeUhrzeit(DateTime startzeit, DateTime endzeit)
         {
-            _trackService.uhrzeit = zeit;
+            _trackService.Startzeit = startzeit;
+            _trackService.Endzeit = endzeit;
         }
 
 

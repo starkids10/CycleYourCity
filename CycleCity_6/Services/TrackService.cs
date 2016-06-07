@@ -12,23 +12,27 @@ namespace CycleCity_6.Services
 {
     internal class TrackService
     {
-        private readonly List<Track> _tracks;
         private readonly Dictionary<string, HeatPoint> _heatPoints;
         private Timer aTimer;
         private readonly DatabaseContentService _databaseContentService;
-        public bool heatmapAnzeigen { get; set; }
-        public int uhrzeit;
+
+        public DateTime Startzeit { get; set; }
+        public DateTime Endzeit { get; set; }
+        public bool HeatmapAnzeigen { get; set; }
 
         public TrackService()
         {
             _databaseContentService = initServerConnection();
-            _tracks = new List<Track>();
             _heatPoints = new Dictionary<string, HeatPoint>();
-            heatmapAnzeigen = false;
+            HeatmapAnzeigen = false;
 
             aTimer = new Timer(10000);
             aTimer.Elapsed += CollectData_OnTimedEvent;
             aTimer.Enabled = true;
+
+            Startzeit = new DateTime(2016,05,20,00,00,00);
+            Endzeit = DateTime.Now;
+
 
         }
 
@@ -47,17 +51,6 @@ namespace CycleCity_6.Services
                 return null;
             }
         }
-        /// <summary>
-        /// Returns all tracks.
-        /// </summary>
-        /// <returns>all registered tracks</returns>
-        public IEnumerable<Track> GetAllTracks()
-        {
-            Contract.Ensures(Contract.Result<IEnumerable<Track>>() != null);
-            Contract.Ensures(Contract.Result<IEnumerable<Track>>().Any());
-            return _tracks;
-        }
-
 
         public IEnumerable<HeatPoint> GetAllHeatPoints()
         {
@@ -136,8 +129,8 @@ namespace CycleCity_6.Services
             {
                 try
                 {
-                    var data = _databaseContentService.GetDataFromTo(new DateTime(2016,uhrzeit + 1,05,00,00,00), DateTime.Now);
-                    if (heatmapAnzeigen)
+                    var data = _databaseContentService.GetDataFromTo(Startzeit, Endzeit);
+                    if (HeatmapAnzeigen)
                     {
                         var heatPoints = GpsToEsriParser.ParseJsonToPoinList(data);
                         GenerateNewHeatMap(heatPoints);

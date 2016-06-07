@@ -175,7 +175,8 @@ namespace CycleCity_6.Tools.CyclistViewer
             foreach(var track in tracks)
             {
                 var simpleLineSymbol = new SimpleLineSymbol { Width = 3 };
-                simpleLineSymbol.Color = Colors.Blue;
+                simpleLineSymbol.Color = Colors.BlueViolet;
+                simpleLineSymbol.Style = SimpleLineStyle.Dot;
 
                 var markerSym = new SimpleMarkerSymbol ();
                 markerSym.Color = Colors.Red;

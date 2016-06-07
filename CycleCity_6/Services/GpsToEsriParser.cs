@@ -18,7 +18,7 @@ namespace CycleCity_6.Services
         /// </summary>
         /// <param name="url">Path to .gpx file</param>
         /// <returns>represents the track in the gpx file as a polyline</returns>
-        public static Polyline ParseGpxToEsriPolyline(string url)
+        public static Track ParseGpxToEsriPolyline(string url)
         {
             List<MapPoint> points = new List<MapPoint>();
             try
@@ -53,7 +53,10 @@ namespace CycleCity_6.Services
                 Console.WriteLine("File not found");
                 points = new List<MapPoint>();
             }
-            return new Polyline(points, SpatialReferences.Wgs84);
+
+            var Startpunkt = new Point (points.First (), DateTime.Now);
+            var Endpunkt = new Point (points.Last (), DateTime.Now);
+            return new Track("125", new Polyline(points, SpatialReferences.Wgs84), Startpunkt, Endpunkt);
         }
 
 
@@ -72,9 +75,12 @@ namespace CycleCity_6.Services
 
                 var waypoints = track.Children();
                 var pointList = waypoints.Select(point => new MapPoint((double)point["lon"], (double)point["lat"],SpatialReferences.Wgs84)).ToList();
+
+                var startpunkt = new Point (pointList.First (), startzeit);
+                var endpunkt = new Point (pointList.Last (), endzeit);                
+
                 var tour = new Polyline(pointList, SpatialReferences.Wgs84);
-                var startpunkt = new Point(pointList.First(), startzeit);
-                var endpunkt = new Point(pointList.Last(), endzeit);
+                
                 trackList.Add(new Track(id, tour, startpunkt, endpunkt));
             }
 

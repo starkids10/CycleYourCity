@@ -54,6 +54,7 @@ namespace CycleCity_6.Services
                 points = new List<MapPoint> ();
                 }
             return new Polyline (points, SpatialReferences.Wgs84);
+            //test
         }
 
 

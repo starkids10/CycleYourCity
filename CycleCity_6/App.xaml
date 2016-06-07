@@ -5,5 +5,19 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <tools:ViewModelLocator x:Key="ViewModelLocator" />
+        <!-- Button Style-->
+        <Style TargetType="{x:Type Button}" x:Key="Monate">
+            <Setter Property="Height" Value="40" />
+            <Setter Property="Width" Value="120" />
+            <Setter Property="Background" Value="#FFFFD700" />
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="FontFamily" Value="Segoe UI Black" />
+            <!-- TODO eigentlich sollte es kein MousOver mehr geben
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="Aqua"/>
+                </Trigger>
+            </Style.Triggers>-->
+        </Style>
     </Application.Resources>
 </Application>

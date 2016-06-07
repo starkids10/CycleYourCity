@@ -12,33 +12,53 @@
     <Grid>
         <esri:MapView  x:Name="CycleMapView" Map="{Binding Map}" />
 
-        <TextBlock x:Name="letzteAktuallisierung" Text="{Binding Path=LetzteAktuallisierung, UpdateSourceTrigger=PropertyChanged}" Foreground="White" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Top" Margin="10"/>
-        <StackPanel Name="ControlPanel"  VerticalAlignment="Bottom" Margin="5" Orientation="Horizontal" HorizontalAlignment="Center">
-            <DockPanel VerticalAlignment="Center" Margin="10">
-                <TextBox Text="{Binding ElementName=slider, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Width="40" />
-                <Slider x:Name="ZeitSlider" Maximum="24" TickPlacement="BottomRight"   Width="300" VerticalAlignment="Center" IsSnapToTickEnabled="True" ValueChanged="Slider_OnValueChanged"/>
-            </DockPanel>
-            <Button x:Name="HeatMapAnzeigen"  Width="100"  Height="100"  Opacity="0.5" Click="HeatMapOrTracksAnzeigen_OnClick">
-                <Button.Content>
-                    <TextBlock>
+        <TextBlock x:Name="letzteAktuallisierung" Text="{Binding Path=LetzteAktuallisierung, UpdateSourceTrigger=PropertyChanged}" Foreground="Black" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Top" Margin="10"/>
+        <StackPanel Background="Black" Opacity="0.5" VerticalAlignment="Bottom" HorizontalAlignment="Stretch">
+            <StackPanel Name="ControlPanel"  VerticalAlignment="Bottom" Margin="5" Orientation="Horizontal" HorizontalAlignment="Center" Background="Black" Opacity="0.35" >
+
+                <DockPanel VerticalAlignment="Center" Margin="10">
+                    <TextBox Text="{Binding ElementName=slider, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Width="40" />
+                    <Slider x:Name="ZeitSlider" Maximum="24" TickPlacement="BottomRight"   Width="300" VerticalAlignment="Center" IsSnapToTickEnabled="True" ValueChanged="Slider_OnValueChanged"/>
+                </DockPanel>
+
+                <Button x:Name="HeatMapAnzeigen"  Width="100"  Height="100"  Click="HeatMapOrTracksAnzeigen_OnClick">
+                    <Button.Content>
+                        <TextBlock>
                        HeatMap 
                         <LineBreak/>
                         Anzeigen
-                    </TextBlock>
-                </Button.Content>
-            </Button>
-            <Button x:Name="TrackAnzeigen" Width="100"  Height="100"  Opacity="0.5" Click="HeatMapOrTracksAnzeigen_OnClick" Visibility="Collapsed">
-                <Button.Content>
-                    <StackPanel>
-                        <Image Source="\Images\tack_icon.png" Stretch="UniformToFill" />
-                        <TextBlock>
+                        </TextBlock>
+                    </Button.Content>
+                </Button>
+                <Button x:Name="TrackAnzeigen" Width="100"  Height="100"  Click="HeatMapOrTracksAnzeigen_OnClick" Visibility="Collapsed">
+                    <Button.Content>
+                        <StackPanel>
+                            <Image Source="\Images\tack_icon.png" Stretch="UniformToFill" />
+                            <TextBlock>
                        Tracks 
                         <LineBreak/>
                         Anzeigen
-                        </TextBlock>
-                    </StackPanel>
-                </Button.Content>
-            </Button>
+                            </TextBlock>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+
+            </StackPanel>
+            
+            <DockPanel Name="Zeitleiste" HorizontalAlignment="Center" Background="Black">
+                <Button Name="M1" Content="Januar" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch" />
+                <Button Name="M2" Content="Februar" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch" />
+                <Button Name="M3" Content="März" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch" />
+                <Button Name="M4" Content="April" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch" />
+                <Button Name="M5" Content="Mai" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch" />
+                <Button Name="M6" Content="Juni" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch" />
+                <Button Name="M7" Content="Juli" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch" />
+                <Button Name="M8" Content="August" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch" />
+                <Button Name="M9" Content="September" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch" />
+                <Button Name="M10" Content="Oktober" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch" />
+                <Button Name="M11" Content="November" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch" />
+                <Button Name="M12" Content="Dezember" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch" />
+            </DockPanel>
 
         </StackPanel>
     </Grid>

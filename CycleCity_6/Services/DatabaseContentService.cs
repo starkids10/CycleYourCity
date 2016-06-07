@@ -1,5 +1,6 @@
 ﻿using System;
 using System.CodeDom;
+using System.Diagnostics.Contracts;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -11,7 +12,7 @@ namespace CycleCity_6.Services
     class DatabaseContentService
     {
         private readonly string _token;
-        
+
         /// <summary>
         /// Der DatabaseContentService erzeugt eine Verbindung zu unserem Server und holt Daten von diesem.
         /// 
@@ -25,7 +26,7 @@ namespace CycleCity_6.Services
             }
             catch (Exception)
             {
-                
+
                 throw;
             }
         }
@@ -57,6 +58,56 @@ namespace CycleCity_6.Services
             {
                 throw new WebException("Keine Verbindung zum CycleYourCity-Server");
             }
+        }
+
+
+        /// <summary>
+        /// Holt Daten aus dem angebeben Zeitraum vom Server.
+        /// Wenn 'to' den 'min'-Value von DateTime hat, werden alle Daten vom Startzeitpunkt bis zum aktuellen Datum geholt.
+        /// </summary>
+        /// <param name="from">Startzeit des Intervalls</param>
+        /// <param name="to">Endzeit des Intervalls</param>
+        /// <returns>Ein Json String zum parsen</returns>
+        public string GetDataFromTo(DateTime from, DateTime to)
+        {
+            Contract.Assert(from != null);
+            Contract.Assert(to != null);
+            Contract.Assert(to > from);
+
+            string start = from.ToString("yyyy-MM-dd hh:mm:ss");
+            string ende;
+            if (to.Equals(DateTime.MinValue))
+            {
+                ende = "";
+            }
+            else
+            {
+                ende = to.ToString("yyyy-MM-dd hh:mm:ss");
+            }
+
+            var request = (HttpWebRequest)WebRequest.Create("https://api.cyc.jmakro.de:4040/get_coordinates.php");
+
+            var data = Encoding.ASCII.GetBytes("auth_token=" + _token + "&" + "from=" + start + "&" + "to=" + ende);
+
+            request.Method = "POST";
+            request.ContentType = "application/x-www-form-urlencoded";
+            request.ContentLength = data.Length;
+
+            try
+            {
+
+                using (var stream = request.GetRequestStream())
+                {
+                    stream.Write(data, 0, data.Length);
+                }
+                var response = (HttpWebResponse)request.GetResponse();
+                return new StreamReader(response.GetResponseStream()).ReadToEnd();
+            }
+            catch (Exception)
+            {
+                throw new WebException("Keine Verbindung zum CycleYourCity-Server");
+            }
+
         }
 
         private string getToken()

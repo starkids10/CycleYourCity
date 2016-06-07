@@ -17,6 +17,7 @@ namespace CycleCity_6.Services
         private Timer aTimer;
         private readonly DatabaseContentService _databaseContentService;
         public bool heatmapAnzeigen { get; set; }
+        public int uhrzeit;
 
         public TrackService()
         {
@@ -135,7 +136,7 @@ namespace CycleCity_6.Services
             {
                 try
                 {
-                    var data = _databaseContentService.GetNewData();
+                    var data = _databaseContentService.GetDataFromTo(new DateTime(2016,uhrzeit + 1,05,00,00,00), DateTime.Now);
                     if (heatmapAnzeigen)
                     {
                         var heatPoints = GpsToEsriParser.ParseJsonToPoinList(data);

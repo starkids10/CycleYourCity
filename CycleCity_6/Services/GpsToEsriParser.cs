@@ -77,13 +77,6 @@ namespace CycleCity_6.Services
                 var endpunkt = new Point(pointList.Last(), endzeit);
                 trackList.Add(new Track(id, tour, startpunkt, endpunkt));
             }
-
-            //Debug
-            foreach (var track in trackList)
-            {
-                Console.WriteLine(track.Startzeit + "\n" + track.Endzeit + "\n" + track.Tour);
-            }
-
             return trackList;
         }
 
@@ -136,6 +129,7 @@ namespace CycleCity_6.Services
             }
             catch (Exception)
             {
+                Console.WriteLine("test");
                 return DateTime.Now;
             }
         }

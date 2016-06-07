@@ -54,6 +54,8 @@ namespace CycleCity_6.Tools.CyclistViewer
         {
             //TODO Daten nach der ausgewählten Zeit anzeigen lassen
             Console.WriteLine(ZeitSlider.Value);
+            GetViewModel().SetzeUhrzeit((int)ZeitSlider.Value);
+            
 
         }
     }

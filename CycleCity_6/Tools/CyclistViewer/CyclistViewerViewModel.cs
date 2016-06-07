@@ -207,6 +207,11 @@ namespace CycleCity_6.Tools.CyclistViewer
             _trackService.heatmapAnzeigen = heatmapanzeigen;
         }
 
+        public void SetzeUhrzeit(int zeit)
+        {
+            _trackService.uhrzeit = zeit;
+        }
+
 
     }
 }

@@ -67,7 +67,7 @@
     <Compile Include="Services\DatabaseContentService.cs" />
     <Compile Include="Services\GpsToEsriParser.cs" />
     <Compile Include="Services\TrackService.cs" />
-    <Compile Include="Tools\CyclistViewer\CyclistViewerView.xaml.cs">
+    <Compile Include="CyclistViewerView.xaml.cs">
       <DependentUpon>CyclistViewerView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tools\CyclistViewer\CyclistViewerViewModel.cs" />
@@ -84,7 +84,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Tools\CyclistViewer\CyclistViewerView.xaml">
+    <Page Include="CyclistViewerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

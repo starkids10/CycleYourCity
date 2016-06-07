@@ -8,21 +8,24 @@ namespace CycleCity_6.Materials
 {
     public class HeatPoint
     {
-        private int heat;
-
-        public HeatPoint(string location, List<Point> points)
+        public HeatPoint(List<Point> points)
         {
-            Location = location;
             Points = points;
-            heat = Points.Count;
+           
         }
 
-        public String Location { get; }
-        public List<Point> Points { get; }
+        public List<Point> Points { get; private set; }
+        public int Heat { get { return Points.Count; } }
 
-        public int Heat
+        public void AddNewPoint(Point point)
         {
-            get { return heat; } 
+            Points.Add(point);
+
+        }
+
+        public void AddNewPoints(List<Point> points)
+        {
+            Points = Points.Concat(points).ToList();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using CycleCity_6.Services;
+﻿using System;
+using CycleCity_6.Services;
 using CycleCity_6.Tools.CyclistViewer;
 
 namespace CycleCity_6.Tools
@@ -7,9 +8,9 @@ namespace CycleCity_6.Tools
     {
         public ViewModelLocator()
         {
-            var cyclistService = new TrackService ();
 
-            CyclistViewerViewModel = new CyclistViewerViewModel (cyclistService);
+                var trackService = new TrackService();
+                CyclistViewerViewModel = new CyclistViewerViewModel(trackService);
         }
 
         public CyclistViewerViewModel CyclistViewerViewModel { get; }

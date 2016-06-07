@@ -4,21 +4,49 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Net;
+using System.Threading;
+using Timer = System.Timers.Timer;
 
 namespace CycleCity_6.Services
 {
     internal class TrackService
     {
-
         private readonly List<Track> _tracks;
+        private readonly Dictionary<string, HeatPoint> _heatPoints;
+        private Timer aTimer;
+        private readonly DatabaseContentService _databaseContentService;
+        public bool heatmapAnzeigen { get; set; }
+        public int uhrzeit;
 
         public TrackService()
         {
+            _databaseContentService = initServerConnection();
             _tracks = new List<Track>();
+            _heatPoints = new Dictionary<string, HeatPoint>();
+            heatmapAnzeigen = false;
+
+            aTimer = new Timer(10000);
+            aTimer.Elapsed += CollectData_OnTimedEvent;
+            aTimer.Enabled = true;
+
         }
 
-        public event EventHandler<Track> TrackAddedEvent = delegate { };
+        public event EventHandler<List<Track>> TrackAddedEvent = delegate { };
+        public event EventHandler<IEnumerable<HeatPoint>> HeatPointAddedEvent = delegate { };
+        public event UnhandledExceptionEventHandler KeineInternetVerbindungEvent = delegate { };
 
+        private DatabaseContentService initServerConnection()
+        {
+            try
+            {
+                return new DatabaseContentService();
+            }
+            catch (WebException)
+            {
+                return null;
+            }
+        }
         /// <summary>
         /// Returns all tracks.
         /// </summary>
@@ -27,37 +55,121 @@ namespace CycleCity_6.Services
         {
             Contract.Ensures(Contract.Result<IEnumerable<Track>>() != null);
             Contract.Ensures(Contract.Result<IEnumerable<Track>>().Any());
-
             return _tracks;
         }
 
-        /// <summary>
-        /// Adds a new Tour to the list
-        /// </summary>
-        /// <param name="id">id of the track</param>
-        public void AddNewTrack(int id)
+
+        public IEnumerable<HeatPoint> GetAllHeatPoints()
         {
-            var newTrack = new Track(id,
-                new Polyline(new[] {new MapPoint(0, 0)}, SpatialReferences.Wgs84));
-
-            _tracks.Add(newTrack);
-
-            TrackAddedEvent(this, newTrack);
+            Contract.Ensures(Contract.Result<IEnumerable<HeatPoint>>() != null);
+            Contract.Ensures(Contract.Result<IEnumerable<HeatPoint>>().Any());
+            return _heatPoints.Values;
         }
 
-        /// <summary>
-        /// Adds a new Tour to the list
-        /// </summary>
-        /// <param name="id">id of the track</param>
-        /// <param tour="tour">Polyline for the track which simulates the tour</param>
-        public void AddNewTrack(int id, Polyline tour)
+        public List<Track> Test()
         {
+            List<Track> data = new List<Track>();
 
-            var newTrack = new Track(id, tour);
+            data.Add(new Track("125", GpsToEsriParser.ParseGpxToEsriPolyline(@"C:\Users\David\Desktop\124744.gpx")));
+            data.Add(new Track("125", GpsToEsriParser.ParseGpxToEsriPolyline(@"C:\Users\David\Desktop\124744.gpx")));
+            data.Add(new Track("125", GpsToEsriParser.ParseGpxToEsriPolyline(@"C:\Users\David\Desktop\268452.gpx")));
+            data.Add(new Track("125", GpsToEsriParser.ParseGpxToEsriPolyline(@"C:\Users\David\Desktop\371034.gpx")));
+            data.Add(new Track("125", GpsToEsriParser.ParseGpxToEsriPolyline(@"C:\Users\David\Desktop\1176550.gpx")));
+            data.Add(new Track("125", GpsToEsriParser.ParseGpxToEsriPolyline(@"C:\Users\David\Desktop\1383637.gpx")));
+            data.Add(new Track("125", GpsToEsriParser.ParseGpxToEsriPolyline(@"C:\Users\David\Desktop\1689922.gpx")));
+            data.Add(new Track("125", GpsToEsriParser.ParseGpxToEsriPolyline(@"C:\Users\David\Desktop\1936187.gpx")));
+            data.Add(new Track("125", GpsToEsriParser.ParseGpxToEsriPolyline(@"C:\Users\David\Desktop\2676847.gpx")));
+            data.Add(new Track("125", GpsToEsriParser.ParseGpxToEsriPolyline(@"C:\Users\David\Desktop\2760562.gpx")));
+            data.Add(new Track("125", GpsToEsriParser.ParseGpxToEsriPolyline(@"C:\Users\David\Desktop\2786928.gpx")));
+            data.Add(new Track("125", GpsToEsriParser.ParseGpxToEsriPolyline(@"C:\Users\David\Desktop\2830496.gpx")));
+            data.Add(new Track("125", GpsToEsriParser.ParseGpxToEsriPolyline(@"C:\Users\David\Desktop\2938461.gpx")));
+            data.Add(new Track("125", GpsToEsriParser.ParseGpxToEsriPolyline(@"C:\Users\David\Desktop\3012989.gpx")));
+            data.Add(new Track("125", GpsToEsriParser.ParseGpxToEsriPolyline(@"C:\Users\David\Desktop\3014395.gpx")));
+            data.Add(new Track("125", GpsToEsriParser.ParseGpxToEsriPolyline(@"C:\Users\David\Desktop\3033481.gpx")));
+            data.Add(new Track("125", GpsToEsriParser.ParseGpxToEsriPolyline(@"C:\Users\David\Desktop\3041433.gpx")));
 
-            _tracks.Add(newTrack);
+            return data;
+        }
 
-            TrackAddedEvent(this, newTrack);
+
+        /// <summary>
+        /// Generiert die HeatMap neu.
+        /// </summary>
+        /// <param name="newPoints">Liste von neu hinzuzufügenden Punkten</param>
+        public async void GenerateNewHeatMap(IEnumerable<Point> newPoints)
+        {
+            var locator = new Esri.ArcGISRuntime.Tasks.Geocoding.OnlineLocatorTask(new Uri(@"http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"), String.Empty);
+            foreach (Point newPoint in newPoints)
+            {
+                string adresse = "";
+                try
+                {
+                    var addressInfo =
+                        await
+                            locator.ReverseGeocodeAsync(newPoint.Coordinates, 50, newPoint.Coordinates.SpatialReference,
+                                CancellationToken.None);
+                    adresse = addressInfo.AddressFields["Address"];
+
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Esri Geocode-Server reagiert nicht oder Adresse unbekannt");
+                    adresse = "unbekannt";
+                }
+
+                HeatPoint heatPoint = null;
+                if (_heatPoints.TryGetValue(adresse, out heatPoint))
+                {
+                    heatPoint.Points.Add(newPoint);
+                }
+                else
+                {
+                    _heatPoints.Add(adresse, new HeatPoint(new List<Point>() { newPoint }));
+                }
+
+            }
+        }
+
+        private void CollectData_OnTimedEvent(Object souce, System.Timers.ElapsedEventArgs e)
+        {
+            if (_databaseContentService != null)
+            {
+                try
+                {
+                    var data = _databaseContentService.GetDataFromTo(new DateTime(2016,uhrzeit + 1,05,00,00,00), DateTime.Now);
+                    if (heatmapAnzeigen)
+                    {
+                        var heatPoints = GpsToEsriParser.ParseJsonToPoinList(data);
+                        GenerateNewHeatMap(heatPoints);
+                        HeatPointAddedEvent(this, _heatPoints.Values);
+                    }
+                    else
+                    {
+                        var tracks = GpsToEsriParser.ParseJsonToEsriPolyline(data);
+                        TrackAddedEvent(this, tracks);
+
+                    }
+
+
+                }
+                catch (WebException webException)
+                {
+                    aTimer.Enabled = false;
+                    KeineInternetVerbindungEvent(this, new UnhandledExceptionEventArgs(webException.Status, false));
+                }
+            }
+            else
+            {
+                aTimer.Enabled = false;
+                KeineInternetVerbindungEvent(this, new UnhandledExceptionEventArgs(new WebException("Keine Internetverbindung"), false));
+            }
+        }
+
+
+
+        public void AktiviereUpdate(bool x)
+        {
+            aTimer.Enabled = x;
         }
     }
 }

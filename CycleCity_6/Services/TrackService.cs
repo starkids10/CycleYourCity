@@ -135,9 +135,7 @@ namespace CycleCity_6.Services
             {
                 try
                 {
-                    //TODO Wenn während das Benutzens das Internet ausfällt, wird hier eine exception geworfen.
                     var data = _databaseContentService.GetNewData();
-
                     if (heatmapAnzeigen)
                     {
                         var heatPoints = GpsToEsriParser.ParseJsonToPoinList(data);

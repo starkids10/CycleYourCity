@@ -57,7 +57,16 @@ namespace CycleCity_6.Tools.CyclistViewer
         {
             //TODO Daten nach der ausgewählten Zeit anzeigen lassen
             Console.WriteLine(ZeitSlider.Value);
-            GetViewModel().SetzeUhrzeit((int)ZeitSlider.Value);
+            int monat;
+            if (monatselected == 0)
+            {
+                monat = 1;
+            }
+            else
+            {
+                monat = monatselected;
+            }
+            GetViewModel().SetzeUhrzeit(new DateTime(2016, monat, 01, (int)ZeitSlider.Value,00 ,00) , DateTime.MaxValue);
 
 
         }

@@ -72,11 +72,11 @@ namespace CycleCity_6.Services
         {
             Contract.Assert(from != null);
             Contract.Assert(to != null);
-            Contract.Assert(to > from);
+            Contract.Assert(from < to);
 
             string start = from.ToString("yyyy-MM-dd hh:mm:ss");
             string ende;
-            if (to.Equals(DateTime.MinValue))
+            if (to.Equals(DateTime.MaxValue))
             {
                 ende = "";
             }
@@ -114,7 +114,7 @@ namespace CycleCity_6.Services
         {
             HttpWebRequest request =
                 (HttpWebRequest)WebRequest.Create("https://api.cyc.jmakro.de:4040/get_auth_token.php");
-            var data = Encoding.ASCII.GetBytes("username=table&password=ftzfD3pz");
+            var data = Encoding.ASCII.GetBytes("username=table2&password=.table2.");
 
             request.Method = "POST";
             request.ContentType = "application/x-www-form-urlencoded";

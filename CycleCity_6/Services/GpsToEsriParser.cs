@@ -71,7 +71,38 @@ namespace CycleCity_6.Services
                 var endzeit = getDate((string)track.Last["time"]);
 
                 var waypoints = track.Children();
-                var pointList = waypoints.Select(point => new MapPoint((double)point["lon"], (double)point["lat"],SpatialReferences.Wgs84)).ToList();
+                var pointList = waypoints.Select(point => new MapPoint((double)point["lon"], (double)point["lat"], SpatialReferences.Wgs84)).ToList();
+
+
+                //TODO tracks splitten, wenn zu weit auseinander
+                //int tempcounter = 0;
+                //for (int i = 0; i < pointList.Count -1; i++)
+                //{
+                //    var differenz = GeometryEngine.Distance(pointList[i], pointList[i + 1]);
+                //    if (differenz > 0.0002)
+                //    {
+                //        for (int j = tempcounter; j < i -2; j++, tempcounter++)
+                //        {
+                //            List<MapPoint> tempPoints = new List<MapPoint>();
+                //            tempPoints.Add(pointList[j]);
+                         
+                //            var tempTour = new Polyline(tempPoints, SpatialReferences.Wgs84);
+                //            var tempStartpunkt = new Point(tempPoints.First(), startzeit);
+                //            var tempEndpunkt = new Point(tempPoints.Last(), endzeit);
+                //            trackList.Add(new Track(id, tempTour, tempStartpunkt, tempEndpunkt));
+                //        }
+
+                //        for (int j = 0; j < i -1; j++)
+                //        {
+                //            pointList.RemoveAt(j);
+                //        }
+                //    }
+                //    else
+                //    {
+                //        tempcounter++;
+                //    }
+
+                //}
                 var tour = new Polyline(pointList, SpatialReferences.Wgs84);
                 var startpunkt = new Point(pointList.First(), startzeit);
                 var endpunkt = new Point(pointList.Last(), endzeit);
@@ -97,6 +128,7 @@ namespace CycleCity_6.Services
             {
                 var waypoints = from points in track.Children()
                                 select points;
+
                 foreach (var point in waypoints)
                 {
                     //Zeit+Datum für jeden Punkt extrahieren

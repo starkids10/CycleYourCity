@@ -59,7 +59,6 @@ namespace CycleCity_6.Materials
 
         public override int GetHashCode()
         {
-            //TODO besseren Hashcode ausdenken
             return Id.Length;
         }
     }

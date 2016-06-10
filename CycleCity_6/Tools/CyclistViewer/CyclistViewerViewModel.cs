@@ -23,7 +23,9 @@ namespace CycleCity_6.Tools.CyclistViewer
     {
         private string _LetzteAktuallisierung;
 
-        private GraphicsLayer gLayer;
+        private GraphicsLayer trackGraphicsLayer;
+        private GraphicsLayer veloGraphicsLayer;
+        private List<Graphic> veloGraphics; 
         public MapView mapView;
         private readonly TrackService _trackService;
 
@@ -39,8 +41,21 @@ namespace CycleCity_6.Tools.CyclistViewer
             trackService.HeatPointAddedEvent += TrackService_OnHeatMapChanged;
             trackService.KeineInternetVerbindungEvent += TrackService_OnKeineInternetVerbindung;
 
-            
+            InitializeVelorouten();
+        }
 
+        private void InitializeVelorouten()
+        {
+            veloGraphics = new List<Graphic>();
+            foreach (var velo in _trackService.Velorouten)
+            {
+                var simpleLineSymbol = new SimpleLineSymbol
+                {
+                    Color = Color.FromArgb(80,255,0,0),
+                    Width = 4
+                };
+                veloGraphics.Add(new Graphic(velo.Tour, simpleLineSymbol));
+            }
         }
 
         public Map Map
@@ -67,11 +82,13 @@ namespace CycleCity_6.Tools.CyclistViewer
             // (give the layer an ID so it can be found later)
             baseLayer.ID = "BaseMap";
 
-            gLayer = new GraphicsLayer();
+            trackGraphicsLayer = new GraphicsLayer();
+            veloGraphicsLayer = new GraphicsLayer();
 
             // add the layer to the Map
             Map.Layers.Add(baseLayer);
-            Map.Layers.Add(gLayer);
+            Map.Layers.Add(veloGraphicsLayer);
+            Map.Layers.Add(trackGraphicsLayer);
             // set the initial view point
             var mapPoint = new Esri.ArcGISRuntime.Geometry.MapPoint(9.993888, 53.548401,
                 Esri.ArcGISRuntime.Geometry.SpatialReferences.Wgs84);
@@ -106,8 +123,8 @@ namespace CycleCity_6.Tools.CyclistViewer
             simpleLineSymbol.Color = randomColor;
             collection.Add(new Graphic(track.Tour, simpleLineSymbol));
 
-            mapView.Dispatcher.InvokeAsync (() => gLayer.Graphics.Clear ());
-            mapView.Dispatcher.InvokeAsync (() => gLayer.Graphics.AddRange(collection));
+            mapView.Dispatcher.InvokeAsync (() => trackGraphicsLayer.Graphics.Clear ());
+            mapView.Dispatcher.InvokeAsync (() => trackGraphicsLayer.Graphics.AddRange(collection));
 
             LetzteAktuallisierung = "Letzte Aktuallisierung: " + DateTime.Now.ToLongTimeString ();
         }
@@ -149,8 +166,8 @@ namespace CycleCity_6.Tools.CyclistViewer
 
             }
 
-            mapView.Dispatcher.InvokeAsync(() => gLayer.Graphics.Clear());
-            mapView.Dispatcher.InvokeAsync(() => gLayer.Graphics.AddRange(collection));
+            mapView.Dispatcher.InvokeAsync(() => trackGraphicsLayer.Graphics.Clear());
+            mapView.Dispatcher.InvokeAsync(() => trackGraphicsLayer.Graphics.AddRange(collection));
             _trackService.AktiviereUpdate(true);
         }
 
@@ -168,20 +185,17 @@ namespace CycleCity_6.Tools.CyclistViewer
         public void AddTracksToMapLayer(List<Track> tracks)
         {
             List<Graphic> collection = new List<Graphic> ();
-            Random randomGen = new Random ();
 
             foreach(var track in tracks)
             {
-                var simpleLineSymbol = new SimpleLineSymbol { Width = 3 };
+                var simpleLineSymbol = new SimpleLineSymbol { Width = 3, Color = Color.FromArgb(40,0,0,255)};
                 
-                var randomColor = Colors.Blue;
-
-                simpleLineSymbol.Color = randomColor;
                 collection.Add (new Graphic (track.Tour, simpleLineSymbol));
             }
 
-            mapView.Dispatcher.InvokeAsync (() => gLayer.Graphics.Clear ());
-            mapView.Dispatcher.InvokeAsync (() => gLayer.Graphics.AddRange (collection));
+            mapView.Dispatcher.InvokeAsync (() => trackGraphicsLayer.Graphics.Clear ());
+            mapView.Dispatcher.InvokeAsync(() => veloGraphicsLayer.Graphics.AddRange(veloGraphics));
+            mapView.Dispatcher.InvokeAsync (() => trackGraphicsLayer.Graphics.AddRange (collection));
 
             LetzteAktuallisierung = "Letzte Aktuallisierung: " + DateTime.Now.ToLongTimeString ();
         }

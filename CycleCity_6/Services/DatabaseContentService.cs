@@ -4,6 +4,7 @@ using System.Diagnostics.Contracts;
 using System.IO;
 using System.Net;
 using System.Text;
+using CycleCity_6.Materials;
 using Newtonsoft.Json.Linq;
 
 
@@ -63,7 +64,7 @@ namespace CycleCity_6.Services
 
         /// <summary>
         /// Holt Daten aus dem angebeben Zeitraum vom Server.
-        /// Wenn 'to' den 'min'-Value von DateTime hat, werden alle Daten vom Startzeitpunkt bis zum aktuellen Datum geholt.
+        /// Wenn 'to' den 'max'-Value von DateTime hat, werden alle Daten vom Startzeitpunkt bis zum aktuellen Datum geholt.
         /// </summary>
         /// <param name="from">Startzeit des Intervalls</param>
         /// <param name="to">Endzeit des Intervalls</param>
@@ -114,7 +115,7 @@ namespace CycleCity_6.Services
         {
             HttpWebRequest request =
                 (HttpWebRequest)WebRequest.Create("https://api.cyc.jmakro.de:4040/get_auth_token.php");
-            var data = Encoding.ASCII.GetBytes("username=table2&password=.table2.");
+            var data = Encoding.ASCII.GetBytes("username=" + User.Name + "&password=" + User.Passwort);
 
             request.Method = "POST";
             request.ContentType = "application/x-www-form-urlencoded";

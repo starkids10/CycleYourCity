@@ -64,6 +64,7 @@
     <Compile Include="Materials\HeatPoint.cs" />
     <Compile Include="Materials\Point.cs" />
     <Compile Include="Materials\Track.cs" />
+    <Compile Include="Materials\User.cs" />
     <Compile Include="Services\DatabaseContentService.cs" />
     <Compile Include="Services\GpsToEsriParser.cs" />
     <Compile Include="Services\TrackService.cs" />
@@ -107,6 +108,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Data\Velorouten_Hamburg.gpx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -120,6 +122,7 @@
   <ItemGroup>
     <Resource Include="Images\tack_icon.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Esri.ArcGISRuntime.10.2.7.1234\build\net45\Esri.ArcGISRuntime.targets" Condition="Exists('..\packages\Esri.ArcGISRuntime.10.2.7.1234\build\net45\Esri.ArcGISRuntime.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

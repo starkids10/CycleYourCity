@@ -18,9 +18,9 @@ namespace CycleCity_6.Services
         /// </summary>
         /// <param name="url">Path to .gpx file</param>
         /// <returns>represents the track in the gpx file as a polyline</returns>
-        public static Polyline ParseGpxToEsriPolyline(string url)
+        public static List<Track> ParseGpxToEsriPolyline(string url)
         {
-            List<MapPoint> points = new List<MapPoint>();
+            List<Track> trackList = new List<Track>();
             try
             {
                 XDocument gpxDoc = XDocument.Load(@url);
@@ -39,21 +39,21 @@ namespace CycleCity_6.Services
 
                 foreach (var track in tracks)
                 {
+                    List<MapPoint> points = new List<MapPoint>();
                     foreach (var trekSeg in track.Segs)
                     {
                         var y = Double.Parse(trekSeg.Latitude, CultureInfo.InvariantCulture);
                         var x = Double.Parse(trekSeg.Longitude, CultureInfo.InvariantCulture);
                         points.Add(new MapPoint(x, y));
                     }
+                    trackList.Add(new Track("-1",new Polyline(points, SpatialReferences.Wgs84)));
                 }
-                Console.WriteLine(points.Count);
             }
             catch (FileNotFoundException)
             {
                 Console.WriteLine("File not found");
-                points = new List<MapPoint>();
             }
-            return new Polyline(points, SpatialReferences.Wgs84);
+            return trackList;
         }
 
 

@@ -56,8 +56,8 @@ namespace CycleCity_6.Tools.CyclistViewer
         private void Slider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             //TODO Daten nach der ausgewählten Zeit anzeigen lassen
-            Console.WriteLine(ZeitSlider.Value);
             int monat;
+            int stunde = (int) ZeitSlider.Value;
             if (monatselected == 0)
             {
                 monat = 1;
@@ -66,7 +66,11 @@ namespace CycleCity_6.Tools.CyclistViewer
             {
                 monat = monatselected;
             }
-            GetViewModel().SetzeUhrzeit(new DateTime(2016, monat, 01, (int)ZeitSlider.Value,00 ,00) , DateTime.MaxValue);
+            if (stunde == 24)
+            {
+                stunde = 0;
+            }
+            GetViewModel().SetzeUhrzeit(new DateTime(2016, monat, 01, stunde ,00 ,00) , DateTime.MaxValue);
 
 
         }
@@ -109,8 +113,8 @@ namespace CycleCity_6.Tools.CyclistViewer
                 {
                     setBackground("M" + x);
                 }
-            }
 
+            }
         }
 
         

@@ -16,8 +16,10 @@ namespace CycleCity_6.Tools.CyclistViewer
     /// </summary>
     public partial class CyclistViewerView : UserControl
     {
-        private int monatselected = 0;
+
+        private int monatselected = 0; //dies ist nur eine flag die werte 0-2 annimt
         private int startmonat = 0;
+        private int endmonat = 0;
 
         public CyclistViewerView()
         {
@@ -56,32 +58,43 @@ namespace CycleCity_6.Tools.CyclistViewer
         private void Slider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             //TODO Daten nach der ausgewählten Zeit anzeigen lassen
+            int stunde = (int)ZeitSlider.Value;
             int monat;
-            int stunde = (int) ZeitSlider.Value;
-            if (monatselected == 0)
+            if (startmonat == 0)
             {
                 monat = 1;
             }
             else
             {
-                monat = monatselected;
+                monat = startmonat;
             }
             if (stunde == 24)
             {
                 stunde = 0;
             }
-            GetViewModel().SetzeUhrzeit(new DateTime(2016, monat, 01, stunde ,00 ,00) , DateTime.MaxValue);
-
+            if (endmonat == 0)
+            {
+                GetViewModel().SetzeUhrzeit(new DateTime(2016, monat, 01, stunde, 00, 00), DateTime.MaxValue);
+            }
+            else
+            {
+                int letzterTag = DateTime.DaysInMonth(2016, endmonat);
+                //TODO mehr als nur eine Stunde anzeigen
+                GetViewModel().SetzeUhrzeit(new DateTime(2016, startmonat, 01, stunde, 00, 00), new DateTime(2016, endmonat, letzterTag, stunde, 59, 59));
+            }
 
         }
 
-        private void Monatsauswahl_OnTouch(object sender, System.Windows.Input.TouchEventArgs e)
+        // TODO wieder einbauen wenn auf touch verwendet werden soll "System.Windows.Input.TouchEventArgs"
+
+        private void Monatsauswahl_OnTouch(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
             string monat = button.Name;
 
             if (monatselected == 0 || monatselected == 2)
             {
+                //Click Flag setzten 
                 monatselected = 1;
                 // von allen Buttons Hintergrundfarbe zurücksetzten
                 resetBackgrounds();
@@ -89,18 +102,17 @@ namespace CycleCity_6.Tools.CyclistViewer
                 //Hintergrundfarbe setzten
                 startmonat = setBackground(monat);
 
-                //TODO monat an server schicken;
-                //TODO Karte Updaten;
+                //Server Zeitraum mitteilen ("SetzeUhrzeit();")
+                GetViewModel().SetzeUhrzeit(new DateTime(2016, startmonat, 01, 00, 00, 00), DateTime.MaxValue);
+
             }
             else if (monatselected == 1)
             {
                 monatselected = 2;
 
                 //diesen und ersten monat auswählen;
-                int endmonat = setBackground(monat);
+                endmonat = setBackground(monat);
 
-                //TODO zeitspanne an server schicken;
-                //TODO Update machen;
 
                 //buttons dazwischen mit neuer hintergrundfarbe anpassen;
                 if (startmonat > endmonat)
@@ -114,10 +126,15 @@ namespace CycleCity_6.Tools.CyclistViewer
                     setBackground("M" + x);
                 }
 
+                //Server Zeitraum mitteilen ("SetzeUhrzeit();")
+                int letzterTag = DateTime.DaysInMonth(2016, endmonat);
+                GetViewModel().SetzeUhrzeit(new DateTime(2016, startmonat, 01, 00, 00, 00), new DateTime(2016, endmonat, letzterTag, 23, 59, 59));
+
+
             }
         }
 
-        
+
         /// <summary>
         /// Setzt den Hintergrund eines übergebenen Buttons auf "Aqua" und gibt dessen Monat als Int zurück (1-12)
         /// </summary>
@@ -183,6 +200,14 @@ namespace CycleCity_6.Tools.CyclistViewer
             M11.Background = Brushes.Gold;
             M12.Background = Brushes.Gold;
 
+        }
+
+        private void LiveModus_Click(object sender, RoutedEventArgs e)
+        {
+            resetBackgrounds();
+            startmonat = 0;
+            endmonat = 0;
+            ZeitSlider.Value = 0;
         }
     }
 }

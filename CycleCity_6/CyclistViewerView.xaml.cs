@@ -89,7 +89,6 @@ namespace CycleCity_6.Tools.CyclistViewer
             }
             GetViewModel().SetzeUhrzeit(new DateTime(2016, startmonat, 01, stunde ,00 ,00) , new DateTime(2016, endmonat, 01,stunde,00,00));
 
-
         }
 
         private void Monatsauswahl_OnTouch(object sender, System.Windows.Input.TouchEventArgs e)
@@ -116,20 +115,23 @@ namespace CycleCity_6.Tools.CyclistViewer
                 //diesen und ersten monat auswählen;
                 _endmonat = setBackground(monat);
 
-                //TODO zeitspanne an server schicken;
-                //TODO Update machen;
 
                 //buttons dazwischen mit neuer hintergrundfarbe anpassen;
-                if (_startmonat > _endmonat)
+                if (startmonat > endmonat)
                 {
-                    int y = _startmonat;
-                    _startmonat = _endmonat;
-                    _endmonat = y;
+                    int y = startmonat;
+                    startmonat = endmonat;
+                    endmonat = y;
                 }
-                for (int x = _startmonat; x < _endmonat; x++)
+                for (int x = startmonat; x < endmonat; x++)
                 {
                     setBackground("M" + x);
                 }
+
+                //Server Zeitraum mitteilen ("SetzeUhrzeit();")
+                int letzterTag = DateTime.DaysInMonth(2016, endmonat);
+                GetViewModel().SetzeUhrzeit(new DateTime(2016, startmonat, 01, 00, 00, 00), new DateTime(2016, endmonat, letzterTag, 23, 59, 59));
+
 
             }
         }
@@ -200,6 +202,14 @@ namespace CycleCity_6.Tools.CyclistViewer
             M11.Background = Brushes.Gold;
             M12.Background = Brushes.Gold;
 
+        }
+
+        private void LiveModus_Click(object sender, RoutedEventArgs e)
+        {
+            resetBackgrounds();
+            startmonat = 0;
+            endmonat = 0;
+            ZeitSlider.Value = 0;
         }
     }
 }

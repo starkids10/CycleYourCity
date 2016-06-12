@@ -16,14 +16,20 @@ namespace CycleCity_6.Tools.CyclistViewer
     /// </summary>
     public partial class CyclistViewerView : UserControl
     {
-        private int monatselected = 0;
-        private int startmonat = 0;
+        private int _monatselected = 0;
+        private int _startmonat = 0;
+        private int _endmonat = 0;
+        private DateTime _startzeit;
+        private DateTime _endzeit;
 
         public CyclistViewerView()
         {
             InitializeComponent();
 
-            GetViewModel().mapView = CycleMapView;
+            GetViewModel().MapView = CycleMapView;
+            _startzeit = DateTime.MinValue;
+            _endzeit = DateTime.MaxValue;
+            ;
         }
 
         private CyclistViewerViewModel GetViewModel()
@@ -56,21 +62,32 @@ namespace CycleCity_6.Tools.CyclistViewer
         private void Slider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             //TODO Daten nach der ausgewählten Zeit anzeigen lassen
-            int monat;
+            int startmonat;
+            int endmonat;
             int stunde = (int) ZeitSlider.Value;
-            if (monatselected == 0)
+            if (_startmonat == 0)
             {
-                monat = 1;
+                startmonat = 1;
             }
             else
             {
-                monat = monatselected;
+                startmonat = _startmonat;
             }
+
+            if (_endmonat == 0)
+            {
+                endmonat = 12;
+            }
+            else
+            {
+                endmonat = _endmonat;
+            }
+
             if (stunde == 24)
             {
                 stunde = 0;
             }
-            GetViewModel().SetzeUhrzeit(new DateTime(2016, monat, 01, stunde ,00 ,00) , DateTime.MaxValue);
+            GetViewModel().SetzeUhrzeit(new DateTime(2016, startmonat, 01, stunde ,00 ,00) , new DateTime(2016, endmonat, 01,stunde,00,00));
 
 
         }
@@ -80,36 +97,36 @@ namespace CycleCity_6.Tools.CyclistViewer
             Button button = sender as Button;
             string monat = button.Name;
 
-            if (monatselected == 0 || monatselected == 2)
+            if (_monatselected == 0 || _monatselected == 2)
             {
-                monatselected = 1;
+                _monatselected = 1;
                 // von allen Buttons Hintergrundfarbe zurücksetzten
                 resetBackgrounds();
 
                 //Hintergrundfarbe setzten
-                startmonat = setBackground(monat);
-
+                _startmonat = setBackground(monat);
+                _endmonat = setBackground(monat);
                 //TODO monat an server schicken;
                 //TODO Karte Updaten;
             }
-            else if (monatselected == 1)
+            else if (_monatselected == 1)
             {
-                monatselected = 2;
+                _monatselected = 2;
 
                 //diesen und ersten monat auswählen;
-                int endmonat = setBackground(monat);
+                _endmonat = setBackground(monat);
 
                 //TODO zeitspanne an server schicken;
                 //TODO Update machen;
 
                 //buttons dazwischen mit neuer hintergrundfarbe anpassen;
-                if (startmonat > endmonat)
+                if (_startmonat > _endmonat)
                 {
-                    int y = startmonat;
-                    startmonat = endmonat;
-                    endmonat = y;
+                    int y = _startmonat;
+                    _startmonat = _endmonat;
+                    _endmonat = y;
                 }
-                for (int x = startmonat; x < endmonat; x++)
+                for (int x = _startmonat; x < _endmonat; x++)
                 {
                     setBackground("M" + x);
                 }

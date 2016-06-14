@@ -8,6 +8,7 @@ using System.Windows;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Tasks.Geocoding;
 using System.Windows.Media;
+using System.Globalization;
 
 namespace CycleCity_6.Tools.CyclistViewer
 {
@@ -58,8 +59,13 @@ namespace CycleCity_6.Tools.CyclistViewer
         private void Slider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             //TODO Daten nach der ausgewählten Zeit anzeigen lassen
-            int stunde = (int)ZeitSlider.Value;
+            int stundeVon = (int)ZeitSliderVon.Value;
+            int stundeBis = (int)ZeitSliderBis.Value;
             int monat;
+
+            SliderVonText.Text = ZeitSliderVon.Value + ":00";
+            SliderBisText.Text = ZeitSliderBis.Value + ":00";
+
             if (startmonat == 0)
             {
                 monat = 1;
@@ -68,19 +74,24 @@ namespace CycleCity_6.Tools.CyclistViewer
             {
                 monat = startmonat;
             }
-            if (stunde == 24)
+            if (stundeVon == 24)
             {
-                stunde = 0;
+                stundeVon = 0;
+            }
+            if (stundeBis == 24)
+            {
+                stundeBis = 0;
             }
             if (endmonat == 0)
             {
-                GetViewModel().SetzeUhrzeit(new DateTime(2016, monat, 01, stunde, 00, 00), DateTime.MaxValue);
+                GetViewModel().SetzeUhrzeit(new DateTime(2016, monat, 01, stundeVon, 00, 00), DateTime.MaxValue);
             }
             else
             {
                 int letzterTag = DateTime.DaysInMonth(2016, endmonat);
-                //TODO mehr als nur eine Stunde anzeigen
-                GetViewModel().SetzeUhrzeit(new DateTime(2016, startmonat, 01, stunde, 00, 00), new DateTime(2016, endmonat, letzterTag, stunde, 59, 59));
+                //TODO Aktuell wird von Monat x die Startzeit genommen und von Monat y die endzeit. Am Ende soll aber 
+                // bsw. in einem Monat alles von 9-11 Uhr angezeigt werden. Dafür brauchen wir aber unsere eigene Datenbasis
+                GetViewModel().SetzeUhrzeit(new DateTime(2016, startmonat, 01, stundeVon, 00, 00), new DateTime(2016, endmonat, letzterTag, stundeBis, 59, 59));
             }
 
         }
@@ -136,7 +147,7 @@ namespace CycleCity_6.Tools.CyclistViewer
 
 
         /// <summary>
-        /// Setzt den Hintergrund eines übergebenen Buttons auf "Aqua" und gibt dessen Monat als Int zurück (1-12)
+        /// Setzt den Hintergrund eines übergebenen Buttons auf "CadetBlue" und gibt dessen Monat als Int zurück (1-12)
         /// </summary>
         /// <param name="monat"></param>
         /// <returns></returns>
@@ -145,40 +156,40 @@ namespace CycleCity_6.Tools.CyclistViewer
             switch (monat)
             {
                 case "M1":
-                    M1.Background = Brushes.Aqua;
+                    M1.Background = Brushes.CadetBlue;
                     return 1;
                 case "M2":
-                    M2.Background = Brushes.Aqua;
+                    M2.Background = Brushes.CadetBlue;
                     return 2;
                 case "M3":
-                    M3.Background = Brushes.Aqua;
+                    M3.Background = Brushes.CadetBlue;
                     return 3;
                 case "M4":
-                    M4.Background = Brushes.Aqua;
+                    M4.Background = Brushes.CadetBlue;
                     return 4;
                 case "M5":
-                    M5.Background = Brushes.Aqua;
+                    M5.Background = Brushes.CadetBlue;
                     return 5;
                 case "M6":
-                    M6.Background = Brushes.Aqua;
+                    M6.Background = Brushes.CadetBlue;
                     return 6;
                 case "M7":
-                    M7.Background = Brushes.Aqua;
+                    M7.Background = Brushes.CadetBlue;
                     return 7;
                 case "M8":
-                    M8.Background = Brushes.Aqua;
+                    M8.Background = Brushes.CadetBlue;
                     return 8;
                 case "M9":
-                    M9.Background = Brushes.Aqua;
+                    M9.Background = Brushes.CadetBlue;
                     return 9;
                 case "M10":
-                    M10.Background = Brushes.Aqua;
+                    M10.Background = Brushes.CadetBlue;
                     return 10;
                 case "M11":
-                    M11.Background = Brushes.Aqua;
+                    M11.Background = Brushes.CadetBlue;
                     return 11;
                 case "M12":
-                    M12.Background = Brushes.Aqua;
+                    M12.Background = Brushes.CadetBlue;
                     return 12;
                 default:
                     return 0;
@@ -187,18 +198,18 @@ namespace CycleCity_6.Tools.CyclistViewer
 
         private void resetBackgrounds()
         {
-            M1.Background = Brushes.Gold;
-            M2.Background = Brushes.Gold;
-            M3.Background = Brushes.Gold;
-            M4.Background = Brushes.Gold;
-            M5.Background = Brushes.Gold;
-            M6.Background = Brushes.Gold;
-            M7.Background = Brushes.Gold;
-            M8.Background = Brushes.Gold;
-            M9.Background = Brushes.Gold;
-            M10.Background = Brushes.Gold;
-            M11.Background = Brushes.Gold;
-            M12.Background = Brushes.Gold;
+            M1.Background = Brushes.PowderBlue;
+            M2.Background = Brushes.PowderBlue;
+            M3.Background = Brushes.PowderBlue;
+            M4.Background = Brushes.PowderBlue;
+            M5.Background = Brushes.PowderBlue;
+            M6.Background = Brushes.PowderBlue;
+            M7.Background = Brushes.PowderBlue;
+            M8.Background = Brushes.PowderBlue;
+            M9.Background = Brushes.PowderBlue;
+            M10.Background = Brushes.PowderBlue;
+            M11.Background = Brushes.PowderBlue;
+            M12.Background = Brushes.PowderBlue;
 
         }
 
@@ -207,7 +218,49 @@ namespace CycleCity_6.Tools.CyclistViewer
             resetBackgrounds();
             startmonat = 0;
             endmonat = 0;
-            ZeitSlider.Value = 0;
+            ZeitSliderVon.Value = 0;
+            ZeitSliderBis.Value = 0;
         }
+
+        private void CYC_Checked(object sender, RoutedEventArgs e)
+        {
+            //TODO Checkbox passende Tracks anzeigen
+        }
+
+        private void CYC_Unchecked(object sender, RoutedEventArgs e)
+        {
+            //TODO Checkbox passende Tracks ausblenden
+        }
+
+        private void Naviki_Checked(object sender, RoutedEventArgs e)
+        {
+            //TODO Checkbox passende Tracks anzeigen
+        }
+
+        private void Naviki_Unchecked(object sender, RoutedEventArgs e)
+        {
+            //TODO Checkbox passende Tracks ausblenden
+        }
+
+        private void AlleVelorouten_Checked(object sender, RoutedEventArgs e)
+        {
+            //TODO Checkbox passende Velorouten anzeigen
+        }
+
+        private void AlleVelorouten_Unchecked(object sender, RoutedEventArgs e)
+        {
+            //TODO Checkbox passende Velorouten ausblenden
+        }
+
+        private void Veloroute_Checked(object sender, RoutedEventArgs e)
+        {
+            //TODO Checkbox passende Velorouten anzeigen
+        }
+
+        private void Veloroute_Unchecked(object sender, RoutedEventArgs e)
+        {
+            //TODO Checkbox passende Velorouten ausblenden
+        }
+
     }
 }

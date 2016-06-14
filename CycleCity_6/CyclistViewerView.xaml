@@ -13,56 +13,142 @@
     <Grid>
         <esri:MapView  x:Name="CycleMapView" Map="{Binding Map}" />
 
-        <StackPanel HorizontalAlignment="Right" Margin="20,0,0,20">
-            <TextBlock x:Name="letzteAktuallisierung" Text="{Binding Path=LetzteAktuallisierung, UpdateSourceTrigger=PropertyChanged}" Foreground="Black" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Top" Margin="10"/>
-            <Button x:Name="HeatMapAnzeigen"  Width="100"  Height="100"  Click="HeatMapOrTracksAnzeigen_OnClick" FontSize="20" FontFamily="Segoe UI Black" Background="#FF7FA7D3">
-                <Button.Content>
-                    <TextBlock>
+        <TextBlock x:Name="letzteAktuallisierung" Text="{Binding Path=LetzteAktuallisierung, UpdateSourceTrigger=PropertyChanged}" Foreground="Black" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Margin="10" FontSize="15"/>
+
+        <!--Ausklapp Menü Rechts-->
+        <Expander x:Name="Filter" HorizontalAlignment="Right"  VerticalAlignment="Stretch" >
+            <Expander.Header>
+                <TextBlock FontSize="20" FontFamily="Segoe UI Black">
+                    Filter
+                </TextBlock>
+            </Expander.Header>
+
+            <StackPanel HorizontalAlignment="Right" Margin="20,0,0,90" Background="DarkGray" Width="150">
+                <Button x:Name="HeatMapAnzeigen"  Width="100"  Height="100"  Click="HeatMapOrTracksAnzeigen_OnClick" FontSize="20" FontFamily="Segoe UI Black" Background="#FF7FA7D3">
+                    <Button.Content>
+                        <TextBlock>
                        HeatMap 
                         <LineBreak/>
                         Anzeigen
-                    </TextBlock>
-                </Button.Content>
-            </Button>
-            <Button x:Name="TrackAnzeigen" Width="100"  Height="100"  Click="HeatMapOrTracksAnzeigen_OnClick" Visibility="Collapsed" FontFamily="Segoe UI Black" FontSize="20">
-                <Button.Content>
-                    <StackPanel>
-                        <Image Source="\Images\tack_icon.png" Stretch="UniformToFill" />
-                        <TextBlock>
+                        </TextBlock>
+                    </Button.Content>
+                </Button>
+                <Button x:Name="TrackAnzeigen" Width="100"  Height="100"  Click="HeatMapOrTracksAnzeigen_OnClick" Visibility="Collapsed" FontFamily="Segoe UI Black" FontSize="20">
+                    <Button.Content>
+                        <StackPanel>
+                            <Image Source="\Images\tack_icon.png" Stretch="UniformToFill" />
+                            <TextBlock>
                        Tracks 
                         <LineBreak/>
                         Anzeigen
-                        </TextBlock>
-                    </StackPanel>
-                </Button.Content>
-            </Button>
-        </StackPanel>
-
-        <StackPanel Background="Black"  Opacity="0.5" VerticalAlignment="Bottom" HorizontalAlignment="Stretch">
-            <StackPanel Name="ControlPanel"  VerticalAlignment="Bottom" Margin="5" Orientation="Horizontal" HorizontalAlignment="Center" Background="Black" >
-                <DockPanel VerticalAlignment="Center" Margin="10">
-                    <TextBox Text="{Binding ElementName=ZeitSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Width="40" />
-                    <Slider x:Name="ZeitSlider"  Maximum="24" TickPlacement="BottomRight"   Width="300" VerticalAlignment="Center" IsSnapToTickEnabled="True" ValueChanged="Slider_OnValueChanged" RenderTransformOrigin="0.5,0.5"/>
-                </DockPanel>
-                <Button Name="LiveModus" Content="Live●" Click="LiveModus_Click" Width="40" Height="24" FontFamily="Segoe UI Black" Background="Black" Foreground="Red" BorderBrush="White" />
+                            </TextBlock>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+                <StackPanel Background="White" Opacity="0.8" Margin="5">
+                    <CheckBox Content="CYC" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="CYC_Checked" Unchecked="CYC_Unchecked"/>
+                    <CheckBox Content="Naviki" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Naviki_Checked" Unchecked="Naviki_Unchecked"/>
+                </StackPanel>
+                <TreeView Margin="5" Background="White" Opacity="0.8">
+                    <TreeViewItem IsExpanded="True">
+                        <TreeViewItem.Header>
+                            <CheckBox Content="Velorouten" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="AlleVelorouten_Checked" Unchecked="AlleVelorouten_Unchecked"/>
+                        </TreeViewItem.Header>
+                        <CheckBox Content="Route 1" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
+                        <CheckBox Content="Route 2" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
+                        <CheckBox Content="Route 3" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
+                        <CheckBox Content="Route 4" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
+                        <CheckBox Content="Route 5" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
+                        <CheckBox Content="Route 6" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
+                        <CheckBox Content="Route 7" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
+                        <CheckBox Content="Route 8" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
+                        <CheckBox Content="Route 9" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
+                        <CheckBox Content="Route 10" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
+                        <CheckBox Content="Route 11" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
+                        <CheckBox Content="Route 12" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
+                        <CheckBox Content="Route 13" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
+                        <CheckBox Content="Route 14" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
+                    </TreeViewItem>
+                </TreeView>
             </StackPanel>
-            
-            <DockPanel Name="Zeitleiste" HorizontalAlignment="Center" Background="Black" >
-                <Button Name="M1" Content="Januar" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch" Click="Monatsauswahl_OnTouch" />
-                <Button Name="M2" Content="Februar" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  Click="Monatsauswahl_OnTouch"/>
-                <Button Name="M3" Content="März" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  Click="Monatsauswahl_OnTouch"/>
-                <Button Name="M4" Content="April" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  Click="Monatsauswahl_OnTouch"/>
-                <Button Name="M5" Content="Mai" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  Click="Monatsauswahl_OnTouch"/>
-                <Button Name="M6" Content="Juni" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  Click="Monatsauswahl_OnTouch"/>
-                <Button Name="M7" Content="Juli" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  Click="Monatsauswahl_OnTouch"/>
-                <Button Name="M8" Content="August" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  Click="Monatsauswahl_OnTouch"/>
-                <Button Name="M9" Content="September" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  Click="Monatsauswahl_OnTouch"/>
-                <Button Name="M10" Content="Oktober" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  Click="Monatsauswahl_OnTouch"/>
-                <Button Name="M11" Content="November" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  Click="Monatsauswahl_OnTouch"/>
-                <Button Name="M12" Content="Dezember" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  Click="Monatsauswahl_OnTouch"/>
-            </DockPanel>
 
-        </StackPanel>
+            <Expander.Triggers>
+                <EventTrigger RoutedEvent="Expander.Expanded">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard>
+                            <Storyboard >
+                                <DoubleAnimation From="80" To="180" Storyboard.TargetName="Filter" Storyboard.TargetProperty="Width" Duration="0:00:00.5"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="Expander.Collapsed">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard>
+                            <Storyboard >
+                                <DoubleAnimation From="180" To="80" Storyboard.TargetName="Filter" Storyboard.TargetProperty="Width" Duration="0:00:00.5"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+            </Expander.Triggers>
+        </Expander>
+
+        <!--Ausklapp Menü Zur Zeiteinstellung Unten-->
+        <Expander x:Name="zeit" Header="Zeiteinstellung" HorizontalAlignment="Stretch"  VerticalAlignment="Bottom" FontSize="20" FontFamily="Segoe UI Black">
+            <StackPanel Background="DarkGray" VerticalAlignment="Bottom" HorizontalAlignment="Stretch">
+                <StackPanel Name="ControlPanel"  VerticalAlignment="Bottom" Margin="5" Orientation="Horizontal" HorizontalAlignment="Center" >
+                    <TextBlock Text="von: " Margin="0,10,0,0" />
+                    <DockPanel VerticalAlignment="Center" Margin="10">
+                        <TextBlock Name="SliderVonText"  Text="0:00" DockPanel.Dock="Right" TextAlignment="Right" Width="55" />
+                        <Slider x:Name="ZeitSliderVon"  Maximum="24" TickPlacement="BottomRight" Width="300" VerticalAlignment="Center" IsSnapToTickEnabled="True" ValueChanged="Slider_OnValueChanged" RenderTransformOrigin="0.5,0.5"/>
+                    </DockPanel>
+                    <TextBlock Text="bis: " Margin="0,10,0,0" />
+                    <DockPanel VerticalAlignment="Center" Margin="10">
+                        <TextBlock Name="SliderBisText" Text="0:00" DockPanel.Dock="Right" TextAlignment="Right" Width="55" />
+                        <Slider x:Name="ZeitSliderBis"  Maximum="24" TickPlacement="BottomRight"  Width="300" VerticalAlignment="Center" IsSnapToTickEnabled="True" ValueChanged="Slider_OnValueChanged" RenderTransformOrigin="0.5,0.5"/>
+                    </DockPanel>
+                    <Button Name="LiveModus" Content="Live●" Click="LiveModus_Click" Width="60" Height="30" FontFamily="Segoe UI Black" Foreground="Red" BorderBrush="White" />
+                </StackPanel>
+
+                <DockPanel Name="Zeitleiste" HorizontalAlignment="Center" Background="Black" >
+                    <Button Name="M1" Content="Januar" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch" Click="Monatsauswahl_OnTouch" />
+                    <Button Name="M2" Content="Februar" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  Click="Monatsauswahl_OnTouch"/>
+                    <Button Name="M3" Content="März" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  Click="Monatsauswahl_OnTouch"/>
+                    <Button Name="M4" Content="April" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  Click="Monatsauswahl_OnTouch"/>
+                    <Button Name="M5" Content="Mai" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  Click="Monatsauswahl_OnTouch"/>
+                    <Button Name="M6" Content="Juni" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  Click="Monatsauswahl_OnTouch"/>
+                    <Button Name="M7" Content="Juli" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  Click="Monatsauswahl_OnTouch"/>
+                    <Button Name="M8" Content="August" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  Click="Monatsauswahl_OnTouch"/>
+                    <Button Name="M9" Content="September" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  Click="Monatsauswahl_OnTouch"/>
+                    <Button Name="M10" Content="Oktober" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  Click="Monatsauswahl_OnTouch"/>
+                    <Button Name="M11" Content="November" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  Click="Monatsauswahl_OnTouch"/>
+                    <Button Name="M12" Content="Dezember" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  Click="Monatsauswahl_OnTouch"/>
+                </DockPanel>
+            </StackPanel>
+
+            <Expander.Triggers>
+                <EventTrigger RoutedEvent="Expander.Expanded">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard>
+                            <Storyboard >
+                                <DoubleAnimation From="40" To="120" Storyboard.TargetName="zeit" Storyboard.TargetProperty="Height" Duration="0:00:00.5"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="Expander.Collapsed">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard>
+                            <Storyboard >
+                                <DoubleAnimation From="120" To="40" Storyboard.TargetName="zeit" Storyboard.TargetProperty="Height" Duration="0:00:00.5"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+            </Expander.Triggers>
+        </Expander>
+
     </Grid>
 </UserControl>
 

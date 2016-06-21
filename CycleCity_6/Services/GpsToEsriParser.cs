@@ -59,6 +59,7 @@ namespace CycleCity_6.Services
 
         public static List<Track> ParseJsonToEsriPolyline(String json)
         {
+            //test
             List<Track> trackList = new List<Track>();
             if (json != "[]")
             {

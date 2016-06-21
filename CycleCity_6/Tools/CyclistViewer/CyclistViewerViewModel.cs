@@ -78,7 +78,7 @@ namespace CycleCity_6.Tools.CyclistViewer
             var uriStreet = new Uri ("http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer");
             var uriDark = new Uri("http://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer");
             var uriLight = new Uri ("http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer");
-            var baseLayer = new Esri.ArcGISRuntime.Layers.ArcGISTiledMapServiceLayer(uriLight);
+            var baseLayer = new Esri.ArcGISRuntime.Layers.ArcGISTiledMapServiceLayer(uriDark);
             // (give the layer an ID so it can be found later)
             baseLayer.ID = "BaseMap";
 

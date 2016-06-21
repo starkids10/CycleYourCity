@@ -166,7 +166,6 @@
                 <Button Name="M12" Content="Dezember" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"/>
             </DockPanel>-->
 
-        </StackPanel>
     </Grid>
 </UserControl>
 

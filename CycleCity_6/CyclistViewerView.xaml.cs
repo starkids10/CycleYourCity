@@ -66,7 +66,7 @@ namespace CycleCity_6.Tools.CyclistViewer
             SliderVonText.Text = ZeitSliderVon.Value + ":00";
             SliderBisText.Text = ZeitSliderBis.Value + ":00";
 
-            if (startmonat == 0)
+            if (_startmonat == 0)
             {
                 monat = 1;
             }
@@ -82,16 +82,16 @@ namespace CycleCity_6.Tools.CyclistViewer
             {
                 stundeBis = 0;
             }
-            if (endmonat == 0)
+            if (_endmonat == 0)
             {
                 GetViewModel().SetzeUhrzeit(new DateTime(2016, monat, 01, stundeVon, 00, 00), DateTime.MaxValue);
             }
             else
             {
-                int letzterTag = DateTime.DaysInMonth(2016, endmonat);
+                int letzterTag = DateTime.DaysInMonth(2016, _endmonat);
                 //TODO Aktuell wird von Monat x die Startzeit genommen und von Monat y die endzeit. Am Ende soll aber 
                 // bsw. in einem Monat alles von 9-11 Uhr angezeigt werden. Dafür brauchen wir aber unsere eigene Datenbasis
-                GetViewModel().SetzeUhrzeit(new DateTime(2016, startmonat, 01, stundeVon, 00, 00), new DateTime(2016, endmonat, letzterTag, stundeBis, 59, 59));
+                GetViewModel().SetzeUhrzeit(new DateTime(2016, _startmonat, 01, stundeVon, 00, 00), new DateTime(2016, _endmonat, letzterTag, stundeBis, 59, 59));
             }
 
         }
@@ -217,9 +217,9 @@ namespace CycleCity_6.Tools.CyclistViewer
 
         private void LiveModus_Click(object sender, RoutedEventArgs e)
         {
-            resetBackgrounds();
-            startmonat = 0;
-            endmonat = 0;
+            ResetBackgrounds();
+            _startmonat = 0;
+            _endmonat = 0;
             ZeitSliderVon.Value = 0;
             ZeitSliderBis.Value = 0;
         }

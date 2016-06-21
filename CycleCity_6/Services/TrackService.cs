@@ -27,7 +27,7 @@ namespace CycleCity_6.Services
 
             aTimer = new Timer(10000);
             aTimer.Elapsed += CollectData_OnTimedEvent;
-            aTimer.Enabled = true;
+            aTimer.Enabled = false;
 
             Velorouten = GpsToEsriParser.ParseGpxToEsriPolyline(Environment.CurrentDirectory + @"\..\..\" + @"\Data\Velorouten_Hamburg.gpx");
 

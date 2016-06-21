@@ -131,7 +131,7 @@ namespace CycleCity_6.Tools.CyclistViewer
 
         private void AddHeatpointToMapLayer(List<Graphic> collection, HeatPoint heatPoint)
         {
-            _trackService.AktiviereUpdate(false);
+            _trackService.AktiviereLiveUpdate(false);
             var punktStyle = new SimpleMarkerSymbol();
             var heat = heatPoint.Heat;
 
@@ -168,7 +168,7 @@ namespace CycleCity_6.Tools.CyclistViewer
 
             MapView.Dispatcher.InvokeAsync(() => _trackGraphicsLayer.Graphics.Clear());
             MapView.Dispatcher.InvokeAsync(() => _trackGraphicsLayer.Graphics.AddRange(collection));
-            _trackService.AktiviereUpdate(true);
+            _trackService.AktiviereLiveUpdate(true);
         }
 
         private void TrackService_OnHeatMapChanged(object sender, IEnumerable<HeatPoint> heatPoints)
@@ -203,16 +203,16 @@ namespace CycleCity_6.Tools.CyclistViewer
 
         private void TrackService_OnKeineInternetVerbindung(object sender, UnhandledExceptionEventArgs e)
         {
-            var result = MessageBox.Show("Es besteht keine Verbindung zum Server. Drücken Sie 'Ok' um es erneut zu versuchen oder 'Cancel' zum Beenden des Programms.", "Netzwerkfehler", MessageBoxButton.OKCancel,
-                   MessageBoxImage.Error);
-            if (result == MessageBoxResult.OK)
-            {
-                _trackService.AktiviereUpdate(true);
-            }
-            else
-            {
-                Environment.Exit(-1);
-            }
+            //var result = MessageBox.Show("Es besteht keine Verbindung zum Server. Drücken Sie 'Ok' um es erneut zu versuchen oder 'Cancel' zum Beenden des Programms.", "Netzwerkfehler", MessageBoxButton.OKCancel,
+            //       MessageBoxImage.Error);
+            //if (result == MessageBoxResult.OK)
+            //{
+            //    _trackService.AktiviereLiveUpdate(true);
+            //}
+            //else
+            //{
+            //    Environment.Exit(-1);
+            //}
         }
 
         public void HeatmapAnzeigen(bool heatmapanzeigen)
@@ -230,8 +230,7 @@ namespace CycleCity_6.Tools.CyclistViewer
         /// <param name="endzeit">Ende des Zeitintervalls</param>
         public void SetzeUhrzeit(DateTime startzeit, DateTime endzeit)
         {
-            _trackService.Startzeit = startzeit;
-            _trackService.Endzeit = endzeit;
+            _trackService.UpdateVonBis(startzeit, endzeit);
         }
 
 

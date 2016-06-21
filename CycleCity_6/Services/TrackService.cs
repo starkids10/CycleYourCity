@@ -16,8 +16,6 @@ namespace CycleCity_6.Services
         private Timer aTimer;
         private readonly DatabaseContentService _databaseContentService;
 
-        public DateTime Startzeit { get; set; }
-        public DateTime Endzeit { get; set; }
         public bool HeatmapAnzeigen { get; set; }
         public List<Track> Velorouten { get; set; }
 
@@ -31,10 +29,7 @@ namespace CycleCity_6.Services
             aTimer.Elapsed += CollectData_OnTimedEvent;
             aTimer.Enabled = true;
 
-            Startzeit = new DateTime(2016,05,20,00,00,00);
-            Endzeit = DateTime.Now;
-
-            Velorouten = GpsToEsriParser.ParseGpxToEsriPolyline(Environment.CurrentDirectory + @"\..\..\"  + @"\Data\Velorouten_Hamburg.gpx");
+            Velorouten = GpsToEsriParser.ParseGpxToEsriPolyline(Environment.CurrentDirectory + @"\..\..\" + @"\Data\Velorouten_Hamburg.gpx");
 
 
         }
@@ -129,11 +124,16 @@ namespace CycleCity_6.Services
 
         private void CollectData_OnTimedEvent(Object souce, System.Timers.ElapsedEventArgs e)
         {
+            HoleDaten(new DateTime(2016, 01, 01, 00, 00, 00), DateTime.MaxValue);
+        }
+
+        private void HoleDaten(DateTime von, DateTime bis)
+        {
             if (_databaseContentService != null)
             {
                 try
                 {
-                    var data = _databaseContentService.GetDataFromTo(Startzeit, Endzeit);
+                    var data = _databaseContentService.GetDataFromTo(von, bis);
                     if (HeatmapAnzeigen)
                     {
                         var heatPoints = GpsToEsriParser.ParseJsonToPoinList(data);
@@ -162,9 +162,12 @@ namespace CycleCity_6.Services
             }
         }
 
+        public void UpdateVonBis(DateTime von, DateTime bis)
+        {
+            HoleDaten(von, bis);
+        }
 
-
-        public void AktiviereUpdate(bool x)
+        public void AktiviereLiveUpdate(bool x)
         {
             aTimer.Enabled = x;
         }

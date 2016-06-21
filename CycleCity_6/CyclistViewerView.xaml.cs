@@ -19,8 +19,10 @@ namespace CycleCity_6.Tools.CyclistViewer
     {
 
         private int _monatselected = 0; //dies ist nur eine flag die werte 0-2 annimmt
-        private int _startmonat = 0;
-        private int _endmonat = 0;
+        private int _startmonat = 1;
+        private int _endmonat = 12;
+        int stundeVon = 0;
+        int stundeBis = 0;
 
         public CyclistViewerView()
         {
@@ -33,7 +35,7 @@ namespace CycleCity_6.Tools.CyclistViewer
         {
             Contract.Requires(DataContext is CyclistViewerViewModel);
 
-            return (CyclistViewerViewModel) DataContext;
+            return (CyclistViewerViewModel)DataContext;
         }
 
         private void HeatMapOrTracksAnzeigen_OnClick(object sender, RoutedEventArgs e)
@@ -59,8 +61,8 @@ namespace CycleCity_6.Tools.CyclistViewer
         private void Slider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             //TODO Daten nach der ausgewählten Zeit anzeigen lassen
-            int stundeVon = (int)ZeitSliderVon.Value;
-            int stundeBis = (int)ZeitSliderBis.Value;
+            stundeVon = (int)ZeitSliderVon.Value;
+            stundeBis = (int)ZeitSliderBis.Value;
             int monat;
 
             SliderVonText.Text = ZeitSliderVon.Value + ":00";
@@ -218,8 +220,8 @@ namespace CycleCity_6.Tools.CyclistViewer
         private void LiveModus_Click(object sender, RoutedEventArgs e)
         {
             ResetBackgrounds();
-            _startmonat = 0;
-            _endmonat = 0;
+            _startmonat = 1;
+            _endmonat = 12;
             ZeitSliderVon.Value = 0;
             ZeitSliderBis.Value = 0;
         }

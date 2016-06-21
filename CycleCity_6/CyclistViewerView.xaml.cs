@@ -21,19 +21,21 @@ namespace CycleCity_6.Tools.CyclistViewer
         private int _monatselected = 0; //dies ist nur eine flag die werte 0-2 annimmt
         private int _startmonat = 0;
         private int _endmonat = 0;
+        private Dictionary<string, Graphic> _velografiken;
 
         public CyclistViewerView()
         {
             InitializeComponent();
 
             GetViewModel().MapView = CycleMapView;
+            _velografiken = GetViewModel().TempVeloGraphics;
         }
 
         private CyclistViewerViewModel GetViewModel()
         {
             Contract.Requires(DataContext is CyclistViewerViewModel);
 
-            return (CyclistViewerViewModel) DataContext;
+            return (CyclistViewerViewModel)DataContext;
         }
 
         private void HeatMapOrTracksAnzeigen_OnClick(object sender, RoutedEventArgs e)
@@ -256,12 +258,22 @@ namespace CycleCity_6.Tools.CyclistViewer
 
         private void Veloroute_Checked(object sender, RoutedEventArgs e)
         {
-            //TODO Checkbox passende Velorouten anzeigen
+            CheckBox box = sender as CheckBox;
+            string name = box.Name;
+            //trennt Index vom Namen
+            string[] index = name.Split('R');
+            //fügt der Map im ViewModel eine zu zeichnende Veloroute hinzu
+            if (!_velografiken.ContainsKey(name))
+            {
+                _velografiken.Add(name, GetViewModel().GetVeloRouteAt(int.Parse(index[1]) - 1));
+            }
         }
 
         private void Veloroute_Unchecked(object sender, RoutedEventArgs e)
         {
-            //TODO Checkbox passende Velorouten ausblenden
+            CheckBox box = sender as CheckBox;
+            string name = box.Name;
+            _velografiken.Remove(name);
         }
 
     }

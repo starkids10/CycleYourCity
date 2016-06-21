@@ -13,13 +13,13 @@ namespace CycleCity_6.Services
     internal class TrackService
     {
         private readonly Dictionary<string, HeatPoint> _heatPoints;
-        private Timer aTimer;
+        private readonly Timer _aTimer;
         private readonly DatabaseContentService _databaseContentService;
 
         public DateTime Startzeit { get; set; }
         public DateTime Endzeit { get; set; }
         public bool HeatmapAnzeigen { get; set; }
-        public List<Track> Velorouten { get; set; }
+        public List<List<Track>> Velorouten { get; set; }
 
         public TrackService()
         {
@@ -27,21 +27,32 @@ namespace CycleCity_6.Services
             _heatPoints = new Dictionary<string, HeatPoint>();
             HeatmapAnzeigen = false;
 
-            aTimer = new Timer(10000);
-            aTimer.Elapsed += CollectData_OnTimedEvent;
-            aTimer.Enabled = true;
+            _aTimer = new Timer(10000);
+            _aTimer.Elapsed += CollectData_OnTimedEvent;
+            _aTimer.Enabled = true;
 
-            Startzeit = new DateTime(2016,05,20,00,00,00);
+            Startzeit = new DateTime(2016, 05, 20, 00, 00, 00);
             Endzeit = DateTime.Now;
-
-            Velorouten = GpsToEsriParser.ParseGpxToEsriPolyline(Environment.CurrentDirectory + @"\..\..\"  + @"\Data\Velorouten_Hamburg.gpx");
-
+            Velorouten = new List<List<Track>>();
+            InitVelorouten();
+            ;
 
         }
 
         public event EventHandler<List<Track>> TrackAddedEvent = delegate { };
         public event EventHandler<IEnumerable<HeatPoint>> HeatPointAddedEvent = delegate { };
         public event UnhandledExceptionEventHandler KeineInternetVerbindungEvent = delegate { };
+
+        private void InitVelorouten()
+        {
+            for (int i = 1; i < 15; i++)
+            {
+                Velorouten.Add(GpsToEsriParser.ParseGpxToEsriPolyline(Environment.CurrentDirectory + @"\..\..\" +
+                                                          @"\Data\Veloroute_" + i+ "_Track.gpx"));
+            }
+
+        }
+
 
         private DatabaseContentService initServerConnection()
         {
@@ -151,13 +162,13 @@ namespace CycleCity_6.Services
                 }
                 catch (WebException webException)
                 {
-                    aTimer.Enabled = false;
+                    _aTimer.Enabled = false;
                     KeineInternetVerbindungEvent(this, new UnhandledExceptionEventArgs(webException.Status, false));
                 }
             }
             else
             {
-                aTimer.Enabled = false;
+                _aTimer.Enabled = false;
                 KeineInternetVerbindungEvent(this, new UnhandledExceptionEventArgs(new WebException("Keine Internetverbindung"), false));
             }
         }
@@ -166,7 +177,7 @@ namespace CycleCity_6.Services
 
         public void AktiviereUpdate(bool x)
         {
-            aTimer.Enabled = x;
+            _aTimer.Enabled = x;
         }
     }
 }

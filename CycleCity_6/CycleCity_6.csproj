@@ -108,7 +108,20 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="Data\Velorouten_Hamburg.gpx" />
+    <None Include="Data\Veloroute_10_Track.gpx" />
+    <None Include="Data\Veloroute_11_Track.gpx" />
+    <None Include="Data\Veloroute_12_Track.gpx" />
+    <None Include="Data\Veloroute_13_Track.gpx" />
+    <None Include="Data\Veloroute_14_Track.gpx" />
+    <None Include="Data\Veloroute_1_Track.gpx" />
+    <None Include="Data\Veloroute_2_Track.gpx" />
+    <None Include="Data\Veloroute_3_Track.gpx" />
+    <None Include="Data\Veloroute_4_Track.gpx" />
+    <None Include="Data\Veloroute_5_Track.gpx" />
+    <None Include="Data\Veloroute_6_Track.gpx" />
+    <None Include="Data\Veloroute_7_Track.gpx" />
+    <None Include="Data\Veloroute_8_Track.gpx" />
+    <None Include="Data\Veloroute_9_Track.gpx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

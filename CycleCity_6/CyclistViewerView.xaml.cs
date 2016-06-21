@@ -16,27 +16,23 @@ namespace CycleCity_6.Tools.CyclistViewer
     /// </summary>
     public partial class CyclistViewerView : UserControl
     {
-        private int _monatselected = 0;
+
+        private int _monatselected = 0; //dies ist nur eine flag die werte 0-2 annimmt
         private int _startmonat = 0;
         private int _endmonat = 0;
-        private DateTime _startzeit;
-        private DateTime _endzeit;
 
         public CyclistViewerView()
         {
             InitializeComponent();
 
             GetViewModel().MapView = CycleMapView;
-            _startzeit = DateTime.MinValue;
-            _endzeit = DateTime.MaxValue;
-            ;
         }
 
         private CyclistViewerViewModel GetViewModel()
         {
             Contract.Requires(DataContext is CyclistViewerViewModel);
 
-            return (CyclistViewerViewModel)DataContext;
+            return (CyclistViewerViewModel) DataContext;
         }
 
         private void HeatMapOrTracksAnzeigen_OnClick(object sender, RoutedEventArgs e)
@@ -62,87 +58,93 @@ namespace CycleCity_6.Tools.CyclistViewer
         private void Slider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             //TODO Daten nach der ausgewählten Zeit anzeigen lassen
-            int startmonat;
-            int endmonat;
             int stunde = (int) ZeitSlider.Value;
+            int monat;
             if (_startmonat == 0)
             {
-                startmonat = 1;
+                monat = 1;
             }
             else
             {
-                startmonat = _startmonat;
+                monat = _startmonat;
             }
-
-            if (_endmonat == 0)
-            {
-                endmonat = 12;
-            }
-            else
-            {
-                endmonat = _endmonat;
-            }
-
             if (stunde == 24)
             {
                 stunde = 0;
             }
-            GetViewModel().SetzeUhrzeit(new DateTime(2016, startmonat, 01, stunde ,00 ,00) , new DateTime(2016, endmonat, 01,stunde,00,00));
+            if (_endmonat == 0)
+            {
+                GetViewModel().SetzeUhrzeit(new DateTime(2016, monat, 01, stunde, 00, 00), DateTime.MaxValue);
+            }
+            else
+            {
+                int letzterTag = DateTime.DaysInMonth(2016, _endmonat);
+                //TODO mehr als nur eine Stunde anzeigen
+                GetViewModel()
+                    .SetzeUhrzeit(new DateTime(2016, _startmonat, 01, stunde, 00, 00),
+                        new DateTime(2016, _endmonat, letzterTag, stunde, 59, 59));
+            }
 
         }
 
-        private void Monatsauswahl_OnTouch(object sender, System.Windows.Input.TouchEventArgs e)
+        // TODO wieder einbauen wenn auf touch verwendet werden soll "System.Windows.Input.TouchEventArgs"
+
+        private void Monatsauswahl_OnTouch(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
             string monat = button.Name;
 
             if (_monatselected == 0 || _monatselected == 2)
             {
+                //Click Flag setzten 
                 _monatselected = 1;
                 // von allen Buttons Hintergrundfarbe zurücksetzten
-                resetBackgrounds();
+                ResetBackgrounds();
 
                 //Hintergrundfarbe setzten
-                _startmonat = setBackground(monat);
-                _endmonat = setBackground(monat);
-                //TODO monat an server schicken;
-                //TODO Karte Updaten;
+                _startmonat = SetBackground(monat);
+
+                //Server Zeitraum mitteilen ("SetzeUhrzeit();")
+                GetViewModel().SetzeUhrzeit(new DateTime(2016, _startmonat, 01, 00, 00, 00), DateTime.MaxValue);
+
             }
             else if (_monatselected == 1)
             {
                 _monatselected = 2;
 
                 //diesen und ersten monat auswählen;
-                _endmonat = setBackground(monat);
+                _endmonat = SetBackground(monat);
 
 
                 //buttons dazwischen mit neuer hintergrundfarbe anpassen;
-                if (startmonat > endmonat)
+                if (_startmonat > _endmonat)
                 {
-                    int y = startmonat;
-                    startmonat = endmonat;
-                    endmonat = y;
+                    int y = _startmonat;
+                    _startmonat = _endmonat;
+                    _endmonat = y;
                 }
-                for (int x = startmonat; x < endmonat; x++)
+                for (int x = _startmonat; x < _endmonat; x++)
                 {
-                    setBackground("M" + x);
+                    SetBackground("M" + x);
                 }
 
                 //Server Zeitraum mitteilen ("SetzeUhrzeit();")
-                int letzterTag = DateTime.DaysInMonth(2016, endmonat);
-                GetViewModel().SetzeUhrzeit(new DateTime(2016, startmonat, 01, 00, 00, 00), new DateTime(2016, endmonat, letzterTag, 23, 59, 59));
+                int letzterTag = DateTime.DaysInMonth(2016, _endmonat);
+                GetViewModel()
+                    .SetzeUhrzeit(new DateTime(2016, _startmonat, 01, 00, 00, 00),
+                        new DateTime(2016, _endmonat, letzterTag, 23, 59, 59));
 
 
             }
         }
 
-        
+
         /// <summary>
         /// Setzt den Hintergrund eines übergebenen Buttons auf "Aqua" und gibt dessen Monat als Int zurück (1-12)
         /// </summary>
         /// <param name="monat"></param>
         /// <returns></returns>
-        private int setBackground(string monat)
+        private int SetBackground(string monat)
         {
             switch (monat)
             {
@@ -187,7 +189,7 @@ namespace CycleCity_6.Tools.CyclistViewer
             }
         }
 
-        private void resetBackgrounds()
+        private void ResetBackgrounds()
         {
             M1.Background = Brushes.Gold;
             M2.Background = Brushes.Gold;
@@ -206,10 +208,11 @@ namespace CycleCity_6.Tools.CyclistViewer
 
         private void LiveModus_Click(object sender, RoutedEventArgs e)
         {
-            resetBackgrounds();
-            startmonat = 0;
-            endmonat = 0;
+            ResetBackgrounds();
+            _startmonat = 0;
+            _endmonat = 0;
             ZeitSlider.Value = 0;
+            GetViewModel().SetzeUhrzeit(new DateTime(2016, 01, 01, 00, 00, 00), DateTime.MaxValue);
         }
     }
 }

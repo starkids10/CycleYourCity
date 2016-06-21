@@ -46,7 +46,7 @@ namespace CycleCity_6.Services
                         var x = Double.Parse(trekSeg.Longitude, CultureInfo.InvariantCulture);
                         points.Add(new MapPoint(x, y));
                     }
-                    trackList.Add(new Track("-1",new Polyline(points, SpatialReferences.Wgs84)));
+                    trackList.Add(new Track("-1", new Polyline(points, SpatialReferences.Wgs84)));
                 }
             }
             catch (FileNotFoundException)
@@ -60,24 +60,27 @@ namespace CycleCity_6.Services
         public static List<Track> ParseJsonToEsriPolyline(String json)
         {
             List<Track> trackList = new List<Track>();
-            //Hier stürzt beim gleichzeitigen starten das programm ab, weil der token neu vergeben wurde
-            JObject jObject = JObject.Parse(json);
-            var tracks = jObject.Values();
+            if (json != "[]")
+            {
+
+                JObject jObject = JObject.Parse(json);
+                var tracks = jObject.Values();
 
                 var templist = new List<List<MapPoint>>();
-            foreach (var track in tracks)
-            {
-                var id = track.Path;
-                var startzeit = getDate((string)track.First["time"]);
-                var endzeit = getDate((string)track.Last["time"]);
+                foreach (var track in tracks)
+                {
+                    var id = track.Path;
+                    var startzeit = getDate((string)track.First["time"]);
+                    var endzeit = getDate((string)track.Last["time"]);
 
-                var waypoints = track.Children();
-                var pointList = waypoints.Select(point => new MapPoint((double)point["lon"], (double)point["lat"], SpatialReferences.Wgs84)).ToList();
-                var tour = new Polyline(pointList, SpatialReferences.Wgs84);
-                var startpunkt = new Point(pointList.First(), startzeit);
-                var endpunkt = new Point(pointList.Last(), endzeit);
-                templist.Add(pointList);
-                trackList.Add(new Track(id, tour, startpunkt, endpunkt));
+                    var waypoints = track.Children();
+                    var pointList = waypoints.Select(point => new MapPoint((double)point["lon"], (double)point["lat"], SpatialReferences.Wgs84)).ToList();
+                    var tour = new Polyline(pointList, SpatialReferences.Wgs84);
+                    var startpunkt = new Point(pointList.First(), startzeit);
+                    var endpunkt = new Point(pointList.Last(), endzeit);
+                    templist.Add(pointList);
+                    trackList.Add(new Track(id, tour, startpunkt, endpunkt));
+                }
             }
 
             return trackList;

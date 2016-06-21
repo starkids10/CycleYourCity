@@ -46,8 +46,8 @@
                 </DockPanel>
                 <Button Name="LiveModus" Content="Live●" Click="LiveModus_Click" Width="40" Height="24" FontFamily="Segoe UI Black" Background="Black" Foreground="Red" BorderBrush="White" />
             </StackPanel>
-            
-            <DockPanel Name="Zeitleiste" HorizontalAlignment="Center" Background="Black" >
+
+            <DockPanel Name="Zeitleiste" Background="Black" LastChildFill="False" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center"  >
                 <Button Name="M1" Content="Januar" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch" Click="Monatsauswahl_OnTouch" />
                 <Button Name="M2" Content="Februar" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  Click="Monatsauswahl_OnTouch"/>
                 <Button Name="M3" Content="März" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  Click="Monatsauswahl_OnTouch"/>
@@ -61,6 +61,23 @@
                 <Button Name="M11" Content="November" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  Click="Monatsauswahl_OnTouch"/>
                 <Button Name="M12" Content="Dezember" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  Click="Monatsauswahl_OnTouch"/>
             </DockPanel>
+
+
+            <!-- Für Touch
+            <DockPanel Name="Zeitleiste" HorizontalAlignment="Center" Background="Black" >
+                <Button Name="M1" Content="Januar" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  />
+                <Button Name="M2" Content="Februar" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch" />
+                <Button Name="M3" Content="März" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  />
+                <Button Name="M4" Content="April" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  />
+                <Button Name="M5" Content="Mai" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  />
+                <Button Name="M6" Content="Juni" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch" />
+                <Button Name="M7" Content="Juli" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch" />
+                <Button Name="M8" Content="August" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch" />
+                <Button Name="M9" Content="September" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch" />
+                <Button Name="M10" Content="Oktober" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch" />
+                <Button Name="M11" Content="November" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch" />
+                <Button Name="M12" Content="Dezember" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"/>
+            </DockPanel>-->
 
         </StackPanel>
     </Grid>

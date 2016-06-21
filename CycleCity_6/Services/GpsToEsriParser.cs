@@ -61,7 +61,7 @@ namespace CycleCity_6.Services
         {
             //test
             List<Track> trackList = new List<Track>();
-            if (json != "[]")
+            if (json != "[]" && json != "auth_token invalid")
             {
 
                 JObject jObject = JObject.Parse(json);

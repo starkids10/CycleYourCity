@@ -12,31 +12,37 @@ namespace CycleCity_6.Services
 {
     internal class TrackService
     {
-        private readonly Dictionary<string, HeatPoint> _heatPoints;
-        private Timer aTimer;
+        private readonly Timer _aTimer;
         private readonly DatabaseContentService _databaseContentService;
-
-        public bool HeatmapAnzeigen { get; set; }
-        public List<Track> Velorouten { get; set; }
+        public List<List<Track>> Velorouten { get; set; }
 
         public TrackService()
         {
             _databaseContentService = initServerConnection();
-            _heatPoints = new Dictionary<string, HeatPoint>();
-            HeatmapAnzeigen = false;
 
-            aTimer = new Timer(10000);
-            aTimer.Elapsed += CollectData_OnTimedEvent;
-            aTimer.Enabled = false;
+            _aTimer = new Timer(10000);
+            _aTimer.Elapsed += CollectData_OnTimedEvent;
+            _aTimer.Enabled = false;
 
-            Velorouten = GpsToEsriParser.ParseGpxToEsriPolyline(Environment.CurrentDirectory + @"\..\..\" + @"\Data\Velorouten_Hamburg.gpx");
-
-
+            Velorouten = new List<List<Track>>();
+            InitVelorouten();
+            ;
+            HoleDaten(new DateTime(2016, 01, 01, 00, 00, 00), DateTime.MaxValue);
         }
 
         public event EventHandler<List<Track>> TrackAddedEvent = delegate { };
-        public event EventHandler<IEnumerable<HeatPoint>> HeatPointAddedEvent = delegate { };
         public event UnhandledExceptionEventHandler KeineInternetVerbindungEvent = delegate { };
+
+        private void InitVelorouten()
+        {
+            for (int i = 1; i < 15; i++)
+            {
+                Velorouten.Add(GpsToEsriParser.ParseGpxToEsriPolyline(Environment.CurrentDirectory + @"\..\..\" +
+                                                          @"\Data\Veloroute_" + i + "_Track.gpx"));
+            }
+
+        }
+
 
         private DatabaseContentService initServerConnection()
         {
@@ -48,13 +54,6 @@ namespace CycleCity_6.Services
             {
                 return null;
             }
-        }
-
-        public IEnumerable<HeatPoint> GetAllHeatPoints()
-        {
-            Contract.Ensures(Contract.Result<IEnumerable<HeatPoint>>() != null);
-            Contract.Ensures(Contract.Result<IEnumerable<HeatPoint>>().Any());
-            return _heatPoints.Values;
         }
 
 
@@ -83,45 +82,6 @@ namespace CycleCity_6.Services
         //    return data;
         //}
 
-
-        /// <summary>
-        /// Generiert die HeatMap neu.
-        /// </summary>
-        /// <param name="newPoints">Liste von neu hinzuzufügenden Punkten</param>
-        public async void GenerateNewHeatMap(IEnumerable<Point> newPoints)
-        {
-            var locator = new Esri.ArcGISRuntime.Tasks.Geocoding.OnlineLocatorTask(new Uri(@"http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"), String.Empty);
-            foreach (Point newPoint in newPoints)
-            {
-                string adresse = "";
-                try
-                {
-                    var addressInfo =
-                        await
-                            locator.ReverseGeocodeAsync(newPoint.Coordinates, 50, newPoint.Coordinates.SpatialReference,
-                                CancellationToken.None);
-                    adresse = addressInfo.AddressFields["Address"];
-
-                }
-                catch (Exception)
-                {
-                    Console.WriteLine("Esri Geocode-Server reagiert nicht oder Adresse unbekannt");
-                    adresse = "unbekannt";
-                }
-
-                HeatPoint heatPoint = null;
-                if (_heatPoints.TryGetValue(adresse, out heatPoint))
-                {
-                    heatPoint.Points.Add(newPoint);
-                }
-                else
-                {
-                    _heatPoints.Add(adresse, new HeatPoint(new List<Point>() { newPoint }));
-                }
-
-            }
-        }
-
         private void CollectData_OnTimedEvent(Object souce, System.Timers.ElapsedEventArgs e)
         {
             HoleDaten(new DateTime(2016, 01, 01, 00, 00, 00), DateTime.MaxValue);
@@ -134,30 +94,18 @@ namespace CycleCity_6.Services
                 try
                 {
                     var data = _databaseContentService.GetDataFromTo(von, bis);
-                    if (HeatmapAnzeigen)
-                    {
-                        var heatPoints = GpsToEsriParser.ParseJsonToPoinList(data);
-                        GenerateNewHeatMap(heatPoints);
-                        HeatPointAddedEvent(this, _heatPoints.Values);
-                    }
-                    else
-                    {
-                        var tracks = GpsToEsriParser.ParseJsonToEsriPolyline(data);
-                        TrackAddedEvent(this, tracks);
-
-                    }
-
-
+                    var tracks = GpsToEsriParser.ParseJsonToEsriPolyline(data);
+                    TrackAddedEvent(this, tracks);
                 }
                 catch (WebException webException)
                 {
-                    aTimer.Enabled = false;
+                    _aTimer.Enabled = false;
                     KeineInternetVerbindungEvent(this, new UnhandledExceptionEventArgs(webException.Status, false));
                 }
             }
             else
             {
-                aTimer.Enabled = false;
+                _aTimer.Enabled = false;
                 KeineInternetVerbindungEvent(this, new UnhandledExceptionEventArgs(new WebException("Keine Internetverbindung"), false));
             }
         }
@@ -169,7 +117,7 @@ namespace CycleCity_6.Services
 
         public void AktiviereLiveUpdate(bool x)
         {
-            aTimer.Enabled = x;
+            _aTimer.Enabled = x;
         }
     }
 }

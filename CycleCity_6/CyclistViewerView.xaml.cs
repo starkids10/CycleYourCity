@@ -9,6 +9,7 @@ using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Tasks.Geocoding;
 using System.Windows.Media;
 using System.Globalization;
+using System.Linq;
 
 namespace CycleCity_6.Tools.CyclistViewer
 {
@@ -19,16 +20,21 @@ namespace CycleCity_6.Tools.CyclistViewer
     {
 
         private int _monatselected = 0; //dies ist nur eine flag die werte 0-2 annimmt
+        private Dictionary<string, Graphic> _velografiken;
         private int _startmonat = 1;
         private int _endmonat = 12;
         int stundeVon = 0;
         int stundeBis = 0;
+        private UIElementCollection _buttonListe;
 
         public CyclistViewerView()
         {
             InitializeComponent();
 
             GetViewModel().MapView = CycleMapView;
+            _velografiken = GetViewModel().TempVeloGraphics;
+            _buttonListe = Zeitleiste.Children;
+            ;
         }
 
         private CyclistViewerViewModel GetViewModel()
@@ -38,25 +44,6 @@ namespace CycleCity_6.Tools.CyclistViewer
             return (CyclistViewerViewModel)DataContext;
         }
 
-        private void HeatMapOrTracksAnzeigen_OnClick(object sender, RoutedEventArgs e)
-        {
-            if (sender.Equals(TrackAnzeigen))
-            {
-                GetViewModel().HeatmapAnzeigen(false);
-
-                TrackAnzeigen.Visibility = Visibility.Collapsed;
-                HeatMapAnzeigen.Visibility = Visibility.Visible;
-
-            }
-            if (sender.Equals(HeatMapAnzeigen))
-            {
-                GetViewModel().HeatmapAnzeigen(true);
-
-                TrackAnzeigen.Visibility = Visibility.Visible;
-                HeatMapAnzeigen.Visibility = Visibility.Collapsed;
-            }
-
-        }
 
         private void Slider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
@@ -157,6 +144,18 @@ namespace CycleCity_6.Tools.CyclistViewer
         /// <returns></returns>
         private int SetBackground(string monat)
         {
+            //geht nur, wenn alle Monatsbuttons in einem eigenen Container sind.
+
+            //holt sich den Button aus der Buttonlist den Button dessen Namen 'monat' gleicht
+            var monatreturn = from button in _buttonListe.OfType<Button>()
+                              where button.Name == monat select button;
+            //holt sich das erste Element der Liste, da dieses der gewünschte Button ist
+            var returnButton = monatreturn.ToList()[0];
+            returnButton.Background = Brushes.CadetBlue;
+            //returnt die Zahl im Namen des Buttons
+            return int.Parse(returnButton.Name.Split('M')[1]);
+
+
             switch (monat)
             {
                 case "M1":
@@ -202,6 +201,11 @@ namespace CycleCity_6.Tools.CyclistViewer
 
         private void ResetBackgrounds()
         {
+            foreach (var button in _buttonListe.OfType<Button>())
+            {
+                button.Background = Brushes.PowderBlue;
+            }
+            return; //geht nur, wenn alle Monatsbuttons in einem eigenem Container sind.
             M1.Background = Brushes.PowderBlue;
             M2.Background = Brushes.PowderBlue;
             M3.Background = Brushes.PowderBlue;
@@ -214,7 +218,6 @@ namespace CycleCity_6.Tools.CyclistViewer
             M10.Background = Brushes.PowderBlue;
             M11.Background = Brushes.PowderBlue;
             M12.Background = Brushes.PowderBlue;
-
         }
 
         private void LiveModus_Click(object sender, RoutedEventArgs e)
@@ -258,12 +261,25 @@ namespace CycleCity_6.Tools.CyclistViewer
 
         private void Veloroute_Checked(object sender, RoutedEventArgs e)
         {
-            //TODO Checkbox passende Velorouten anzeigen
+            CheckBox box = sender as CheckBox;
+            string name = box.Name;
+            //trennt Index vom Namen
+            string[] index = name.Split('R');
+            //fügt der Map im ViewModel eine zu zeichnende Veloroute hinzu
+            if (!_velografiken.ContainsKey(name))
+            {
+                _velografiken.Add(name, GetViewModel().GetVeloRouteAt(int.Parse(index[1]) - 1));
+            }
+
+            GetViewModel().ZeichneVelorouten();
         }
 
         private void Veloroute_Unchecked(object sender, RoutedEventArgs e)
         {
-            //TODO Checkbox passende Velorouten ausblenden
+            CheckBox box = sender as CheckBox;
+            string name = box.Name;
+            _velografiken.Remove(name);
+            GetViewModel().ZeichneVelorouten();
         }
 
     }

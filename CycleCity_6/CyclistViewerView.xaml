@@ -24,27 +24,6 @@
             </Expander.Header>
 
             <StackPanel HorizontalAlignment="Right" Margin="20,0,0,90" Background="DarkGray" Width="150">
-            <Button x:Name="HeatMapAnzeigen"  Width="100"  Height="100"  Click="HeatMapOrTracksAnzeigen_OnClick" FontSize="20" FontFamily="Segoe UI Black" Background="#FF7FA7D3">
-                <Button.Content>
-                    <TextBlock>
-                       HeatMap 
-                        <LineBreak/>
-                        Anzeigen
-                    </TextBlock>
-                </Button.Content>
-            </Button>
-            <Button x:Name="TrackAnzeigen" Width="100"  Height="100"  Click="HeatMapOrTracksAnzeigen_OnClick" Visibility="Collapsed" FontFamily="Segoe UI Black" FontSize="20">
-                <Button.Content>
-                    <StackPanel>
-                        <Image Source="\Images\tack_icon.png" Stretch="UniformToFill" />
-                        <TextBlock>
-                       Tracks 
-                        <LineBreak/>
-                        Anzeigen
-                        </TextBlock>
-                    </StackPanel>
-                </Button.Content>
-            </Button>
                 <StackPanel Background="White" Opacity="0.8" Margin="5">
                     <CheckBox Content="CYC" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="CYC_Checked" Unchecked="CYC_Unchecked"/>
                     <CheckBox Content="Naviki" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Naviki_Checked" Unchecked="Naviki_Unchecked"/>
@@ -54,20 +33,20 @@
                         <TreeViewItem.Header>
                             <CheckBox Content="Velorouten" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="AlleVelorouten_Checked" Unchecked="AlleVelorouten_Unchecked"/>
                         </TreeViewItem.Header>
-                        <CheckBox Content="Route 1" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
-                        <CheckBox Content="Route 2" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
-                        <CheckBox Content="Route 3" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
-                        <CheckBox Content="Route 4" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
-                        <CheckBox Content="Route 5" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
-                        <CheckBox Content="Route 6" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
-                        <CheckBox Content="Route 7" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
-                        <CheckBox Content="Route 8" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
-                        <CheckBox Content="Route 9" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
-                        <CheckBox Content="Route 10" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
-                        <CheckBox Content="Route 11" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
-                        <CheckBox Content="Route 12" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
-                        <CheckBox Content="Route 13" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
-                        <CheckBox Content="Route 14" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
+                        <CheckBox Name="R1" Content="Route 1" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
+                        <CheckBox Name="R2" Content="Route 2" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
+                        <CheckBox Name="R3" Content="Route 3" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
+                        <CheckBox Name="R4" Content="Route 4" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
+                        <CheckBox Name="R5" Content="Route 5" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
+                        <CheckBox Name="R6" Content="Route 6" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
+                        <CheckBox Name="R7" Content="Route 7" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
+                        <CheckBox Name="R8" Content="Route 8" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
+                        <CheckBox Name="R9" Content="Route 9" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
+                        <CheckBox Name="R10" Content="Route 10" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
+                        <CheckBox Name="R11" Content="Route 11" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
+                        <CheckBox Name="R12" Content="Route 12" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
+                        <CheckBox Name="R13" Content="Route 13" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
+                        <CheckBox Name="R14" Content="Route 14" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
                     </TreeViewItem>
                 </TreeView>
             </StackPanel>
@@ -125,6 +104,22 @@
                 <Button Name="M11" Content="November" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  Click="Monatsauswahl_OnTouch"/>
                 <Button Name="M12" Content="Dezember" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  Click="Monatsauswahl_OnTouch"/>
             </DockPanel>
+
+                <!-- Für Touch
+            <DockPanel Name="Zeitleiste" HorizontalAlignment="Center" Background="Black" >
+                <Button Name="M1" Content="Januar" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  />
+                <Button Name="M2" Content="Februar" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch" />
+                <Button Name="M3" Content="März" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  />
+                <Button Name="M4" Content="April" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  />
+                <Button Name="M5" Content="Mai" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  />
+                <Button Name="M6" Content="Juni" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch" />
+                <Button Name="M7" Content="Juli" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch" />
+                <Button Name="M8" Content="August" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch" />
+                <Button Name="M9" Content="September" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch" />
+                <Button Name="M10" Content="Oktober" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch" />
+                <Button Name="M11" Content="November" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch" />
+                <Button Name="M12" Content="Dezember" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"/>
+            </DockPanel>-->
             </StackPanel>
 
             <Expander.Triggers>
@@ -150,21 +145,7 @@
         </Expander>
 
 
-            <!-- Für Touch
-            <DockPanel Name="Zeitleiste" HorizontalAlignment="Center" Background="Black" >
-                <Button Name="M1" Content="Januar" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  />
-                <Button Name="M2" Content="Februar" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch" />
-                <Button Name="M3" Content="März" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  />
-                <Button Name="M4" Content="April" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  />
-                <Button Name="M5" Content="Mai" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"  />
-                <Button Name="M6" Content="Juni" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch" />
-                <Button Name="M7" Content="Juli" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch" />
-                <Button Name="M8" Content="August" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch" />
-                <Button Name="M9" Content="September" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch" />
-                <Button Name="M10" Content="Oktober" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch" />
-                <Button Name="M11" Content="November" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch" />
-                <Button Name="M12" Content="Dezember" Style="{StaticResource Monate}" TouchDown="Monatsauswahl_OnTouch"/>
-            </DockPanel>-->
+          
 
     </Grid>
 </UserControl>

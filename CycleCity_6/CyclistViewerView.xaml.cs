@@ -34,13 +34,11 @@ namespace CycleCity_6.Tools.CyclistViewer
             GetViewModel().MapView = CycleMapView;
             _velografiken = GetViewModel().TempVeloGraphics;
             _buttonListe = Zeitleiste.Children;
-            ;
         }
 
         private CyclistViewerViewModel GetViewModel()
         {
             Contract.Requires(DataContext is CyclistViewerViewModel);
-
             return (CyclistViewerViewModel)DataContext;
         }
 
@@ -104,15 +102,12 @@ namespace CycleCity_6.Tools.CyclistViewer
 
                 //Server Zeitraum mitteilen ("SetzeUhrzeit();")
                 GetViewModel().SetzeUhrzeit(new DateTime(2016, _startmonat, 01, 00, 00, 00), DateTime.MaxValue);
-
             }
             else if (_monatselected == 1)
             {
                 _monatselected = 2;
-
                 //diesen und ersten monat auswählen;
                 _endmonat = SetBackground(monat);
-
 
                 //buttons dazwischen mit neuer hintergrundfarbe anpassen;
                 if (_startmonat > _endmonat)
@@ -131,8 +126,6 @@ namespace CycleCity_6.Tools.CyclistViewer
                 GetViewModel()
                     .SetzeUhrzeit(new DateTime(2016, _startmonat, 01, 00, 00, 00),
                         new DateTime(2016, _endmonat, letzterTag, 23, 59, 59));
-
-
             }
         }
 

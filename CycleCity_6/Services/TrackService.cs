@@ -15,6 +15,7 @@ namespace CycleCity_6.Services
         private readonly Timer _aTimer;
         private readonly DatabaseContentService _databaseContentService;
         public List<List<Track>> Velorouten { get; set; }
+        public List<Track> alleDaten;
 
         public TrackService()
         {
@@ -27,7 +28,7 @@ namespace CycleCity_6.Services
             Velorouten = new List<List<Track>>();
             InitVelorouten();
             ;
-            HoleDaten(new DateTime(2016, 01, 01, 00, 00, 00), DateTime.MaxValue);
+            alleDaten = HoleDaten(new DateTime(2016, 01, 01, 00, 00, 00), DateTime.Today);
         }
 
         public event EventHandler<List<Track>> TrackAddedEvent = delegate { };
@@ -87,14 +88,15 @@ namespace CycleCity_6.Services
             HoleDaten(new DateTime(2016, 01, 01, 00, 00, 00), DateTime.MaxValue);
         }
 
-        private void HoleDaten(DateTime von, DateTime bis)
+        private List<Track> HoleDaten(DateTime von, DateTime bis)
         {
+            var tracks = new List<Track>();
             if (_databaseContentService != null)
             {
                 try
                 {
                     var data = _databaseContentService.GetDataFromTo(von, bis);
-                    var tracks = GpsToEsriParser.ParseJsonToEsriPolyline(data);
+                    tracks = GpsToEsriParser.ParseJsonToEsriPolyline(data);
                     TrackAddedEvent(this, tracks);
                 }
                 catch (WebException webException)
@@ -108,11 +110,16 @@ namespace CycleCity_6.Services
                 _aTimer.Enabled = false;
                 KeineInternetVerbindungEvent(this, new UnhandledExceptionEventArgs(new WebException("Keine Internetverbindung"), false));
             }
+            return tracks;
         }
 
         public void UpdateVonBis(DateTime von, DateTime bis)
         {
-            HoleDaten(von, bis);
+            var tracks = from t in alleDaten
+                where
+                    (t.Startzeit.Month >= von.Month && t.Endzeit.Month <= bis.Month) && (t.Startzeit.Hour >= von.Hour && t.Endzeit.Hour <= bis.Hour)
+                select t;
+            TrackAddedEvent(this, tracks.ToList());
         }
 
         public void AktiviereLiveUpdate(bool x)

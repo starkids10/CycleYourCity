@@ -19,21 +19,25 @@ namespace CycleCity_6.Tools.CyclistViewer
     public partial class CyclistViewerView : UserControl
     {
 
-        private int _monatselected = 0; //dies ist nur eine flag die werte 0-2 annimmt
+        private int _monatselected; //dies ist nur eine flag die werte 0-2 annimmt
         private Dictionary<string, Graphic> _velografiken;
-        private int _startmonat = 1;
-        private int _endmonat = 12;
-        int stundeVon = 0;
-        int stundeBis = 0;
+        private int _startmonat;
+        private int _endmonat;
+        private int stundeVon;
+        private int stundeBis;
         private UIElementCollection _buttonListe;
+        private ItemCollection checkboxen;
 
         public CyclistViewerView()
         {
             InitializeComponent();
 
+            _startmonat = 1;
+            _endmonat = 12;
             GetViewModel().MapView = CycleMapView;
             _velografiken = GetViewModel().TempVeloGraphics;
             _buttonListe = Zeitleiste.Children;
+            checkboxen = VeloroutenCheckboxContainer.Items;
         }
 
         private CyclistViewerViewModel GetViewModel()
@@ -141,76 +145,24 @@ namespace CycleCity_6.Tools.CyclistViewer
 
             //holt sich den Button aus der Buttonlist den Button dessen Namen 'monat' gleicht
             var monatreturn = from button in _buttonListe.OfType<Button>()
-                              where button.Name == monat select button;
+                              where button.Name == monat
+                              select button;
             //holt sich das erste Element der Liste, da dieses der gewünschte Button ist
             var returnButton = monatreturn.ToList()[0];
             returnButton.Background = Brushes.CadetBlue;
             //returnt die Zahl im Namen des Buttons
             return int.Parse(returnButton.Name.Split('M')[1]);
-
-
-            switch (monat)
-            {
-                case "M1":
-                    M1.Background = Brushes.CadetBlue;
-                    return 1;
-                case "M2":
-                    M2.Background = Brushes.CadetBlue;
-                    return 2;
-                case "M3":
-                    M3.Background = Brushes.CadetBlue;
-                    return 3;
-                case "M4":
-                    M4.Background = Brushes.CadetBlue;
-                    return 4;
-                case "M5":
-                    M5.Background = Brushes.CadetBlue;
-                    return 5;
-                case "M6":
-                    M6.Background = Brushes.CadetBlue;
-                    return 6;
-                case "M7":
-                    M7.Background = Brushes.CadetBlue;
-                    return 7;
-                case "M8":
-                    M8.Background = Brushes.CadetBlue;
-                    return 8;
-                case "M9":
-                    M9.Background = Brushes.CadetBlue;
-                    return 9;
-                case "M10":
-                    M10.Background = Brushes.CadetBlue;
-                    return 10;
-                case "M11":
-                    M11.Background = Brushes.CadetBlue;
-                    return 11;
-                case "M12":
-                    M12.Background = Brushes.CadetBlue;
-                    return 12;
-                default:
-                    return 0;
-            }
         }
 
+        /// <summary>
+        /// setzt die Hintergründe der Buttons für die Monatsauswahl zurück
+        /// </summary>
         private void ResetBackgrounds()
         {
             foreach (var button in _buttonListe.OfType<Button>())
             {
                 button.Background = Brushes.PowderBlue;
             }
-            return; //geht nur, wenn alle Monatsbuttons in einem eigenem Container sind.
-            M1.Background = Brushes.PowderBlue;
-            M2.Background = Brushes.PowderBlue;
-            M3.Background = Brushes.PowderBlue;
-            M4.Background = Brushes.PowderBlue;
-            M5.Background = Brushes.PowderBlue;
-            M6.Background = Brushes.PowderBlue;
-            M7.Background = Brushes.PowderBlue;
-            M8.Background = Brushes.PowderBlue;
-            M9.Background = Brushes.PowderBlue;
-            M10.Background = Brushes.PowderBlue;
-            M11.Background = Brushes.PowderBlue;
-            M12.Background = Brushes.PowderBlue;
         }
 
         private void LiveModus_Click(object sender, RoutedEventArgs e)
@@ -239,17 +191,24 @@ namespace CycleCity_6.Tools.CyclistViewer
 
         private void Naviki_Unchecked(object sender, RoutedEventArgs e)
         {
-            //TODO Checkbox passende Tracks ausblenden
+
         }
 
         private void AlleVelorouten_Checked(object sender, RoutedEventArgs e)
         {
-            //TODO Checkbox passende Velorouten anzeigen
+            foreach (var box in checkboxen.OfType<CheckBox>())
+            {
+                box.IsChecked = true;
+            }
         }
 
         private void AlleVelorouten_Unchecked(object sender, RoutedEventArgs e)
         {
-            //TODO Checkbox passende Velorouten ausblenden
+
+            foreach (var box in checkboxen.OfType<CheckBox>())
+            {
+                box.IsChecked = false;
+            }
         }
 
         private void Veloroute_Checked(object sender, RoutedEventArgs e)

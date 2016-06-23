@@ -49,6 +49,10 @@ namespace CycleCity_6.Tools.CyclistViewer
 
         private void Slider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
+            if (ZeitSliderVon.Value > ZeitSliderBis.Value -1)
+            {
+                ZeitSliderBis.Value = ZeitSliderVon.Value + 1;
+            }
             //TODO Daten nach der ausgewählten Zeit anzeigen lassen
             _stundeVon = (int)ZeitSliderVon.Value;
             _stundeBis = (int)ZeitSliderBis.Value;

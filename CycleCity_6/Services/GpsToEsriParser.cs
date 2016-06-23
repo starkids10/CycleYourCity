@@ -28,23 +28,23 @@ namespace CycleCity_6.Services
                 var tracks = from track in gpxDoc.Descendants(gpx + "trk")
                              select new
                              {
-                                 Segs = (
+                                 Segs =
                                      from trackpoint in track.Descendants(gpx + "trkpt")
                                      select new
                                      {
                                          Latitude = trackpoint.Attribute("lat").Value,
                                          Longitude = trackpoint.Attribute("lon").Value,
-                                     })
+                                     }
                              };
 
                 foreach (var track in tracks)
                 {
                     List<MapPoint> points = new List<MapPoint>();
-                    foreach (var trekSeg in track.Segs)
+                    foreach (var point in track.Segs)
                     {
-                        var y = Double.Parse(trekSeg.Latitude, CultureInfo.InvariantCulture);
-                        var x = Double.Parse(trekSeg.Longitude, CultureInfo.InvariantCulture);
-                        points.Add(new MapPoint(x, y));
+                        var yCoord = Double.Parse(point.Latitude, CultureInfo.InvariantCulture);
+                        var xCoord = Double.Parse(point.Longitude, CultureInfo.InvariantCulture);
+                        points.Add(new MapPoint(xCoord, yCoord));
                     }
                     trackList.Add(new Track("-1", new Polyline(points, SpatialReferences.Wgs84)));
                 }
@@ -59,7 +59,6 @@ namespace CycleCity_6.Services
 
         public static List<Track> ParseJsonToEsriPolyline(String json)
         {
-            //test
             List<Track> trackList = new List<Track>();
             if (json != "[]" && json != "auth_token invalid")
             {

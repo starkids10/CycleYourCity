@@ -25,7 +25,7 @@ namespace CycleCity_6.Tools.CyclistViewer
 
         private GraphicsLayer _trackGraphicsLayer;
         private GraphicsLayer _veloGraphicsLayer;
-        private List<Graphic> _veloGraphics;
+        private List<List<Graphic>> _veloGraphics;
 
         public MapView MapView;
         private readonly TrackService _trackService;
@@ -41,33 +41,36 @@ namespace CycleCity_6.Tools.CyclistViewer
             trackService.TrackAddedEvent += TrackService_OnTrackAdded;
             trackService.KeineInternetVerbindungEvent += TrackService_OnKeineInternetVerbindung;
 
+            _veloGraphics = new List<List<Graphic>>();
             InitializeVelorouten();
-
-            TempVeloGraphics = new Dictionary<string, Graphic>();
+            TempVeloGraphics = new Dictionary<string, List<Graphic>>();
         }
 
         private void InitializeVelorouten()
         {
-            _veloGraphics = new List<Graphic>();
+            var simpleLineSymbol = new SimpleLineSymbol
+            {
+                Color = Color.FromArgb(80, 255, 0, 0),
+                Width = 4
+            };
             foreach (var velo in _trackService.Velorouten)
             {
+                List<Polyline> polylines = new List<Polyline>();
                 foreach (Track track in velo)
                 {
-
-                    var simpleLineSymbol = new SimpleLineSymbol
-                    {
-                        Color = Color.FromArgb(80, 255, 0, 0),
-                        Width = 4
-                    };
-                    List<Polyline> test = new List<Polyline>();
-                        test.Add(track.Tour);
-
-                    _veloGraphics.Add(new Graphic(track.Tour, simpleLineSymbol));
+                    polylines.Add(track.Tour);
                 }
+                List<Graphic> tempGraphics = new List<Graphic>();
+                foreach (Polyline polyline in polylines)
+                {
+                    tempGraphics.Add(new Graphic(polyline, simpleLineSymbol));
+                }
+                _veloGraphics.Add(tempGraphics);
+
             }
         }
 
-        public Dictionary<string, Graphic> TempVeloGraphics { get; set; }
+        public Dictionary<string, List<Graphic>> TempVeloGraphics { get; set; }
 
         public Map Map
         {
@@ -81,7 +84,7 @@ namespace CycleCity_6.Tools.CyclistViewer
             private set { _LetzteAktuallisierung = value; Notify("LetzteAktuallisierung"); }
         }
 
-        public Graphic GetVeloRouteAt(int index)
+        public List<Graphic> GetVeloRouteAt(int index)
         {
             return _veloGraphics[index];
         }
@@ -120,7 +123,7 @@ namespace CycleCity_6.Tools.CyclistViewer
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(argument));
         }
 
-     
+
         private void TrackService_OnTrackAdded(object sender, List<Track> tracks)
         {
             Contract.Requires(tracks != null);
@@ -138,9 +141,7 @@ namespace CycleCity_6.Tools.CyclistViewer
                 collection.Add(new Graphic(track.Tour, simpleLineSymbol));
             }
 
-            MapView.Dispatcher.InvokeAsync((() => _veloGraphicsLayer.Graphics.Clear()));
             MapView.Dispatcher.InvokeAsync(() => _trackGraphicsLayer.Graphics.Clear());
-            MapView.Dispatcher.InvokeAsync(() => _veloGraphicsLayer.Graphics.AddRange(TempVeloGraphics.Values));
             MapView.Dispatcher.InvokeAsync(() => _trackGraphicsLayer.Graphics.AddRange(collection));
 
             LetzteAktuallisierung = "Letzte Aktuallisierung: " + DateTime.Now.ToLongTimeString();
@@ -149,7 +150,10 @@ namespace CycleCity_6.Tools.CyclistViewer
         public void ZeichneVelorouten()
         {
             MapView.Dispatcher.InvokeAsync((() => _veloGraphicsLayer.Graphics.Clear()));
-            MapView.Dispatcher.InvokeAsync(() => _veloGraphicsLayer.Graphics.AddRange(TempVeloGraphics.Values));
+            foreach (var velo in TempVeloGraphics.Values)
+            {
+                MapView.Dispatcher.InvokeAsync(() => _veloGraphicsLayer.Graphics.AddRange(velo));
+            }
         }
 
         private void TrackService_OnKeineInternetVerbindung(object sender, UnhandledExceptionEventArgs e)

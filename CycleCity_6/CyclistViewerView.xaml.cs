@@ -20,7 +20,7 @@ namespace CycleCity_6.Tools.CyclistViewer
     {
 
         private int _monatselected; //dies ist nur eine flag die werte 0-2 annimmt
-        private Dictionary<string, Graphic> _velografiken;
+        private Dictionary<string, List<Graphic>> _velografiken;
         private int _startmonat;
         private int _endmonat;
         private int stundeVon;

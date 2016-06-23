@@ -15,7 +15,7 @@ namespace CycleCity_6.Services
         private readonly Timer _aTimer;
         private readonly DatabaseContentService _databaseContentService;
         public List<List<Track>> Velorouten { get; set; }
-        public List<Track> alleDaten;
+        public List<Track> AlleDaten;
 
         public TrackService()
         {
@@ -28,7 +28,7 @@ namespace CycleCity_6.Services
             Velorouten = new List<List<Track>>();
             InitVelorouten();
             ;
-            alleDaten = HoleDaten(new DateTime(2016, 01, 01, 00, 00, 00), DateTime.Today);
+            AlleDaten = HoleDaten(new DateTime(2016, 01, 01, 00, 00, 00), DateTime.Today);
         }
 
         public event EventHandler<List<Track>> TrackAddedEvent = delegate { };
@@ -43,7 +43,6 @@ namespace CycleCity_6.Services
             }
 
         }
-
 
         private DatabaseContentService initServerConnection()
         {
@@ -89,7 +88,7 @@ namespace CycleCity_6.Services
 
         public void UpdateVonBis(DateTime von, DateTime bis)
         {
-            var tracks = from t in alleDaten
+            var tracks = from t in AlleDaten
                 where
                     (t.Startzeit.Month >= von.Month && t.Endzeit.Month <= bis.Month) && (t.Startzeit.Hour >= von.Hour && t.Endzeit.Hour <= bis.Hour)
                 select t;

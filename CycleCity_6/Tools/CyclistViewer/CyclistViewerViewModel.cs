@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using CycleCity_6.Materials;
 using CycleCity_6.Services;
@@ -7,15 +6,10 @@ using Esri.ArcGISRuntime.Controls;
 using Esri.ArcGISRuntime.Layers;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Geometry;
-using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
-using System.Linq;
-
 using System.Windows.Media;
 using System.ComponentModel;
-using System.Net;
-using System.Windows;
-using Point = CycleCity_6.Materials.Point;
+
 
 namespace CycleCity_6.Tools.CyclistViewer
 {
@@ -38,8 +32,8 @@ namespace CycleCity_6.Tools.CyclistViewer
 
             LetzteAktuallisierung = "Letzte Aktuallisierung: " + DateTime.Now.ToLongTimeString();
             _trackService = trackService;
-            trackService.TrackAddedEvent += TrackService_OnTrackAdded;
-            trackService.KeineInternetVerbindungEvent += TrackService_OnKeineInternetVerbindung;
+            _trackService.TrackAddedEvent += TrackService_OnTrackAdded;
+            _trackService.KeineInternetVerbindungEvent += TrackService_OnKeineInternetVerbindung;
 
             _veloGraphics = new List<List<Graphic>>();
             InitializeVelorouten();
@@ -149,7 +143,7 @@ namespace CycleCity_6.Tools.CyclistViewer
 
         public void ZeichneVelorouten()
         {
-            MapView.Dispatcher.InvokeAsync((() => _veloGraphicsLayer.Graphics.Clear()));
+            MapView.Dispatcher.InvokeAsync(() => _veloGraphicsLayer.Graphics.Clear());
             foreach (var velo in TempVeloGraphics.Values)
             {
                 MapView.Dispatcher.InvokeAsync(() => _veloGraphicsLayer.Graphics.AddRange(velo));
@@ -179,6 +173,11 @@ namespace CycleCity_6.Tools.CyclistViewer
         public void SetzeUhrzeit(DateTime startzeit, DateTime endzeit)
         {
             _trackService.UpdateVonBis(startzeit, endzeit);
+        }
+
+        public void AktiviereLive(bool live)
+        {
+            _trackService.AktiviereLiveUpdate(live);
         }
 
 

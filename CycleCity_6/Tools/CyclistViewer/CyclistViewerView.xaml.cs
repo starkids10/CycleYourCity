@@ -1,43 +1,43 @@
-﻿using Esri.ArcGISRuntime.Layers;
-using System.Diagnostics.Contracts;
-using System.Windows.Controls;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Threading;
-using System.Windows;
-using Esri.ArcGISRuntime.Geometry;
-using Esri.ArcGISRuntime.Tasks.Geocoding;
-using System.Windows.Media;
-using System.Globalization;
+using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using Esri.ArcGISRuntime.Layers;
 
 namespace CycleCity_6.Tools.CyclistViewer
 {
     /// <summary>
     /// Interaktionslogik für CyclistViewerView.xaml
     /// </summary>
-    public partial class CyclistViewerView : UserControl
+    public partial class CyclistViewerView
     {
 
         private int _monatselected; //dies ist nur eine flag die werte 0-2 annimmt
-        private Dictionary<string, List<Graphic>> _velografiken;
+        private readonly Dictionary<string, List<Graphic>> _velografiken;
         private int _startmonat;
         private int _endmonat;
-        private int stundeVon;
-        private int stundeBis;
-        private UIElementCollection _buttonListe;
-        private ItemCollection checkboxen;
+        private int _stundeVon;
+        private int _stundeBis;
+        private readonly UIElementCollection _buttonListe;
+        private readonly ItemCollection _checkboxen;
+        private bool _live;
 
         public CyclistViewerView()
         {
             InitializeComponent();
+            GetViewModel().MapView = CycleMapView;
 
             _startmonat = 1;
             _endmonat = 12;
-            GetViewModel().MapView = CycleMapView;
+            _stundeVon = 0;
+            _stundeBis = 23;
+            _live = false;
             _velografiken = GetViewModel().TempVeloGraphics;
             _buttonListe = Zeitleiste.Children;
-            checkboxen = VeloroutenCheckboxContainer.Items;
+            _checkboxen = VeloroutenCheckboxContainer.Items;
         }
 
         private CyclistViewerViewModel GetViewModel()
@@ -50,8 +50,8 @@ namespace CycleCity_6.Tools.CyclistViewer
         private void Slider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             //TODO Daten nach der ausgewählten Zeit anzeigen lassen
-            stundeVon = (int)ZeitSliderVon.Value;
-            stundeBis = (int)ZeitSliderBis.Value;
+            _stundeVon = (int)ZeitSliderVon.Value;
+            _stundeBis = (int)ZeitSliderBis.Value;
             int monat;
 
             SliderVonText.Text = ZeitSliderVon.Value + ":00";
@@ -65,24 +65,24 @@ namespace CycleCity_6.Tools.CyclistViewer
             {
                 monat = _startmonat;
             }
-            if (stundeVon == 24)
+            if (_stundeVon == 24)
             {
-                stundeVon = 0;
+                _stundeVon = 0;
             }
-            if (stundeBis == 24)
+            if (_stundeBis == 24)
             {
-                stundeBis = 0;
+                _stundeBis = 0;
             }
             if (_endmonat == 0)
             {
-                GetViewModel().SetzeUhrzeit(new DateTime(2016, monat, 01, stundeVon, 00, 00), DateTime.MaxValue);
+                GetViewModel().SetzeUhrzeit(new DateTime(2016, monat, 01, _stundeVon, 00, 00), DateTime.MaxValue);
             }
             else
             {
                 int letzterTag = DateTime.DaysInMonth(2016, _endmonat);
                 //TODO Aktuell wird von Monat x die Startzeit genommen und von Monat y die endzeit. Am Ende soll aber 
                 // bsw. in einem Monat alles von 9-11 Uhr angezeigt werden. Dafür brauchen wir aber unsere eigene Datenbasis
-                GetViewModel().SetzeUhrzeit(new DateTime(2016, _startmonat, 01, stundeVon, 00, 00), new DateTime(2016, _endmonat, letzterTag, stundeBis, 59, 59));
+                GetViewModel().SetzeUhrzeit(new DateTime(2016, _startmonat, 01, _stundeVon, 00, 00), new DateTime(2016, _endmonat, letzterTag, _stundeBis, 59, 59));
             }
 
         }
@@ -162,16 +162,37 @@ namespace CycleCity_6.Tools.CyclistViewer
             foreach (var button in _buttonListe.OfType<Button>())
             {
                 button.Background = Brushes.PowderBlue;
+                button.IsEnabled = true;
             }
+            ZeitSliderBis.IsEnabled = true;
+            ZeitSliderVon.IsEnabled = true;
         }
 
         private void LiveModus_Click(object sender, RoutedEventArgs e)
         {
-            ResetBackgrounds();
             _startmonat = 1;
             _endmonat = 12;
             ZeitSliderVon.Value = 0;
             ZeitSliderBis.Value = 0;
+            var button = sender as Button;
+            button.Foreground = Equals(button.Foreground, Brushes.LightGray) ? Brushes.Red : Brushes.LightGray;
+            _live = !_live;
+            GetViewModel().AktiviereLive(_live);
+            //(de)aktiviere Zeitleiste
+            if (_live)
+            {
+                foreach (Button b in _buttonListe.OfType<Button>())
+                {
+                    b.Background = Brushes.LightGray;
+                    b.IsEnabled = false;
+                }
+                ZeitSliderVon.IsEnabled = false;
+                ZeitSliderBis.IsEnabled = false;
+            }
+            else
+            {
+                ResetBackgrounds();
+            }
         }
 
         private void CYC_Checked(object sender, RoutedEventArgs e)
@@ -196,7 +217,7 @@ namespace CycleCity_6.Tools.CyclistViewer
 
         private void AlleVelorouten_Checked(object sender, RoutedEventArgs e)
         {
-            foreach (var box in checkboxen.OfType<CheckBox>())
+            foreach (var box in _checkboxen.OfType<CheckBox>())
             {
                 box.IsChecked = true;
             }
@@ -205,7 +226,7 @@ namespace CycleCity_6.Tools.CyclistViewer
         private void AlleVelorouten_Unchecked(object sender, RoutedEventArgs e)
         {
 
-            foreach (var box in checkboxen.OfType<CheckBox>())
+            foreach (var box in _checkboxen.OfType<CheckBox>())
             {
                 box.IsChecked = false;
             }

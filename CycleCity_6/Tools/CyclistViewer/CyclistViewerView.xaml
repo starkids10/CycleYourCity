@@ -86,9 +86,9 @@
                     <TextBlock Text="bis: " Margin="0,10,0,0" />
                     <DockPanel VerticalAlignment="Center" Margin="10">
                         <TextBlock Name="SliderBisText" Text="0:00" DockPanel.Dock="Right" TextAlignment="Right" Width="55" />
-                        <Slider x:Name="ZeitSliderBis"  Maximum="24" TickPlacement="BottomRight"  Width="300" VerticalAlignment="Center" IsSnapToTickEnabled="True" ValueChanged="Slider_OnValueChanged" RenderTransformOrigin="0.5,0.5"/>
+                        <Slider x:Name="ZeitSliderBis" Maximum="24" TickPlacement="BottomRight"  Width="300" VerticalAlignment="Center" IsSnapToTickEnabled="True" ValueChanged="Slider_OnValueChanged" RenderTransformOrigin="0.5,0.5"/>
                     </DockPanel>
-                    <Button Name="LiveModus" Content="Live●" Click="LiveModus_Click" Width="60" Height="30" FontFamily="Segoe UI Black" Foreground="Red" BorderBrush="White" />
+                    <Button Name="LiveModus" Content="Live●" Click="LiveModus_Click" Width="60" Height="30" FontFamily="Segoe UI Black" Foreground="LightGray" BorderBrush="White" />
                 </StackPanel>
 
                 <DockPanel Name="Zeitleiste" Background="Black" LastChildFill="False" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center"  >
@@ -144,10 +144,6 @@
                 </EventTrigger>
             </Expander.Triggers>
         </Expander>
-
-
-
-
     </Grid>
 </UserControl>
 

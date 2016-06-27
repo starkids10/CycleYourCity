@@ -49,6 +49,7 @@ namespace CycleCity_6.Tools.CyclistViewer
 
         private void Slider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
+            //Von sollte nicht größer sein als bis, verschiebt den Slider optisch
             if (ZeitSliderVon.Value > ZeitSliderBis.Value -1)
             {
                 ZeitSliderBis.Value = ZeitSliderVon.Value + 1;

@@ -28,21 +28,24 @@ namespace CycleCity_6.Tools.CyclistViewer
         private List<Graphic> veloGraphics; 
         public MapView mapView;
         private readonly TrackService _trackService;
+        private readonly LocalDBService _localDBService;
 
-        public CyclistViewerViewModel(TrackService trackService)
+        public CyclistViewerViewModel(TrackService trackService, LocalDBService localDBService)
         {
             Contract.Requires(trackService != null);
 
             InitializeMap();
 
             LetzteAktuallisierung = "Letzte Aktuallisierung: " + DateTime.Now.ToLongTimeString();
+            _localDBService = localDBService;
             _trackService = trackService;
             trackService.TrackAddedEvent += TrackService_OnTrackAdded;
             trackService.HeatPointAddedEvent += TrackService_OnHeatMapChanged;
             trackService.KeineInternetVerbindungEvent += TrackService_OnKeineInternetVerbindung;
 
             InitializeVelorouten();
-        }
+
+            }
 
         private void InitializeVelorouten()
         {
@@ -191,6 +194,8 @@ namespace CycleCity_6.Tools.CyclistViewer
                 var simpleLineSymbol = new SimpleLineSymbol { Width = 3, Color = Color.FromArgb(40,0,0,255)};
                 
                 collection.Add (new Graphic (track.Tour, simpleLineSymbol));
+                Console.WriteLine (track.Id);
+                Console.WriteLine ("---");
             }
 
             mapView.Dispatcher.InvokeAsync (() => trackGraphicsLayer.Graphics.Clear ());

@@ -8,6 +8,7 @@ using Esri.ArcGISRuntime.Geometry;
 
 namespace CycleCity_6.Materials
 {
+    [Serializable]
     public class Track
     {
         public Track(string id, Polyline tour, Point start, Point ende)
@@ -20,7 +21,7 @@ namespace CycleCity_6.Materials
             Endpunkt = ende;
             Startzeit = start.Time;
             Endzeit = ende.Time;
-
+            Console.WriteLine (Tour.ToString ());
         }
 
         public Track(string id, Polyline tour)
@@ -33,7 +34,6 @@ namespace CycleCity_6.Materials
             Endpunkt = null;
             Startzeit = DateTime.Now;
             Endzeit = DateTime.Now;
-
         }
 
         public string Id { get; }

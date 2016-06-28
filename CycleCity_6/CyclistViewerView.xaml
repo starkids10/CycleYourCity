@@ -11,7 +11,7 @@
 
 
     <Grid>
-        <esri:MapView  x:Name="CycleMapView" Map="{Binding Map}" />
+        <esri:MapView  x:Name="CycleMapView" Map="{Binding Map}" Margin="0,0,0,94" />
 
         <StackPanel HorizontalAlignment="Right" Margin="20,0,0,20">
             <TextBlock x:Name="letzteAktuallisierung" Text="{Binding Path=LetzteAktuallisierung, UpdateSourceTrigger=PropertyChanged}" Foreground="Black" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Top" Margin="10"/>

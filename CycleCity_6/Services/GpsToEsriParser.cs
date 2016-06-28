@@ -36,7 +36,7 @@ namespace CycleCity_6.Services
                                          Longitude = trackpoint.Attribute("lon").Value,
                                      })
                              };
-
+                
                 foreach (var track in tracks)
                 {
                     List<MapPoint> points = new List<MapPoint>();

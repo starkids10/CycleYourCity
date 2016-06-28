@@ -8,7 +8,7 @@ namespace CycleCity_6.Materials
 { 
     class User
     {
-        public static string Name = "table4";
-        public static string Passwort = ".table4.";
+        public static string Name = "table2";
+        public static string Passwort = ".table2.";
     }
 }

@@ -21,13 +21,13 @@ namespace CycleCity_6.Services
         {
             _databaseContentService = initServerConnection();
 
-            _aTimer = new Timer(10000);
+            _aTimer = new Timer(2000);
             _aTimer.Elapsed += CollectData_OnTimedEvent;
             _aTimer.Enabled = false;
 
             Velorouten = new List<List<Track>>();
             InitVelorouten();
-            ;
+            
             AlleDaten = HoleDaten(new DateTime(2016, 01, 01, 00, 00, 00), DateTime.Today);
         }
 
@@ -58,7 +58,8 @@ namespace CycleCity_6.Services
 
         private void CollectData_OnTimedEvent(Object souce, System.Timers.ElapsedEventArgs e)
         {
-            HoleDaten(new DateTime(2016, 01, 01, 00, 00, 00), DateTime.MaxValue);
+            var temp = GpsToEsriParser.ParseJsonToEsriPolyline(_databaseContentService.GetNewData());
+            TrackAddedEvent(this, temp);
         }
 
         private List<Track> HoleDaten(DateTime von, DateTime bis)

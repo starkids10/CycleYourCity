@@ -12,52 +12,36 @@ namespace CycleCity_6.Services
 {
     internal class TrackService
     {
-        private readonly Dictionary<string, HeatPoint> _heatPoints;
-        private Timer aTimer;
+        private readonly Timer _aTimer;
         private readonly DatabaseContentService _databaseContentService;
-
-        public DateTime Startzeit { get; set; }
-        public DateTime Endzeit { get; set; }
-        public bool HeatmapAnzeigen { get; set; }
-        public List<Track> Velorouten { get; set; }
+        public List<List<Track>> Velorouten { get; set; }
+        public List<Track> AlleDaten;
 
         public TrackService()
         {
             _databaseContentService = initServerConnection();
-            _heatPoints = new Dictionary<string, HeatPoint>();
-            HeatmapAnzeigen = false;
 
-            aTimer = new Timer(10000);
-            aTimer.Elapsed += CollectData_OnTimedEvent;
-            aTimer.Enabled = true;
+            _aTimer = new Timer(2000);
+            _aTimer.Elapsed += CollectData_OnTimedEvent;
+            _aTimer.Enabled = false;
 
-            Startzeit = new DateTime(2016,05,20,00,00,00);
-            Endzeit = DateTime.Now;
-
-            Velorouten = GpsToEsriParser.ParseGpxToEsriPolyline(Environment.CurrentDirectory + @"\..\..\"  + @"\Data\Velorouten_Hamburg.gpx");
+            Velorouten = new List<List<Track>>();
+            InitVelorouten();
+            
+            AlleDaten = HoleDaten(new DateTime(2016, 01, 01, 00, 00, 00), DateTime.Today);
         }
 
         public event EventHandler<List<Track>> TrackAddedEvent = delegate { };
-        public event EventHandler<IEnumerable<HeatPoint>> HeatPointAddedEvent = delegate { };
         public event UnhandledExceptionEventHandler KeineInternetVerbindungEvent = delegate { };
 
-        private DatabaseContentService initServerConnection()
+        private void InitVelorouten()
         {
-            try
+            for (int i = 1; i < 15; i++)
             {
-                return new DatabaseContentService();
+                Velorouten.Add(GpsToEsriParser.ParseGpxToEsriPolyline(Environment.CurrentDirectory + @"\..\..\" +
+                                                          @"\Data\Veloroute_" + i + "_Track.gpx"));
             }
-            catch (WebException)
-            {
-                return null;
-            }
-        }
 
-        public IEnumerable<HeatPoint> GetAllHeatPoints()
-        {
-            Contract.Ensures(Contract.Result<IEnumerable<HeatPoint>>() != null);
-            Contract.Ensures(Contract.Result<IEnumerable<HeatPoint>>().Any());
-            return _heatPoints.Values;
         }
 
 
@@ -123,50 +107,49 @@ namespace CycleCity_6.Services
                     _heatPoints.Add(adresse, new HeatPoint(new List<Point>() { newPoint }));
                 }
 
-            }
-        }
-
         private void CollectData_OnTimedEvent(Object souce, System.Timers.ElapsedEventArgs e)
         {
+            var temp = GpsToEsriParser.ParseJsonToEsriPolyline(_databaseContentService.GetNewData());
+            TrackAddedEvent(this, temp);
+        }
+
+        private List<Track> HoleDaten(DateTime von, DateTime bis)
+        {
+            var tracks = new List<Track>();
             if (_databaseContentService != null)
             {
                 try
                 {
-                    var data = _databaseContentService.GetDataFromTo(Startzeit, Endzeit);
-                    if (HeatmapAnzeigen)
-                    {
-                        var heatPoints = GpsToEsriParser.ParseJsonToPoinList(data);
-                        GenerateNewHeatMap(heatPoints);
-                        HeatPointAddedEvent(this, _heatPoints.Values);
-                    }
-                    else
-                    {
-                        var tracks = GpsToEsriParser.ParseJsonToEsriPolyline(data);
-                        //TrackAddedEvent(this, tracks);
-                        TrackAddedEvent (this, Test ());
-
-                    }
-
-
+                    var data = _databaseContentService.GetDataFromTo(von, bis);
+                    tracks = GpsToEsriParser.ParseJsonToEsriPolyline(data);
+                    TrackAddedEvent(this, tracks);
                 }
                 catch (WebException webException)
                 {
-                    aTimer.Enabled = false;
+                    _aTimer.Enabled = false;
                     KeineInternetVerbindungEvent(this, new UnhandledExceptionEventArgs(webException.Status, false));
                 }
             }
             else
             {
-                aTimer.Enabled = false;
+                _aTimer.Enabled = false;
                 KeineInternetVerbindungEvent(this, new UnhandledExceptionEventArgs(new WebException("Keine Internetverbindung"), false));
             }
+            return tracks;
         }
 
-
-
-        public void AktiviereUpdate(bool x)
+        public void UpdateVonBis(DateTime von, DateTime bis)
         {
-            aTimer.Enabled = x;
+            var tracks = from t in AlleDaten
+                where
+                    (t.Startzeit.Month >= von.Month && t.Endzeit.Month <= bis.Month) && (t.Startzeit.Hour >= von.Hour && t.Endzeit.Hour <= bis.Hour)
+                select t;
+            TrackAddedEvent(this, tracks.ToList());
+        }
+
+        public void AktiviereLiveUpdate(bool x)
+        {
+            _aTimer.Enabled = x;
         }
     }
 }

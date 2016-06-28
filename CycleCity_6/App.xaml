@@ -9,7 +9,7 @@
         <Style TargetType="{x:Type Button}" x:Key="Monate">
             <Setter Property="Height" Value="40" />
             <Setter Property="Width" Value="120" />
-            <Setter Property="Background" Value="#FFFFD700" />
+            <Setter Property="Background" Value="PowderBlue" />
             <Setter Property="FontSize" Value="20" />
             <Setter Property="FontFamily" Value="Segoe UI Black" />
             <!-- TODO eigentlich sollte es kein MousOver mehr geben
@@ -19,6 +19,12 @@
                 </Trigger>
             </Style.Triggers>-->
         </Style>
-        
+
+        <Style TargetType="{x:Type CheckBox}" x:Key="ModifiedCheckBox">
+            <Setter Property="FontFamily" Value="Segoe UI Black"/>
+            <Setter Property="FontSize" Value="15" />
+
+        </Style>
+
     </Application.Resources>
 </Application>

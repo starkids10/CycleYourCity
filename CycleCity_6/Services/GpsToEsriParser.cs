@@ -28,25 +28,25 @@ namespace CycleCity_6.Services
                 var tracks = from track in gpxDoc.Descendants(gpx + "trk")
                              select new
                              {
-                                 Segs = (
+                                 Segs =
                                      from trackpoint in track.Descendants(gpx + "trkpt")
                                      select new
                                      {
                                          Latitude = trackpoint.Attribute("lat").Value,
                                          Longitude = trackpoint.Attribute("lon").Value,
-                                     })
+                                     }
                              };
                 
                 foreach (var track in tracks)
                 {
                     List<MapPoint> points = new List<MapPoint>();
-                    foreach (var trekSeg in track.Segs)
+                    foreach (var point in track.Segs)
                     {
-                        var y = Double.Parse(trekSeg.Latitude, CultureInfo.InvariantCulture);
-                        var x = Double.Parse(trekSeg.Longitude, CultureInfo.InvariantCulture);
-                        points.Add(new MapPoint(x, y));
+                        var yCoord = Double.Parse(point.Latitude, CultureInfo.InvariantCulture);
+                        var xCoord = Double.Parse(point.Longitude, CultureInfo.InvariantCulture);
+                        points.Add(new MapPoint(xCoord, yCoord));
                     }
-                    trackList.Add(new Track("-1",new Polyline(points, SpatialReferences.Wgs84)));
+                    trackList.Add(new Track("-1", new Polyline(points, SpatialReferences.Wgs84)));
                 }
             }
             catch (FileNotFoundException)
@@ -60,54 +60,29 @@ namespace CycleCity_6.Services
         public static List<Track> ParseJsonToEsriPolyline(String json)
         {
             List<Track> trackList = new List<Track>();
-            //Hier stürzt beim gleichzeitigen starten das programm ab, weil der token neu vergeben wurde
-            JObject jObject = JObject.Parse(json);
-            var tracks = jObject.Values();
-
-            foreach (var track in tracks)
+            if (json != "[]" && json != "auth_token invalid")
             {
-                var id = track.Path;
-                var startzeit = getDate((string)track.First["time"]);
-                var endzeit = getDate((string)track.Last["time"]);
 
-                var waypoints = track.Children();
-                var pointList = waypoints.Select(point => new MapPoint((double)point["lon"], (double)point["lat"], SpatialReferences.Wgs84)).ToList();
+                JObject jObject = JObject.Parse(json);
+                var tracks = jObject.Values();
 
+                var templist = new List<List<MapPoint>>();
+                foreach (var track in tracks)
+                {
+                    var id = track.Path;
+                    var startzeit = getDate((string)track.First["time"]);
+                    var endzeit = getDate((string)track.Last["time"]);
 
-                //TODO tracks splitten, wenn zu weit auseinander
-                //int tempcounter = 0;
-                //for (int i = 0; i < pointList.Count -1; i++)
-                //{
-                //    var differenz = GeometryEngine.Distance(pointList[i], pointList[i + 1]);
-                //    if (differenz > 0.0002)
-                //    {
-                //        for (int j = tempcounter; j < i -2; j++, tempcounter++)
-                //        {
-                //            List<MapPoint> tempPoints = new List<MapPoint>();
-                //            tempPoints.Add(pointList[j]);
-                         
-                //            var tempTour = new Polyline(tempPoints, SpatialReferences.Wgs84);
-                //            var tempStartpunkt = new Point(tempPoints.First(), startzeit);
-                //            var tempEndpunkt = new Point(tempPoints.Last(), endzeit);
-                //            trackList.Add(new Track(id, tempTour, tempStartpunkt, tempEndpunkt));
-                //        }
-
-                //        for (int j = 0; j < i -1; j++)
-                //        {
-                //            pointList.RemoveAt(j);
-                //        }
-                //    }
-                //    else
-                //    {
-                //        tempcounter++;
-                //    }
-
-                //}
-                var tour = new Polyline(pointList, SpatialReferences.Wgs84);
-                var startpunkt = new Point(pointList.First(), startzeit);
-                var endpunkt = new Point(pointList.Last(), endzeit);
-                trackList.Add(new Track(id, tour, startpunkt, endpunkt));
+                    var waypoints = track.Children();
+                    var pointList = waypoints.Select(point => new MapPoint((double)point["lon"], (double)point["lat"], SpatialReferences.Wgs84)).ToList();
+                    var tour = new Polyline(pointList, SpatialReferences.Wgs84);
+                    var startpunkt = new Point(pointList.First(), startzeit);
+                    var endpunkt = new Point(pointList.Last(), endzeit);
+                    templist.Add(pointList);
+                    trackList.Add(new Track(id, tour, startpunkt, endpunkt));
+                }
             }
+
             return trackList;
         }
 

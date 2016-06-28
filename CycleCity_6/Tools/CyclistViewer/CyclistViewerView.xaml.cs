@@ -54,7 +54,6 @@ namespace CycleCity_6.Tools.CyclistViewer
             {
                 ZeitSliderBis.Value = ZeitSliderVon.Value + 1;
             }
-            //TODO Daten nach der ausgewählten Zeit anzeigen lassen
             _stundeVon = (int)ZeitSliderVon.Value;
             _stundeBis = (int)ZeitSliderBis.Value;
             int monat;
@@ -85,8 +84,6 @@ namespace CycleCity_6.Tools.CyclistViewer
             else
             {
                 int letzterTag = DateTime.DaysInMonth(2016, _endmonat);
-                //TODO Aktuell wird von Monat x die Startzeit genommen und von Monat y die endzeit. Am Ende soll aber 
-                // bsw. in einem Monat alles von 9-11 Uhr angezeigt werden. Dafür brauchen wir aber unsere eigene Datenbasis
                 GetViewModel().SetzeUhrzeit(new DateTime(2016, _startmonat, 01, _stundeVon, 00, 00), new DateTime(2016, _endmonat, letzterTag, _stundeBis, 59, 59));
             }
 
@@ -109,7 +106,7 @@ namespace CycleCity_6.Tools.CyclistViewer
                 //Hintergrundfarbe setzten
                 _startmonat = SetBackground(monat);
 
-                //Server Zeitraum mitteilen ("SetzeUhrzeit();")
+                //Server Zeitraum mitteilen
                 GetViewModel().SetzeUhrzeit(new DateTime(2016, _startmonat, 01, 00, 00, 00), DateTime.MaxValue);
             }
             else if (_monatselected == 1)
@@ -130,7 +127,7 @@ namespace CycleCity_6.Tools.CyclistViewer
                     SetBackground("M" + x);
                 }
 
-                //Server Zeitraum mitteilen ("SetzeUhrzeit();")
+                //Server Zeitraum mitteilen 
                 int letzterTag = DateTime.DaysInMonth(2016, _endmonat);
                 GetViewModel()
                     .SetzeUhrzeit(new DateTime(2016, _startmonat, 01, 00, 00, 00),
@@ -178,7 +175,7 @@ namespace CycleCity_6.Tools.CyclistViewer
             _startmonat = 1;
             _endmonat = 12;
             ZeitSliderVon.Value = 0;
-            ZeitSliderBis.Value = 0;
+            ZeitSliderBis.Value = 23;
             var button = sender as Button;
             button.Foreground = Equals(button.Foreground, Brushes.LightGray) ? Brushes.Red : Brushes.LightGray;
             _live = !_live;

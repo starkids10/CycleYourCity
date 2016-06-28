@@ -37,7 +37,7 @@ namespace CycleCity_6.Services
         /// </summary>
         public string GetNewData()
         {
-            var request = (HttpWebRequest)WebRequest.Create("https://api.cyc.jmakro.de:4040/get_latest_coordinates.php");
+            var request = (HttpWebRequest)WebRequest.Create("https://cychh.informatik.uni-hamburg.de:443/get_latest_coordinates.php");
 
             var data = Encoding.ASCII.GetBytes("auth_token=" + _token);
 
@@ -86,7 +86,7 @@ namespace CycleCity_6.Services
                 ende = to.ToString("yyyy-MM-dd hh:mm:ss");
             }
 
-            var request = (HttpWebRequest)WebRequest.Create("https://api.cyc.jmakro.de:4040/get_coordinates.php");
+            var request = (HttpWebRequest)WebRequest.Create("https://cychh.informatik.uni-hamburg.de:443/get_coordinates.php");
 
             var data = Encoding.ASCII.GetBytes("auth_token=" + _token + "&" + "from=" + start + "&" + "to=" + ende);
 
@@ -114,7 +114,7 @@ namespace CycleCity_6.Services
         private string getToken()
         {
             HttpWebRequest request =
-                (HttpWebRequest)WebRequest.Create("https://api.cyc.jmakro.de:4040/get_auth_token.php");
+                (HttpWebRequest)WebRequest.Create("https://cychh.informatik.uni-hamburg.de:443/get_auth_token.php");
             var data = Encoding.ASCII.GetBytes("username=" + User.Name + "&password=" + User.Passwort);
 
             request.Method = "POST";

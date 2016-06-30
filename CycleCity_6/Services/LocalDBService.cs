@@ -10,35 +10,13 @@ namespace CycleCity_6.Services
 {
     public class LocalDBService
     {
-        private SqlCommand command;
-
         private TableTableAdapter adapter = new TableTableAdapter ();
-
 
         public LocalDBService()
         {
-            //SqlConnection con = new SqlConnection (CycleCity_6.Properties.Settings.Default.TrackDBConnectionString);
-            //adapter.Connection = new SqlConnection (CycleCity_6.Properties.Settings.Default.TrackDBConnectionString);
-
-            //adapter.Insert ("id", "test");
-            //adapter.Update ("id","test", "id");
-
-
             var a = adapter.GetData ();
             Console.WriteLine (a.Count + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
-
-            //try
-            //{
-            //    con.Open ();
-            //    Console.WriteLine ("Connection open");
-            //    command = new SqlCommand ("", con);
-            //    con.Close ();
-            //}
-            //catch
-            //{
-            //    Console.WriteLine ("Connection could not be open");
-            //}
         }
 
         public void AddJson(string json)
@@ -55,7 +33,15 @@ namespace CycleCity_6.Services
                     var id = track.Path;
                     var str = track.ToString ();
 
-                    adapter.Update (str, id);
+                    try
+                    {
+                        adapter.Insert (id, str);
+                    }
+                    catch(Exception exp)
+                    {
+                        adapter.Update (str, id);
+                    }
+                    
                 }
             }
         }

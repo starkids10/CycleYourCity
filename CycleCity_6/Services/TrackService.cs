@@ -87,19 +87,19 @@ namespace CycleCity_6.Services
 
         private void CollectData_OnTimedEvent(Object souce, System.Timers.ElapsedEventArgs e)
         {
-            //var Json = _databaseContentService.GetNewData ();
+            var Json = _databaseContentService.GetNewData ();
 
-            //var temp = GpsToEsriParser.ParseJsonToEsriPolyline(Json);
-            //TrackAddedEvent(this, temp);
+            var temp = GpsToEsriParser.ParseJsonToEsriPolyline (Json);
+            TrackAddedEvent (this, temp);
 
 
             //var data = _localDBService.LoadTrackFromDB ("0093ae0aca761f8f6ec5a38600108481");
-            var data = _localDBService.LoadAllTracksFromDB ();
+            //var data = _localDBService.LoadAllTracksFromDB ();
 
-            var line = GpsToEsriParser.JArrayToPolyline (data);
+            //var line = GpsToEsriParser.JArrayToPolyline (data);
 
-            TrackAddedEvent (this, line);
-            //_localDBService.AddJson (Json);
+            //TrackAddedEvent (this, line);
+            _localDBService.AddJson (Json);
         }
 
         private List<Track> HoleDaten(DateTime von, DateTime bis)

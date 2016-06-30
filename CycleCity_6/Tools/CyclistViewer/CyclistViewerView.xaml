@@ -13,8 +13,11 @@
     <Grid>
         <esri:MapView  x:Name="CycleMapView" Map="{Binding Map}" />
 
-        <TextBlock x:Name="letzteAktuallisierung" Text="{Binding Path=LetzteAktuallisierung, UpdateSourceTrigger=PropertyChanged}" Foreground="Black" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Margin="10" FontSize="15"/>
-
+        <StackPanel Margin="10" HorizontalAlignment="Left" VerticalAlignment="Top" Background="LightGray" >
+            <TextBlock x:Name="letzteAktuallisierung" Margin="5,5,5,0" Text="{Binding Path=LetzteAktuallisierung, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap"   />
+            <TextBlock x:Name="TrackAnzahl" Margin="5,0,5,5" Text="{Binding Path=TrackAnzahl, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap"  />
+        </StackPanel>
+        
         <!--Ausklapp Menü Rechts-->
         <Expander x:Name="Filter" HorizontalAlignment="Right"  VerticalAlignment="Stretch" >
             <Expander.Header>
@@ -33,7 +36,7 @@
                         <TreeViewItem.Header>
                             <CheckBox Content="Velorouten" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="AlleVelorouten_Checked" Unchecked="AlleVelorouten_Unchecked"/>
                         </TreeViewItem.Header>
-                        
+
                         <CheckBox Name="R1" Content="Route 1" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
                         <CheckBox Name="R2" Content="Route 2" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>
                         <CheckBox Name="R3" Content="Route 3" Style="{StaticResource ResourceKey=ModifiedCheckBox}" Checked="Veloroute_Checked" Unchecked="Veloroute_Unchecked"/>

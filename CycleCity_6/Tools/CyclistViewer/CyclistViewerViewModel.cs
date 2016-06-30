@@ -23,6 +23,7 @@ namespace CycleCity_6.Tools.CyclistViewer
 
         public MapView MapView;
         private readonly TrackService _trackService;
+        private string _TrackAnzahl;
 
         public CyclistViewerViewModel(TrackService trackService)
         {
@@ -31,6 +32,7 @@ namespace CycleCity_6.Tools.CyclistViewer
             InitializeMap();
 
             LetzteAktuallisierung = "Letzte Aktuallisierung: " + DateTime.Now.ToLongTimeString();
+            TrackAnzahl = "Anzahl Tracks: " + _TrackAnzahl;
             _trackService = trackService;
             _trackService.TrackAddedEvent += TrackService_OnTrackAdded;
             _trackService.KeineInternetVerbindungEvent += TrackService_OnKeineInternetVerbindung;
@@ -77,6 +79,13 @@ namespace CycleCity_6.Tools.CyclistViewer
             get { return _LetzteAktuallisierung; }
             private set { _LetzteAktuallisierung = value; Notify("LetzteAktuallisierung"); }
         }
+
+        public string TrackAnzahl
+        {
+            get { return _TrackAnzahl; }
+            private set { _TrackAnzahl = value; Notify("TrackAnzahl"); }
+        }
+
 
         public List<Graphic> GetVeloRouteAt(int index)
         {
@@ -139,6 +148,8 @@ namespace CycleCity_6.Tools.CyclistViewer
             MapView.Dispatcher.InvokeAsync(() => _trackGraphicsLayer.Graphics.AddRange(collection));
 
             LetzteAktuallisierung = "Letzte Aktuallisierung: " + DateTime.Now.ToLongTimeString();
+
+            TrackAnzahl = "Anzahl Tracks: " + tracks.Count;
         }
 
         public void ZeichneVelorouten()

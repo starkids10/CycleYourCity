@@ -17,6 +17,7 @@ namespace CycleCity_6.Tools.CyclistViewer
 
         private int _monatselected; //dies ist nur eine flag die werte 0-2 annimmt
         private readonly Dictionary<string, List<Graphic>> _velografiken;
+        private int _jahr;
         private int _startmonat;
         private int _endmonat;
         private int _stundeVon;
@@ -30,6 +31,7 @@ namespace CycleCity_6.Tools.CyclistViewer
             InitializeComponent();
             GetViewModel().MapView = CycleMapView;
 
+            _jahr = 2016;
             _startmonat = 1;
             _endmonat = 12;
             _stundeVon = 0;
@@ -75,16 +77,16 @@ namespace CycleCity_6.Tools.CyclistViewer
             }
             if (_stundeBis == 24)
             {
-                _stundeBis = 0;
+                _stundeBis = 23;
             }
             if (_endmonat == 0)
             {
-                GetViewModel().SetzeUhrzeit(new DateTime(2016, monat, 01, _stundeVon, 00, 00), DateTime.MaxValue);
+                GetViewModel().SetzeUhrzeit(new DateTime(_jahr, monat, 01, _stundeVon, 00, 00), DateTime.MaxValue);
             }
             else
             {
-                int letzterTag = DateTime.DaysInMonth(2016, _endmonat);
-                GetViewModel().SetzeUhrzeit(new DateTime(2016, _startmonat, 01, _stundeVon, 00, 00), new DateTime(2016, _endmonat, letzterTag, _stundeBis, 59, 59));
+                int letzterTag = DateTime.DaysInMonth(_jahr, _endmonat);
+                GetViewModel().SetzeUhrzeit(new DateTime(_jahr, _startmonat, 01, _stundeVon, 00, 00), new DateTime(_jahr, _endmonat, letzterTag, _stundeBis, 59, 59));
             }
 
         }
@@ -107,7 +109,8 @@ namespace CycleCity_6.Tools.CyclistViewer
                 _startmonat = SetBackground(monat);
 
                 //Server Zeitraum mitteilen
-                GetViewModel().SetzeUhrzeit(new DateTime(2016, _startmonat, 01, 00, 00, 00), DateTime.MaxValue);
+                int letzterTag = DateTime.DaysInMonth(_jahr, _startmonat);
+                GetViewModel().SetzeUhrzeit(new DateTime(_jahr, _startmonat, 01, 00, 00, 00), new DateTime(_jahr, _startmonat, letzterTag, 23,59,59));
             }
             else if (_monatselected == 1)
             {
@@ -128,10 +131,10 @@ namespace CycleCity_6.Tools.CyclistViewer
                 }
 
                 //Server Zeitraum mitteilen 
-                int letzterTag = DateTime.DaysInMonth(2016, _endmonat);
+                int letzterTag = DateTime.DaysInMonth(_jahr, _endmonat);
                 GetViewModel()
-                    .SetzeUhrzeit(new DateTime(2016, _startmonat, 01, 00, 00, 00),
-                        new DateTime(2016, _endmonat, letzterTag, 23, 59, 59));
+                    .SetzeUhrzeit(new DateTime(_jahr, _startmonat, 01, 00, 00, 00),
+                        new DateTime(_jahr, _endmonat, letzterTag, 23, 59, 59));
             }
         }
 

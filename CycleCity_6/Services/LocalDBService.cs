@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 using System.Data.SqlClient;
-using CycleCity_6.Materials;
-using CycleCity_6.Properties;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
+
 using CycleCity_6.TrackDBDataSetTableAdapters;
 
 namespace CycleCity_6.Services
@@ -24,10 +20,8 @@ namespace CycleCity_6.Services
             //SqlConnection con = new SqlConnection (CycleCity_6.Properties.Settings.Default.TrackDBConnectionString);
             //adapter.Connection = new SqlConnection (CycleCity_6.Properties.Settings.Default.TrackDBConnectionString);
 
-            var time = DateTime.Now.ToString();
-
-            adapter.Insert ("id", time, time, "a", "b", "c");
-            //adapter.Update ("id", time, time, "a", "b", "c", "id", time, time);
+            //adapter.Insert ("id", "test");
+            //adapter.Update ("id","test", "id");
 
 
             var a = adapter.GetData ();
@@ -45,6 +39,48 @@ namespace CycleCity_6.Services
             //{
             //    Console.WriteLine ("Connection could not be open");
             //}
+        }
+
+        public void AddJson(string json)
+        {
+            Console.WriteLine ("updating table");
+            if(json != "[]" && json != "auth_token invalid")
+            {
+                JObject jObject = JObject.Parse (json);
+
+                var tracks = jObject.Values ();
+
+                foreach(var track in tracks)
+                {
+                    var id = track.Path;
+                    var str = track.ToString ();
+
+                    adapter.Update (str, id);
+                }
+            }
+        }
+
+        public List<Tuple<String, String>> LoadTrackFromDB(string ID)
+        {
+            var data = adapter.GetData ();
+
+            var toprint = data.Where (x => x.Id == ID).First ();
+
+            return new List<Tuple<String, String>> { Tuple.Create (toprint.Id, toprint.Json) };
+        }
+
+        public List<Tuple<String, String>> LoadAllTracksFromDB()
+        {
+            var tracks = new List<Tuple<String, String>> ();
+
+            var data = adapter.GetData ();
+
+            foreach(var a in data)
+            {
+                tracks.Add(Tuple.Create (a.Id, a.Json));
+            }
+
+            return tracks;
         }
     }
 }

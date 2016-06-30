@@ -23,16 +23,14 @@ namespace CycleCity_6.Tools.CyclistViewer
 
         public MapView MapView;
         private readonly TrackService _trackService;
-        private readonly LocalDBService _localDBService;
 
-        public CyclistViewerViewModel(TrackService trackService, LocalDBService localDBService)
+        public CyclistViewerViewModel(TrackService trackService)
         {
             Contract.Requires(trackService != null);
 
             InitializeMap();
 
             LetzteAktuallisierung = "Letzte Aktuallisierung: " + DateTime.Now.ToLongTimeString();
-            _localDBService = localDBService;
             _trackService = trackService;
             _trackService.TrackAddedEvent += TrackService_OnTrackAdded;
             _trackService.KeineInternetVerbindungEvent += TrackService_OnKeineInternetVerbindung;

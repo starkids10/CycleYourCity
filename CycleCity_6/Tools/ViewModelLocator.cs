@@ -10,9 +10,8 @@ namespace CycleCity_6.Tools
         {
 
             var trackService = new TrackService();
-            var localDBService = new LocalDBService ();
 
-            CyclistViewerViewModel = new CyclistViewerViewModel(trackService, localDBService);
+            CyclistViewerViewModel = new CyclistViewerViewModel(trackService);
         }
 
         public CyclistViewerViewModel CyclistViewerViewModel { get; }

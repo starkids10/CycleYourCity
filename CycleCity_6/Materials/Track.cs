@@ -21,7 +21,6 @@ namespace CycleCity_6.Materials
             Endpunkt = ende;
             Startzeit = start.Time;
             Endzeit = ende.Time;
-            Console.WriteLine (Tour.ToString ());
         }
 
         public Track(string id, Polyline tour)

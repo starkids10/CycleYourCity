@@ -14,12 +14,15 @@ namespace CycleCity_6.Services
     {
         private readonly Timer _aTimer;
         private readonly DatabaseContentService _databaseContentService;
+        private LocalDBService _localDBService;
+
         public List<List<Track>> Velorouten { get; set; }
         public List<Track> AlleDaten;
 
         public TrackService()
         {
             _databaseContentService = initServerConnection();
+            _localDBService = new LocalDBService ();
 
             _aTimer = new Timer(2000);
             _aTimer.Elapsed += CollectData_OnTimedEvent;
@@ -44,6 +47,18 @@ namespace CycleCity_6.Services
 
         }
 
+        private DatabaseContentService initServerConnection()
+        {
+            try
+            {
+                return new DatabaseContentService ();
+            }
+            catch(WebException)
+            {
+                return null;
+            }
+
+        }
 
         public List<Track> Test()
         {
@@ -68,49 +83,23 @@ namespace CycleCity_6.Services
             data.Add (GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\3041433.gpx").First());
 
             return data;
-
         }
-
-
-        /// <summary>
-        /// Generiert die HeatMap neu.
-        /// </summary>
-        /// <param name="newPoints">Liste von neu hinzuzufügenden Punkten</param>
-        public async void GenerateNewHeatMap(IEnumerable<Point> newPoints)
-        {
-            var locator = new Esri.ArcGISRuntime.Tasks.Geocoding.OnlineLocatorTask(new Uri(@"http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"), String.Empty);
-            foreach (Point newPoint in newPoints)
-            {
-                string adresse = "";
-                try
-                {
-                    var addressInfo =
-                        await
-                            locator.ReverseGeocodeAsync(newPoint.Coordinates, 50, newPoint.Coordinates.SpatialReference,
-                                CancellationToken.None);
-                    adresse = addressInfo.AddressFields["Address"];
-
-                }
-                catch (Exception)
-                {
-                    Console.WriteLine("Esri Geocode-Server reagiert nicht oder Adresse unbekannt");
-                    adresse = "unbekannt";
-                }
-
-                HeatPoint heatPoint = null;
-                if (_heatPoints.TryGetValue(adresse, out heatPoint))
-                {
-                    heatPoint.Points.Add(newPoint);
-                }
-                else
-                {
-                    _heatPoints.Add(adresse, new HeatPoint(new List<Point>() { newPoint }));
-                }
 
         private void CollectData_OnTimedEvent(Object souce, System.Timers.ElapsedEventArgs e)
         {
-            var temp = GpsToEsriParser.ParseJsonToEsriPolyline(_databaseContentService.GetNewData());
-            TrackAddedEvent(this, temp);
+            //var Json = _databaseContentService.GetNewData ();
+
+            //var temp = GpsToEsriParser.ParseJsonToEsriPolyline(Json);
+            //TrackAddedEvent(this, temp);
+
+
+            //var data = _localDBService.LoadTrackFromDB ("0093ae0aca761f8f6ec5a38600108481");
+            var data = _localDBService.LoadAllTracksFromDB ();
+
+            var line = GpsToEsriParser.JArrayToPolyline (data);
+
+            TrackAddedEvent (this, line);
+            //_localDBService.AddJson (Json);
         }
 
         private List<Track> HoleDaten(DateTime von, DateTime bis)
@@ -120,9 +109,13 @@ namespace CycleCity_6.Services
             {
                 try
                 {
-                    var data = _databaseContentService.GetDataFromTo(von, bis);
+                    var Json = _databaseContentService.GetDataFromTo (von, bis);
+
+                    var data = Json;
                     tracks = GpsToEsriParser.ParseJsonToEsriPolyline(data);
                     TrackAddedEvent(this, tracks);
+
+                    _localDBService.AddJson (Json);
                 }
                 catch (WebException webException)
                 {

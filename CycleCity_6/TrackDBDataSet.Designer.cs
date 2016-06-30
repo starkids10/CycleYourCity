@@ -281,15 +281,7 @@ namespace CycleCity_6 {
             
             private global::System.Data.DataColumn columnId;
             
-            private global::System.Data.DataColumn columnStartTime;
-            
-            private global::System.Data.DataColumn columnEndTime;
-            
-            private global::System.Data.DataColumn columnTour;
-            
-            private global::System.Data.DataColumn columnStartPoint;
-            
-            private global::System.Data.DataColumn columnEndPoint;
+            private global::System.Data.DataColumn columnJson;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
@@ -334,41 +326,9 @@ namespace CycleCity_6 {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn StartTimeColumn {
+            public global::System.Data.DataColumn JsonColumn {
                 get {
-                    return this.columnStartTime;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn EndTimeColumn {
-                get {
-                    return this.columnEndTime;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn TourColumn {
-                get {
-                    return this.columnTour;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn StartPointColumn {
-                get {
-                    return this.columnStartPoint;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn EndPointColumn {
-                get {
-                    return this.columnEndPoint;
+                    return this.columnJson;
                 }
             }
             
@@ -409,15 +369,11 @@ namespace CycleCity_6 {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public TableRow AddTableRow(string Id, string StartTime, string EndTime, string Tour, string StartPoint, string EndPoint) {
+            public TableRow AddTableRow(string Id, string Json) {
                 TableRow rowTableRow = ((TableRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         Id,
-                        StartTime,
-                        EndTime,
-                        Tour,
-                        StartPoint,
-                        EndPoint};
+                        Json};
                 rowTableRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowTableRow);
                 return rowTableRow;
@@ -448,11 +404,7 @@ namespace CycleCity_6 {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             internal void InitVars() {
                 this.columnId = base.Columns["Id"];
-                this.columnStartTime = base.Columns["StartTime"];
-                this.columnEndTime = base.Columns["EndTime"];
-                this.columnTour = base.Columns["Tour"];
-                this.columnStartPoint = base.Columns["StartPoint"];
-                this.columnEndPoint = base.Columns["EndPoint"];
+                this.columnJson = base.Columns["Json"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -460,29 +412,14 @@ namespace CycleCity_6 {
             private void InitClass() {
                 this.columnId = new global::System.Data.DataColumn("Id", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnId);
-                this.columnStartTime = new global::System.Data.DataColumn("StartTime", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnStartTime);
-                this.columnEndTime = new global::System.Data.DataColumn("EndTime", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnEndTime);
-                this.columnTour = new global::System.Data.DataColumn("Tour", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnTour);
-                this.columnStartPoint = new global::System.Data.DataColumn("StartPoint", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnStartPoint);
-                this.columnEndPoint = new global::System.Data.DataColumn("EndPoint", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnEndPoint);
+                this.columnJson = new global::System.Data.DataColumn("Json", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnJson);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnId}, true));
                 this.columnId.AllowDBNull = false;
                 this.columnId.Unique = true;
                 this.columnId.MaxLength = 50;
-                this.columnStartTime.AllowDBNull = false;
-                this.columnEndTime.AllowDBNull = false;
-                this.columnTour.AllowDBNull = false;
-                this.columnTour.MaxLength = 2147483647;
-                this.columnStartPoint.AllowDBNull = false;
-                this.columnStartPoint.MaxLength = 2147483647;
-                this.columnEndPoint.AllowDBNull = false;
-                this.columnEndPoint.MaxLength = 2147483647;
+                this.columnJson.AllowDBNull = false;
                 this.ExtendedProperties.Add("Generator_RowClassName", "TableRow");
                 this.ExtendedProperties.Add("Generator_RowEvArgName", "TableRowChangeEvent");
                 this.ExtendedProperties.Add("Generator_RowEvHandlerName", "TableRowChangeEventHandler");
@@ -643,56 +580,12 @@ namespace CycleCity_6 {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string StartTime {
+            public string Json {
                 get {
-                    return ((string)(this[this.tableTable.StartTimeColumn]));
+                    return ((string)(this[this.tableTable.JsonColumn]));
                 }
                 set {
-                    this[this.tableTable.StartTimeColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string EndTime {
-                get {
-                    return ((string)(this[this.tableTable.EndTimeColumn]));
-                }
-                set {
-                    this[this.tableTable.EndTimeColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string Tour {
-                get {
-                    return ((string)(this[this.tableTable.TourColumn]));
-                }
-                set {
-                    this[this.tableTable.TourColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string StartPoint {
-                get {
-                    return ((string)(this[this.tableTable.StartPointColumn]));
-                }
-                set {
-                    this[this.tableTable.StartPointColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string EndPoint {
-                get {
-                    return ((string)(this[this.tableTable.EndPointColumn]));
-                }
-                set {
-                    this[this.tableTable.EndPointColumn] = value;
+                    this[this.tableTable.JsonColumn] = value;
                 }
             }
         }
@@ -857,11 +750,8 @@ namespace CycleCity_6.TrackDBDataSetTableAdapters {
             tableMapping.SourceTable = "Table";
             tableMapping.DataSetTable = "Table";
             tableMapping.ColumnMappings.Add("Id", "Id");
-            tableMapping.ColumnMappings.Add("StartTime", "StartTime");
-            tableMapping.ColumnMappings.Add("EndTime", "EndTime");
-            tableMapping.ColumnMappings.Add("Tour", "Tour");
-            tableMapping.ColumnMappings.Add("StartPoint", "StartPoint");
-            tableMapping.ColumnMappings.Add("EndPoint", "EndPoint");
+            tableMapping.ColumnMappings.Add("StartTime", "Json");
+            tableMapping.ColumnMappings.Add("Json", "Json");
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.DeleteCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.DeleteCommand.Connection = this.Connection;
@@ -870,27 +760,18 @@ namespace CycleCity_6.TrackDBDataSetTableAdapters {
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_Id", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Id", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.InsertCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = "INSERT INTO [Table] ([Id], [StartTime], [EndTime], [Tour], [StartPoint], [EndPoin" +
-                "t]) VALUES (@Id, @StartTime, @EndTime, @Tour, @StartPoint, @EndPoint);\r\nSELECT I" +
-                "d, StartTime, EndTime, Tour, StartPoint, EndPoint FROM [Table] WHERE (Id = @Id)";
+            this._adapter.InsertCommand.CommandText = "INSERT INTO [Table] ([Id], [Json]) VALUES (@Id, @Json);\r\nSELECT Id, Json FROM [Ta" +
+                "ble] WHERE (Id = @Id)";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Id", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Id", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@StartTime", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "StartTime", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@EndTime", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "EndTime", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Tour", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Tour", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@StartPoint", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "StartPoint", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@EndPoint", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "EndPoint", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Json", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Json", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
-            this._adapter.UpdateCommand.CommandText = @"UPDATE [Table] SET [Id] = @Id, [StartTime] = @StartTime, [EndTime] = @EndTime, [Tour] = @Tour, [StartPoint] = @StartPoint, [EndPoint] = @EndPoint WHERE (([Id] = @Original_Id));
-SELECT Id, StartTime, EndTime, Tour, StartPoint, EndPoint FROM [Table] WHERE (Id = @Id)";
+            this._adapter.UpdateCommand.CommandText = "UPDATE [Table] SET [Id] = @Id, [Json] = @Json WHERE (([Id] = @Original_Id));\r\nSEL" +
+                "ECT Id, Json FROM [Table] WHERE (Id = @Id)";
             this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Id", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Id", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@StartTime", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "StartTime", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@EndTime", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "EndTime", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Tour", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Tour", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@StartPoint", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "StartPoint", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@EndPoint", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "EndPoint", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Json", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Json", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_Id", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Id", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
         }
         
@@ -907,7 +788,7 @@ SELECT Id, StartTime, EndTime, Tour, StartPoint, EndPoint FROM [Table] WHERE (Id
             this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT Id, StartTime, EndTime, Tour, StartPoint, EndPoint\r\nFROM     [Table]";
+            this._commandCollection[0].CommandText = "SELECT Id, Json FROM [Table]";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }
         
@@ -995,42 +876,18 @@ SELECT Id, StartTime, EndTime, Tour, StartPoint, EndPoint FROM [Table] WHERE (Id
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, true)]
-        public virtual int Insert(string Id, string StartTime, string EndTime, string Tour, string StartPoint, string EndPoint) {
+        public virtual int Insert(string Id, string Json) {
             if ((Id == null)) {
                 throw new global::System.ArgumentNullException("Id");
             }
             else {
                 this.Adapter.InsertCommand.Parameters[0].Value = ((string)(Id));
             }
-            if ((StartTime == null)) {
-                throw new global::System.ArgumentNullException("StartTime");
+            if ((Json == null)) {
+                throw new global::System.ArgumentNullException("Json");
             }
             else {
-                this.Adapter.InsertCommand.Parameters[1].Value = ((string)(StartTime));
-            }
-            if ((EndTime == null)) {
-                throw new global::System.ArgumentNullException("EndTime");
-            }
-            else {
-                this.Adapter.InsertCommand.Parameters[2].Value = ((string)(EndTime));
-            }
-            if ((Tour == null)) {
-                throw new global::System.ArgumentNullException("Tour");
-            }
-            else {
-                this.Adapter.InsertCommand.Parameters[3].Value = ((string)(Tour));
-            }
-            if ((StartPoint == null)) {
-                throw new global::System.ArgumentNullException("StartPoint");
-            }
-            else {
-                this.Adapter.InsertCommand.Parameters[4].Value = ((string)(StartPoint));
-            }
-            if ((EndPoint == null)) {
-                throw new global::System.ArgumentNullException("EndPoint");
-            }
-            else {
-                this.Adapter.InsertCommand.Parameters[5].Value = ((string)(EndPoint));
+                this.Adapter.InsertCommand.Parameters[1].Value = ((string)(Json));
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -1052,48 +909,24 @@ SELECT Id, StartTime, EndTime, Tour, StartPoint, EndPoint FROM [Table] WHERE (Id
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(string Id, string StartTime, string EndTime, string Tour, string StartPoint, string EndPoint, string Original_Id) {
+        public virtual int Update(string Id, string Json, string Original_Id) {
             if ((Id == null)) {
                 throw new global::System.ArgumentNullException("Id");
             }
             else {
                 this.Adapter.UpdateCommand.Parameters[0].Value = ((string)(Id));
             }
-            if ((StartTime == null)) {
-                throw new global::System.ArgumentNullException("StartTime");
+            if ((Json == null)) {
+                throw new global::System.ArgumentNullException("Json");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[1].Value = ((string)(StartTime));
-            }
-            if ((EndTime == null)) {
-                throw new global::System.ArgumentNullException("EndTime");
-            }
-            else {
-                this.Adapter.UpdateCommand.Parameters[2].Value = ((string)(EndTime));
-            }
-            if ((Tour == null)) {
-                throw new global::System.ArgumentNullException("Tour");
-            }
-            else {
-                this.Adapter.UpdateCommand.Parameters[3].Value = ((string)(Tour));
-            }
-            if ((StartPoint == null)) {
-                throw new global::System.ArgumentNullException("StartPoint");
-            }
-            else {
-                this.Adapter.UpdateCommand.Parameters[4].Value = ((string)(StartPoint));
-            }
-            if ((EndPoint == null)) {
-                throw new global::System.ArgumentNullException("EndPoint");
-            }
-            else {
-                this.Adapter.UpdateCommand.Parameters[5].Value = ((string)(EndPoint));
+                this.Adapter.UpdateCommand.Parameters[1].Value = ((string)(Json));
             }
             if ((Original_Id == null)) {
                 throw new global::System.ArgumentNullException("Original_Id");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[6].Value = ((string)(Original_Id));
+                this.Adapter.UpdateCommand.Parameters[2].Value = ((string)(Original_Id));
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
             if (((this.Adapter.UpdateCommand.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -1115,8 +948,8 @@ SELECT Id, StartTime, EndTime, Tour, StartPoint, EndPoint FROM [Table] WHERE (Id
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(string StartTime, string EndTime, string Tour, string StartPoint, string EndPoint, string Original_Id) {
-            return this.Update(Original_Id, StartTime, EndTime, Tour, StartPoint, EndPoint, Original_Id);
+        public virtual int Update(string Json, string Original_Id) {
+            return this.Update(Original_Id, Json, Original_Id);
         }
     }
     

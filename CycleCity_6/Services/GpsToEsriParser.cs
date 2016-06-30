@@ -66,24 +66,56 @@ namespace CycleCity_6.Services
                 JObject jObject = JObject.Parse(json);
                 var tracks = jObject.Values();
 
-                var templist = new List<List<MapPoint>>();
+                //var templist = new List<List<MapPoint>>();
                 foreach (var track in tracks)
                 {
                     var id = track.Path;
                     var startzeit = getDate((string)track.First["time"]);
                     var endzeit = getDate((string)track.Last["time"]);
 
+                    var txt = json.ToString ();
+
                     var waypoints = track.Children();
                     var pointList = waypoints.Select(point => new MapPoint((double)point["lon"], (double)point["lat"], SpatialReferences.Wgs84)).ToList();
                     var tour = new Polyline(pointList, SpatialReferences.Wgs84);
                     var startpunkt = new Point(pointList.First(), startzeit);
                     var endpunkt = new Point(pointList.Last(), endzeit);
-                    templist.Add(pointList);
+                    //templist.Add(pointList);
                     trackList.Add(new Track(id, tour, startpunkt, endpunkt));
                 }
             }
 
             return trackList;
+        }
+
+        public static List<Track> JArrayToPolyline(List<Tuple<String, String>> data)
+        {
+            var tracks = new List<Track> ();
+
+            foreach(var tuple in data)
+            {
+                var id = tuple.Item1;
+                var json = tuple.Item2;
+
+                if(json != "[]" && json != "auth_token invalid")
+                {
+                    JArray array = JArray.Parse (json);
+
+                    var startzeit = getDate ((string)array.First["time"]);
+                    var endzeit = getDate ((string)array.Last["time"]);
+
+                    var waypoints = array.Children ();
+
+                    var pointList = waypoints.Select (point => new MapPoint ((double)point["lon"], (double)point["lat"], SpatialReferences.Wgs84)).ToList ();
+
+                    var tour = new Polyline (pointList, SpatialReferences.Wgs84);
+                    var startpunkt = new Point (pointList.First (), startzeit);
+                    var endpunkt = new Point (pointList.Last (), endzeit);
+
+                    tracks.Add(new Track(id, tour, startpunkt, endpunkt));
+                }
+            }
+            return tracks;
         }
 
         /// <summary>

@@ -94,6 +94,8 @@ namespace CycleCity_6.Tools.CyclistViewer
             var baseLayer = new Esri.ArcGISRuntime.Layers.ArcGISTiledMapServiceLayer(uriLight);
             // (give the layer an ID so it can be found later)
             baseLayer.ID = "BaseMap";
+            baseLayer.MaxScale = 40000;
+            baseLayer.MinScale = 200000;
 
             _trackGraphicsLayer = new GraphicsLayer();
             _veloGraphicsLayer = new GraphicsLayer();

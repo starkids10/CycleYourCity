@@ -6,7 +6,6 @@ using System.Linq;
 using System.Xml.Linq;
 using CycleCity_6.Materials;
 using Esri.ArcGISRuntime.Geometry;
-using Esri.ArcGISRuntime.Tasks.Geocoding;
 using Newtonsoft.Json.Linq;
 
 namespace CycleCity_6.Services

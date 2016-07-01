@@ -14,12 +14,15 @@ namespace CycleCity_6.Services
     {
         private readonly Timer _aTimer;
         private readonly DatabaseContentService _databaseContentService;
+        private LocalDBService _localDBService;
+
         public List<List<Track>> Velorouten { get; set; }
         public List<Track> AlleDaten;
 
         public TrackService()
         {
             _databaseContentService = initServerConnection();
+            _localDBService = new LocalDBService ();
 
             _aTimer = new Timer(2000);
             _aTimer.Elapsed += CollectData_OnTimedEvent;
@@ -48,18 +51,55 @@ namespace CycleCity_6.Services
         {
             try
             {
-                return new DatabaseContentService();
+                return new DatabaseContentService ();
             }
-            catch (WebException)
+            catch(WebException)
             {
                 return null;
             }
+
+        }
+
+        public List<Track> Test()
+        {
+            List<Track> data = new List<Track> ();
+
+            data.Add (GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\124744.gpx").First());
+            data.Add (GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\124744.gpx").First());
+            data.Add (GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\268452.gpx").First());
+            data.Add (GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\371034.gpx").First());
+            data.Add (GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\1176550.gpx").First());
+            data.Add (GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\1383637.gpx").First());
+            data.Add (GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\1689922.gpx").First());
+            data.Add (GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\1936187.gpx").First());
+            data.Add (GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\2676847.gpx").First());
+            data.Add (GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\2760562.gpx").First());
+            data.Add (GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\2786928.gpx").First());
+            data.Add (GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\2830496.gpx").First());
+            data.Add (GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\2938461.gpx").First());
+            data.Add (GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\3012989.gpx").First());
+            data.Add (GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\3014395.gpx").First());
+            data.Add (GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\3033481.gpx").First());
+            data.Add (GpsToEsriParser.ParseGpxToEsriPolyline (@"C:\Users\David\Desktop\3041433.gpx").First());
+
+            return data;
         }
 
         private void CollectData_OnTimedEvent(Object souce, System.Timers.ElapsedEventArgs e)
         {
-            var temp = GpsToEsriParser.ParseJsonToEsriPolyline(_databaseContentService.GetNewData());
-            TrackAddedEvent(this, temp);
+            var Json = _databaseContentService.GetNewData ();
+
+            var temp = GpsToEsriParser.ParseJsonToEsriPolyline (Json);
+            TrackAddedEvent (this, temp);
+
+
+            //var data = _localDBService.LoadTrackFromDB ("0093ae0aca761f8f6ec5a38600108481");
+            //var data = _localDBService.LoadAllTracksFromDB ();
+
+            //var line = GpsToEsriParser.JArrayToPolyline (data);
+
+            //TrackAddedEvent (this, line);
+            _localDBService.AddJson (Json);
         }
 
         private List<Track> HoleDaten(DateTime von, DateTime bis)
@@ -69,9 +109,13 @@ namespace CycleCity_6.Services
             {
                 try
                 {
-                    var data = _databaseContentService.GetDataFromTo(von, bis);
+                    var Json = _databaseContentService.GetDataFromTo (von, bis);
+
+                    var data = Json;
                     tracks = GpsToEsriParser.ParseJsonToEsriPolyline(data);
                     TrackAddedEvent(this, tracks);
+
+                    _localDBService.AddJson (Json);
                 }
                 catch (WebException webException)
                 {

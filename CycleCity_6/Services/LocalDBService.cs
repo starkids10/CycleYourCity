@@ -36,6 +36,7 @@ namespace CycleCity_6.Services
                     try
                     {
                         adapter.Update (str, id);
+                        
                     }
                     catch(Exception exp)
                     {

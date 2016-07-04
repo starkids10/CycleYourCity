@@ -97,17 +97,17 @@ namespace CycleCity_6.Services
                     return;
                 }
 
-                var temp = GpsToEsriParser.ParseJsonToEsriPolyline (Json);
-                TrackAddedEvent (this, temp);
+                //var temp = GpsToEsriParser.ParseJsonToEsriPolyline (Json);
+                //TrackAddedEvent (this, temp);
 
                 //var data = _localDBService.LoadTrackFromDB ("0093ae0aca761f8f6ec5a38600108481");
-                //var data = _localDBService.LoadAllTracksFromDB ();
+                var data = _localDBService.LoadAllTracksFromDB ();
 
-                //var tracks = GpsToEsriParser.JArrayToPolyline (data);
-                //tracks.AddRange (Test ());
+                var tracks = GpsToEsriParser.JArrayToPolyline (data);
+                tracks.AddRange (Test ());
 
-                //TrackAddedEvent (this, tracks);
-                _localDBService.AddJson (Json);            
+                TrackAddedEvent (this, tracks);
+                //_localDBService.AddJson (Json);            
         }
 
         private List<Track> HoleDaten(DateTime von, DateTime bis)

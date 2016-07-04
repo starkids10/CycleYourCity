@@ -19,6 +19,8 @@ namespace CycleCity_6.Services
         public List<List<Track>> Velorouten { get; set; }
         public List<Track> AlleDaten;
 
+        public bool Live { get; private set; }
+
         public TrackService()
         {
             _databaseContentService = initServerConnection();
@@ -87,19 +89,25 @@ namespace CycleCity_6.Services
 
         private void CollectData_OnTimedEvent(Object souce, System.Timers.ElapsedEventArgs e)
         {
-            var Json = _databaseContentService.GetNewData ();
 
-            var temp = GpsToEsriParser.ParseJsonToEsriPolyline (Json);
-            TrackAddedEvent (this, temp);
+                var Json = _databaseContentService.GetNewData ();
 
+                if (Json == "[]")
+                {
+                    return;
+                }
 
-            //var data = _localDBService.LoadTrackFromDB ("0093ae0aca761f8f6ec5a38600108481");
-            //var data = _localDBService.LoadAllTracksFromDB ();
+                var temp = GpsToEsriParser.ParseJsonToEsriPolyline (Json);
+                TrackAddedEvent (this, temp);
 
-            //var line = GpsToEsriParser.JArrayToPolyline (data);
+                //var data = _localDBService.LoadTrackFromDB ("0093ae0aca761f8f6ec5a38600108481");
+                //var data = _localDBService.LoadAllTracksFromDB ();
 
-            //TrackAddedEvent (this, line);
-            _localDBService.AddJson (Json);
+                //var tracks = GpsToEsriParser.JArrayToPolyline (data);
+                //tracks.AddRange (Test ());
+
+                //TrackAddedEvent (this, tracks);
+                _localDBService.AddJson (Json);            
         }
 
         private List<Track> HoleDaten(DateTime von, DateTime bis)
@@ -109,6 +117,7 @@ namespace CycleCity_6.Services
             {
                 try
                 {
+                    _aTimer.Stop ();
                     var Json = _databaseContentService.GetDataFromTo (von, bis);
 
                     var data = Json;
@@ -134,15 +143,31 @@ namespace CycleCity_6.Services
         public void UpdateVonBis(DateTime von, DateTime bis)
         {
             var tracks = from t in AlleDaten
-                where
-                    (t.Startzeit.Month >= von.Month && t.Endzeit.Month <= bis.Month) && (t.Startzeit.Hour >= von.Hour && t.Endzeit.Hour <= bis.Hour)
-                select t;
-            TrackAddedEvent(this, tracks.ToList());
+                         where
+                             (t.Startzeit.Month >= von.Month && t.Endzeit.Month <= bis.Month) && (t.Startzeit.Hour >= von.Hour && t.Endzeit.Hour <= bis.Hour)
+                         select t;
+            TrackAddedEvent (this, tracks.ToList ());
+
+            _aTimer.Stop ();
+            //var data = _localDBService.LoadAllTracksFromDB ();
+
+            //var tracks = GpsToEsriParser.JArrayToPolyline (data);
+            //tracks.AddRange (Test ());
+
+            //TrackAddedEvent (this, tracks);
         }
 
         public void AktiviereLiveUpdate(bool x)
         {
-            _aTimer.Enabled = x;
+            if(x)
+            {
+                _aTimer.Start ();
+            }
+            else
+            {
+                _aTimer.Stop ();
+            }
+
         }
     }
 }

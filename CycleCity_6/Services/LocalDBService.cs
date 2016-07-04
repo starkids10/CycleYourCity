@@ -35,11 +35,11 @@ namespace CycleCity_6.Services
 
                     try
                     {
-                        adapter.Insert (id, str);
+                        adapter.Update (str, id);
                     }
                     catch(Exception exp)
                     {
-                        adapter.Update (str, id);
+                        adapter.Insert (id, str);
                     }
                     
                 }

@@ -76,7 +76,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Materials\HeatPoint.cs" />
     <Compile Include="Materials\Point.cs" />
     <Compile Include="Materials\Track.cs" />
     <Compile Include="Materials\User.cs" />

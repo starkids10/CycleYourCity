@@ -36,7 +36,7 @@ namespace CycleCity_6.Materials.Tests
         }
 
         [TestMethod]
-        public void EqualTest()
+        public void EqualsTest()
         {
             Assert.AreEqual(_point1, _point2);
             Assert.AreNotEqual(_point1,_point3);

@@ -15,15 +15,31 @@ namespace CycleCity_6.Tools.CyclistViewer
 {
     internal class CyclistViewerViewModel : INotifyPropertyChanged
     {
+        // Felder für Properties
+        private string _TrackAnzahl;
         private string _LetzteAktuallisierung;
 
-        private GraphicsLayer _trackGraphicsLayer;
-        private GraphicsLayer _veloGraphicsLayer;
-        private List<List<Graphic>> _veloGraphics;
+        // Felder
+        private GraphicsLayer trackGraphicsLayer;
+        private GraphicsLayer veloGraphicsLayer;
+        private List<List<Graphic>> veloGraphics;
 
         public MapView MapView;
-        private readonly TrackService _trackService;
-        private string _TrackAnzahl;
+        private readonly TrackService trackService;
+
+        public string LetzteAktuallisierung
+        {
+            get { return _LetzteAktuallisierung; }
+            private set { _LetzteAktuallisierung = value; Notify ("LetzteAktuallisierung"); }
+        }
+
+        public string TrackAnzahl
+        {
+            get { return _TrackAnzahl; }
+            private set { _TrackAnzahl = value; Notify ("TrackAnzahl"); }
+        }
+
+        public Dictionary<string, List<Graphic>> TempVeloGraphics { get; set; }
 
         public CyclistViewerViewModel(TrackService trackService)
         {
@@ -33,11 +49,11 @@ namespace CycleCity_6.Tools.CyclistViewer
 
             LetzteAktuallisierung = "Letzte Aktuallisierung: " + DateTime.Now.ToLongTimeString();
             TrackAnzahl = "Anzahl Tracks: " + _TrackAnzahl;
-            _trackService = trackService;
-            _trackService.TrackAddedEvent += TrackService_OnTrackAdded;
-            _trackService.KeineInternetVerbindungEvent += TrackService_OnKeineInternetVerbindung;
+            this.trackService = trackService;
+            this.trackService.TrackAddedEvent += TrackService_OnTrackAdded;
+            this.trackService.KeineInternetVerbindungEvent += TrackService_OnKeineInternetVerbindung;
 
-            _veloGraphics = new List<List<Graphic>>();
+            veloGraphics = new List<List<Graphic>>();
             InitializeVelorouten();
             TempVeloGraphics = new Dictionary<string, List<Graphic>>();
         }
@@ -49,7 +65,7 @@ namespace CycleCity_6.Tools.CyclistViewer
                 Color = Color.FromArgb(80, 255, 0, 0),
                 Width = 4
             };
-            foreach (var velo in _trackService.Velorouten)
+            foreach (var velo in trackService.Velorouten)
             {
                 List<Polyline> polylines = new List<Polyline>();
                 foreach (Track track in velo)
@@ -61,12 +77,10 @@ namespace CycleCity_6.Tools.CyclistViewer
                 {
                     tempGraphics.Add(new Graphic(polyline, simpleLineSymbol));
                 }
-                _veloGraphics.Add(tempGraphics);
+                veloGraphics.Add(tempGraphics);
 
             }
         }
-
-        public Dictionary<string, List<Graphic>> TempVeloGraphics { get; set; }
 
         public Map Map
         {
@@ -74,22 +88,9 @@ namespace CycleCity_6.Tools.CyclistViewer
             private set;
         }
 
-        public string LetzteAktuallisierung
-        {
-            get { return _LetzteAktuallisierung; }
-            private set { _LetzteAktuallisierung = value; Notify("LetzteAktuallisierung"); }
-        }
-
-        public string TrackAnzahl
-        {
-            get { return _TrackAnzahl; }
-            private set { _TrackAnzahl = value; Notify("TrackAnzahl"); }
-        }
-
-
         public List<Graphic> GetVeloRouteAt(int index)
         {
-            return _veloGraphics[index];
+            return veloGraphics[index];
         }
 
         public void InitializeMap()
@@ -103,16 +104,16 @@ namespace CycleCity_6.Tools.CyclistViewer
             var baseLayer = new Esri.ArcGISRuntime.Layers.ArcGISTiledMapServiceLayer(uriLight);
             // (give the layer an ID so it can be found later)
             baseLayer.ID = "BaseMap";
-            baseLayer.MaxScale = 40000;
-            baseLayer.MinScale = 200000;
+            //baseLayer.MaxScale = 40000;
+            //baseLayer.MinScale = 200000;
 
-            _trackGraphicsLayer = new GraphicsLayer();
-            _veloGraphicsLayer = new GraphicsLayer();
+            trackGraphicsLayer = new GraphicsLayer();
+            veloGraphicsLayer = new GraphicsLayer();
 
             // add the layer to the Map
             Map.Layers.Add(baseLayer);
-            Map.Layers.Add(_veloGraphicsLayer);
-            Map.Layers.Add(_trackGraphicsLayer);
+            Map.Layers.Add(veloGraphicsLayer);
+            Map.Layers.Add(trackGraphicsLayer);
             // set the initial view point
             var mapPoint = new Esri.ArcGISRuntime.Geometry.MapPoint(9.993888, 53.548401,
                 Esri.ArcGISRuntime.Geometry.SpatialReferences.Wgs84);
@@ -139,15 +140,15 @@ namespace CycleCity_6.Tools.CyclistViewer
         {
             List<Graphic> collection = new List<Graphic>();
 
+            var simpleLineSymbol = new SimpleLineSymbol { Width = 3, Color = Color.FromArgb (80, 0, 0, 255) };
+
             foreach (var track in tracks)
             {
-                var simpleLineSymbol = new SimpleLineSymbol { Width = 3, Color = Color.FromArgb(80, 0, 0, 255) };
-
                 collection.Add(new Graphic(track.Tour, simpleLineSymbol));
             }
 
-            MapView.Dispatcher.InvokeAsync(() => _trackGraphicsLayer.Graphics.Clear());
-            MapView.Dispatcher.InvokeAsync(() => _trackGraphicsLayer.Graphics.AddRange(collection));
+            MapView.Dispatcher.InvokeAsync(() => trackGraphicsLayer.Graphics.Clear());
+            MapView.Dispatcher.InvokeAsync(() => trackGraphicsLayer.Graphics.AddRange(collection));
 
             LetzteAktuallisierung = "Letzte Aktuallisierung: " + DateTime.Now.ToLongTimeString();
 
@@ -156,10 +157,10 @@ namespace CycleCity_6.Tools.CyclistViewer
 
         public void ZeichneVelorouten()
         {
-            MapView.Dispatcher.InvokeAsync(() => _veloGraphicsLayer.Graphics.Clear());
+            MapView.Dispatcher.InvokeAsync(() => veloGraphicsLayer.Graphics.Clear());
             foreach (var velo in TempVeloGraphics.Values)
             {
-                MapView.Dispatcher.InvokeAsync(() => _veloGraphicsLayer.Graphics.AddRange(velo));
+                MapView.Dispatcher.InvokeAsync(() => veloGraphicsLayer.Graphics.AddRange(velo));
             }
         }
 
@@ -185,12 +186,12 @@ namespace CycleCity_6.Tools.CyclistViewer
         /// <param name="endzeit">Ende des Zeitintervalls</param>
         public void SetzeUhrzeit(DateTime startzeit, DateTime endzeit)
         {
-            _trackService.UpdateVonBis(startzeit, endzeit);
+            trackService.UpdateVonBis(startzeit, endzeit);
         }
 
         public void AktiviereLive(bool live)
         {
-            _trackService.AktiviereLiveUpdate(live);
+            trackService.AktiviereLiveUpdate(live);
         }
 
 

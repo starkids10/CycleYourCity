@@ -55,8 +55,9 @@ namespace CycleCity_6.Services
                 var response = (HttpWebResponse)request.GetResponse();
                 return new StreamReader(response.GetResponseStream()).ReadToEnd();
             }
-            catch (Exception)
+            catch (Exception exp)
             {
+                Console.WriteLine (exp.Message);
                 throw new WebException("Keine Verbindung zum CycleYourCity-Server");
             }
         }
@@ -111,6 +112,10 @@ namespace CycleCity_6.Services
 
         }
 
+        /// <summary>
+        /// Token für die Server kommunikation wird abgefragt.
+        /// </summary>
+        /// <returns></returns>
         private string getToken()
         {
             HttpWebRequest request =

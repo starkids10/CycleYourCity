@@ -8,9 +8,9 @@
         <!-- Button Style-->
         <Style TargetType="{x:Type Button}" x:Key="Monate">
             <Setter Property="Height" Value="40" />
-            <Setter Property="Width" Value="120" />
+            <Setter Property="Width" Value="60" />
             <Setter Property="Background" Value="PowderBlue" />
-            <Setter Property="FontSize" Value="20" />
+            <Setter Property="FontSize" Value="10" />
             <Setter Property="FontFamily" Value="Segoe UI Black" />
             <!-- TODO eigentlich sollte es kein MousOver mehr geben
             <Style.Triggers>
